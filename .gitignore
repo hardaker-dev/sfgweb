@@ -1,0 +1,9 @@
+/SaasFeeGuides/SaasFeeGuides.IntegrationTests/bin/*
+/SaasFeeGuides/SaasFeeGuides.Database.Deploy/bin/*
+/SaasFeeGuides/SaasFeeGuides.Database.Deploy/obj/*
+/SaasFeeGuides/SaasFeeGuides.IntegrationTests/obj/*
+/SaasFeeGuides/SaasFeeGuides.RestClient/bin/*
+/SaasFeeGuides/SaasFeeGuides.RestClient/obj/*
+/SaasFeeGuides/SaasFeeGuides.ViewModels/bin/*
+/SaasFeeGuides/SaasFeeGuides.ViewModels/obj/*
+/SaasFeeGuides/.vs/*

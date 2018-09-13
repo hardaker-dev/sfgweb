@@ -7,9 +7,45 @@
 
   <ItemGroup>
     <None Remove="Scripts\01_Initial.sql" />
+    <None Remove="Scripts\02_CreateSchemas.sql" />
+    <None Remove="Scripts\03_CreateTable_Activity.sql" />
+    <None Remove="Scripts\04_CreateTable_Content.sql" />
+    <None Remove="Scripts\05_CreateTable_ActivitySku.sql" />
+    <None Remove="Scripts\06_CreateTable_ActivitySkuPrice.sql" />
+    <None Remove="Scripts\07_CreateTable_ActivitySkuDate.sql" />
+    <None Remove="Scripts\08_CreateTable_Customer.sql" />
+    <None Remove="Scripts\09_CreateTable_CustomerRegistration.sql" />
+    <None Remove="Scripts\10_CreateTable_Equiptment.sql" />
+    <None Remove="Scripts\11_CreateTable_ActivityEquiptment.sql" />
+    <None Remove="Scripts\12_CreateTable_Guide.sql" />
+    <None Remove="Scripts\13_CreateTable_CustomerRegistrationEquiptment.sql" />
+    <None Remove="Scripts\14_CreateTable_GuideRegistration.sql" />
+    <None Remove="Scripts\15_CreateProc_InsertCustomer.sql" />
+    <None Remove="Scripts\16_CreateProc_UpdateCustomer.sql" />
+    <None Remove="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
+    <None Remove="Scripts\18_CreateProc_DeleteAccount.sql" />
+    <None Remove="Scripts\19_CreateProc_InsertActivity.sql" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
+    <EmbeddedResource Include="Scripts\04_CreateTable_Content.sql" />
+    <EmbeddedResource Include="Scripts\19_CreateProc_InsertActivity.sql" />
+    <EmbeddedResource Include="Scripts\18_CreateProc_DeleteAccount.sql" />
+    <EmbeddedResource Include="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
+    <EmbeddedResource Include="Scripts\16_CreateProc_UpdateCustomer.sql" />
+    <EmbeddedResource Include="Scripts\15_CreateProc_InsertCustomer.sql" />
+    <EmbeddedResource Include="Scripts\14_CreateTable_GuideRegistration.sql" />
+    <EmbeddedResource Include="Scripts\10_CreateTable_Equiptment.sql" />
+    <EmbeddedResource Include="Scripts\11_CreateTable_ActivityEquiptment.sql" />
+    <EmbeddedResource Include="Scripts\13_CreateTable_CustomerRegistrationEquiptment.sql" />
+    <EmbeddedResource Include="Scripts\09_CreateTable_CustomerRegistration.sql" />
+    <EmbeddedResource Include="Scripts\08_CreateTable_Customer.sql" />
+    <EmbeddedResource Include="Scripts\07_CreateTable_ActivitySkuDate.sql" />
+    <EmbeddedResource Include="Scripts\12_CreateTable_Guide.sql" />
+    <EmbeddedResource Include="Scripts\06_CreateTable_ActivitySkuPrice.sql" />
+    <EmbeddedResource Include="Scripts\05_CreateTable_ActivitySku.sql" />
+    <EmbeddedResource Include="Scripts\03_CreateTable_Activity.sql" />
     <EmbeddedResource Include="Scripts\01_Initial.sql" />
   </ItemGroup>
 

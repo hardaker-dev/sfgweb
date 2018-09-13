@@ -52,6 +52,9 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SaasFeeGuides.ViewModels\SaasFeeGuides.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Migrations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\authenticate\LoginInputs.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

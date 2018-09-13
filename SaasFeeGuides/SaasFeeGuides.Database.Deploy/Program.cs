@@ -5,14 +5,18 @@ using System.Reflection;
 
 namespace SaasFeeGuides.Database.Deploy
 {
-    class Program
+    public class Program
     {
         static int Main(string[] args)
         {
             var connectionString =
                 args.FirstOrDefault()
                 ?? "Server=.; Database=SaasFeeGuides; Trusted_connection=true";
+            return DeployDatabase(connectionString);
+        }
 
+        public static int DeployDatabase(string connectionString)
+        {
             EnsureDatabase.For.SqlDatabase(connectionString);
 
             var upgrader =

@@ -189,9 +189,6 @@ namespace SaasFeeGuides.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
 
                     b.ToTable("AppUser");
 

@@ -1,0 +1,4 @@
+﻿CREATE SCHEMA [App]
+GO
+CREATE SCHEMA [Activities]
+GO

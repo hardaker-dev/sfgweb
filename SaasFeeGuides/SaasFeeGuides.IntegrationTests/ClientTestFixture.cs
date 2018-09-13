@@ -78,10 +78,11 @@ namespace SaasFeeGuides.IntegrationTests
                     Email = "test.1@testemail.com",
                     FirstName = "james",
                     LastName = "hardaker",
-                    Location = "Saas Fee",
                     Password = "password",
-                    Username = "JamesHardaker"
-                    ,IsAdmin = true
+                    Username = "JamesHardaker",
+                    IsAdmin = true,
+                    DateOfBirth = new DateTime(1984,10,31),
+                    
                 });
             }
             catch (Exception e)

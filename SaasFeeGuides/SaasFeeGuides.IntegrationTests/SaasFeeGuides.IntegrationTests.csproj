@@ -46,6 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SaasFeeGuides.Database.Deploy\SaasFeeGuides.Database.Deploy.csproj" />
     <ProjectReference Include="..\SaasFeeGuides.RestClient\SaasFeeGuides.RestClient.csproj" />
     <ProjectReference Include="..\SaasFeeGuides\SaasFeeGuides.csproj" />
   </ItemGroup>

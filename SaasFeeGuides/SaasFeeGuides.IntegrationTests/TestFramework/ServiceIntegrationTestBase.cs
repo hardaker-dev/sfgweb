@@ -1,4 +1,5 @@
-﻿using SaasFeeGuides.IntegrationTests.Helpers;
+﻿using Microsoft.Extensions.Configuration;
+using SaasFeeGuides.IntegrationTests.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +22,12 @@ namespace SaasFeeGuides.IntegrationTests.TestFramework
 
         protected ServiceIntegrationTestBase(ITestOutputHelper output, int minPort, int maxPort)
         {
+            var config = new ConfigurationBuilder()
+          .AddJsonFile("appsettings.json")
+          .Build();
+
+
+            SaasFeeGuides.Database.Deploy.Program.DeployDatabase(config["ConnectionStrings:DefaultConnection"]);
             Output = output;
             var url = TcpSocketHelper.GetNextLocalhostUrl(minPort, maxPort, null);
             Output.WriteLine($"{this.GetType()} StartServiceForTest<{typeof(TStartup)} on {url}");

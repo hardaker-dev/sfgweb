@@ -15,6 +15,6 @@ namespace SaasFeeGuides.Data
 
         }
 
-        public DbSet<AppUser> Users { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
     }
 }

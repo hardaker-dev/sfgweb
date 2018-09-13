@@ -194,9 +194,7 @@ CREATE TABLE [dbo].[AspNetUsers](
 	[LockoutEnd] [datetimeoffset](7) NULL,
 	[LockoutEnabled] [bit] NOT NULL,
 	[AccessFailedCount] [int] NOT NULL,
-	[Discriminator] [nvarchar](max) NOT NULL,
-	[FirstName] [nvarchar](max) NULL,
-	[LastName] [nvarchar](max) NULL,
+	[Discriminator] [nvarchar](max) NOT NULL
  CONSTRAINT [PK_AspNetUsers] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

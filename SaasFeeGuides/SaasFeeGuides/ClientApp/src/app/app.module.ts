@@ -7,16 +7,20 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
+import { SummerComponent } from './summer/summer.component';
+import { WinterComponent } from './winter/winter.component';
+import { AuthenticateComponent } from './authenticate/authenticate.component';
+import { AuthenticateFormComponent } from './authenticate/authenticate-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent
+    SummerComponent,
+    WinterComponent,
+    AuthenticateComponent,
+    AuthenticateFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -24,8 +28,9 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'summer', component: SummerComponent },
+      { path: 'winter', component: WinterComponent },
+      { path: 'authenticate', component: AuthenticateComponent },
     ])
   ],
   providers: [],

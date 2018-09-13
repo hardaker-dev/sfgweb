@@ -49,12 +49,13 @@ namespace SaasFeeGuides
             var config = new ConfigurationBuilder()
            .AddJsonFile("appsettings.json")
            .Build();
-          
+
+            var connectionString = config["ConnectionStrings:DefaultConnection"];
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
             {
 
-                options.UseSqlServer(config["ConnectionStrings:DefaultConnection"],
+                options.UseSqlServer(connectionString,
             b => b.MigrationsAssembly("SaasFeeGuides")).UseLazyLoadingProxies(false);
                 });
            
@@ -139,6 +140,8 @@ namespace SaasFeeGuides
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddSingleton<IActivitiesRepository>(new ActivitiesRepository(connectionString));
+            services.AddSingleton<IAccountRepository>(new AccountRepository(connectionString));
             services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 

@@ -3,46 +3,58 @@ li .glyphicon {
 }
 
 /* Highlighting rules for nav menu items */
-li.link-active a,
-li.link-active a:hover,
-li.link-active a:focus {
-    background-color: #4189C7;
-    color: white;
+li a {
+  background-color: #FFFFFF;
+  color: #001433;
+  text-transform: uppercase;
+  font-size: 16px;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 100;
 }
 
-/* Keep the nav menu independent of scrolling and on top of other items */
-.main-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
+  li a:hover {
+    color: blue;
+  }
+
+ li a:focus {
+    color: blue;
+ }
+
+.navbar {
+  background-color: white;
 }
 
-@media (min-width: 768px) {
+
+
+
+@media (min-width: 0px) {
     /* On small screens, convert the nav menu to a vertical sidebar */
   .main-nav {
-    height: calc(25% - 20px);
+    height: 100px;  
+    display: inline-block;
+    position: relative;
+    left: 0;
+    top: 0;
+    right: 0;
     width: 100%;
+    z-index: 1;
+    
   }
-    .navbar {
-        border-radius: 0px;
-        border-width: 0px;
-        width: 100%;
-    }
-    .navbar-header {
-        float: none;
-    }
-    .navbar-collapse {
-        border-left: 1px solid #444;
-        padding: 0px;
-    }
-    .navbar ul {
-        float: left;
-    }
+  .navbar {
+    border-radius: 0px;
+    border-width: 0px;
+    margin: auto;
+    width: 500px;
+  }
+  .navbar-brand {
+    position:relative;
+  }
+
+  .navbar ul {
+    float: left;
+  }
     .navbar li {
       float: left;
-      font-size: 15px;
       margin: 6px;
     }
     .navbar li a {

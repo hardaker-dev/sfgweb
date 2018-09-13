@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
+    <None Remove="ClientApp\src\app\winter\DashboardIndex.ts" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SaasFeeGuides.ViewModels\SaasFeeGuides.ViewModels.csproj" />
@@ -67,6 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\authenticate\LoginInputs.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\winter\DashboardIndex.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

@@ -25,11 +25,13 @@
     <None Remove="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
     <None Remove="Scripts\18_CreateProc_DeleteAccount.sql" />
     <None Remove="Scripts\19_CreateProc_InsertActivity.sql" />
+    <None Remove="Scripts\20_CreateTable_GuideAvailability.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\04_CreateTable_Content.sql" />
+    <EmbeddedResource Include="Scripts\20_CreateTable_GuideAvailability.sql" />
     <EmbeddedResource Include="Scripts\19_CreateProc_InsertActivity.sql" />
     <EmbeddedResource Include="Scripts\18_CreateProc_DeleteAccount.sql" />
     <EmbeddedResource Include="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />

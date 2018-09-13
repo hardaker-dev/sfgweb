@@ -13,11 +13,11 @@ namespace SaasFeeGuides.IntegrationTests
     {
         private readonly Client _client;
         private AuthenticatedClient _authenticatedClient;
-        private async Task<AuthenticatedClient> AuthenticatedClient()
+        private async Task<AuthenticatedClient> AuthenticatedClient(string username,string password,string email)
         {
             if (_authenticatedClient == null)
             {
-                var loginResponse = await Login();
+                var loginResponse = await Login(username, password, email);
                 _authenticatedClient = new AuthenticatedClient(ServiceUri, loginResponse.auth_token);
             }
             return _authenticatedClient;
@@ -35,7 +35,7 @@ namespace SaasFeeGuides.IntegrationTests
         [Fact]
         public async Task GetDashboardIndex()
         {
-            var authClient = await AuthenticatedClient();
+            var authClient = await AuthenticatedClient("test","password","test.user@sfg.ch");
             try
             {
                 await authClient.AddClaim(new AppClaim()
@@ -50,10 +50,25 @@ namespace SaasFeeGuides.IntegrationTests
                 await authClient.DeleteAccount();
             }
         }
+
+        [Fact]
+        public async Task AddAdminAccount()
+        {
+            var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
+            
+                await authClient.AddClaim(new AppClaim()
+                {
+                    ClaimType = "role",
+                    ClaimValue = "api_access"
+                });
+           
+
+        }
+
         [Fact]
         public async Task AddClaim()
         {
-            var authClient = await AuthenticatedClient();
+            var authClient = await AuthenticatedClient("test", "password", "test.user@sfg.ch");
             try
             {
                 await authClient.AddClaim(new AppClaim()
@@ -69,17 +84,17 @@ namespace SaasFeeGuides.IntegrationTests
 
         }
 
-        private async Task<LoginResponse> Login()
+        private async Task<LoginResponse> Login(string username, string password, string email)
         {
             try
             {
                 await _client.AddAccount(new ViewModels.Registration()
                 {
-                    Email = "test.1@testemail.com",
+                    Email = email,
                     FirstName = "james",
                     LastName = "hardaker",
-                    Password = "password",
-                    Username = "JamesHardaker",
+                    Password = password,
+                    Username = username,
                     IsAdmin = true,
                     DateOfBirth = new DateTime(1984,10,31),
                     
@@ -91,8 +106,8 @@ namespace SaasFeeGuides.IntegrationTests
             }
             var loginResponse = await _client.Login(new ViewModels.Credentials()
             {
-                UserName = "JamesHardaker",
-                Password = "password"
+                UserName = username,
+                Password = password
             });
             return loginResponse;
         }

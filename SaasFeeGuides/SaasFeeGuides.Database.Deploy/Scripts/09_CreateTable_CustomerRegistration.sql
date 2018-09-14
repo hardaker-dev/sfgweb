@@ -12,6 +12,8 @@ BEGIN TRAN
 		[Email] nvarchar(max) null,
 		[HasCancelled] bit not null,
 		[NumPersons] int not null,
+		[PriceAgreed] float not null,
+		[CustomerNotes] nvarchar(max) null,
 		[Created] datetime not null,
 		[Modified] datetime not null		
 	)

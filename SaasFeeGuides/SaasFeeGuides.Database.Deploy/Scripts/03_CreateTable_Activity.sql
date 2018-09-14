@@ -1,14 +1,23 @@
-﻿CREATE TABLE [Activities].[Activity](
+﻿set xact_abort on
+
+BEGIN TRAN
+
+CREATE TABLE [Activities].[Activity](
 	[Id] [int] NOT NULL IDENTITY(1,1),
-	[Name] [nvarchar](max) NOT NULL,
-	[Description] [nvarchar](max) NOT NULL,
-	[MenuImageContentId] int not null,
+	[Name] [nvarchar](450) NOT NULL,
+	[TitleContentId] varchar(50) not null,
+	[DescriptionContentId] varchar(50) NOT NULL,
+	[MenuImageContentId] varchar(50) not null,
 	[VideoContentIds] varchar(max) not null,
-	[ImageContentIds] varchar(max) not null
- CONSTRAINT [PK_Activity] PRIMARY KEY CLUSTERED 
-(
-	[Id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+	[ImageContentIds] varchar(max) not null,
+	[IsActive] bit not null)
+
+ALTER TABLE [Activities].[Activity]  
+	ADD CONSTRAINT PK_Activity PRIMARY KEY CLUSTERED ([Id]);   
+
+
+	CREATE UNIQUE NONCLUSTERED INDEX UIX_Activity_Name
+	ON  [Activities].[Activity] ([Name])
 GO
 
+COMMIT TRAN

@@ -19,18 +19,15 @@ namespace SaasFeeGuides.Controllers
 
         private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
-        private readonly IActivitiesRepository _activitiesRepository;
-        private readonly IAccountRepository _accountRepository;
+        private readonly ICustomerRepository _accountRepository;
 
         public AccountController(
             UserManager<AppUser> userManager,
-            ApplicationDbContext appDbContext, 
-            IActivitiesRepository activitiesRepository,
-            IAccountRepository accountRepository)
+            ApplicationDbContext appDbContext,
+            ICustomerRepository accountRepository)
         {
             _userManager = userManager;         
             _appDbContext = appDbContext;
-            _activitiesRepository = activitiesRepository;
             _accountRepository = accountRepository;
         }
         [HttpPost]
@@ -55,7 +52,7 @@ namespace SaasFeeGuides.Controllers
                 await _userManager.AddClaimAsync(userIdentity, new System.Security.Claims.Claim(Constants.Strings.JwtClaimIdentifiers.Role, Constants.Strings.JwtClaims.ApiAdminAccess));
             }
 
-            await _activitiesRepository.UpsertCustomer(new Models.Customer()
+            await _accountRepository.UpsertCustomer(new Models.Customer()
             {
                 Address = model.Address,
                 DateOfBirth = model.DateOfBirth,

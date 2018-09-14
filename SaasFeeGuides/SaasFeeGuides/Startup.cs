@@ -140,8 +140,9 @@ namespace SaasFeeGuides
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddSingleton<IActivitiesRepository>(new ActivitiesRepository(connectionString));
-            services.AddSingleton<IAccountRepository>(new AccountRepository(connectionString));
+            services.AddSingleton<IActivityRepository>(new ActivityRepository(connectionString));
+            services.AddSingleton<ICustomerRepository>(new CustomerRepository(connectionString));
+            services.AddSingleton<IContentRepository>(new ContentRepository(connectionString));
             services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 
@@ -194,21 +195,21 @@ namespace SaasFeeGuides
             //        template: "DashboardController/{action=Index}/{id?}");
             //});
 
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
+            //app.UseSpa(spa =>
+            //{
+            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            //    // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+            //    spa.Options.SourcePath = "ClientApp";
 
-                if (IsDevelopment(env))
-                {
-                    spa.Options.SourcePath = @"ClientApp";
+            //    if (IsDevelopment(env))
+            //    {
+            //        spa.Options.SourcePath = @"ClientApp";
 
-                    spa.UseAngularCliServer(npmScript: "start");
+            //        spa.UseAngularCliServer(npmScript: "start");
 
-                }
-            });
+            //    }
+            //});
         }
 
         protected virtual bool IsDevelopment(IHostingEnvironment env)

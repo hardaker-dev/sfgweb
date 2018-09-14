@@ -5,7 +5,8 @@ BEGIN TRAN
 	CREATE TABLE [Activities].[Equiptment](	
 		[Id] [int] NOT NULL identity(1,1),
 		[Name] nvarchar(max) not null,
-		[Description] nvarchar(max) null,
+		[TitleContentId] int not null,
+		[DescriptionContentId] int null,
 		[RentalPrice] float not null,
 		[ReplacementPrice] float not null	
 	)

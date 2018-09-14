@@ -18,6 +18,68 @@ namespace SaasFeeGuides.RestClient
         {
             _bearerToken = bearerToken;
         }
+        public async Task UpdateActivitySku(ActivitySku activity)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", "sku")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var patch = request.PatchJsonAsync(activity, DefaultClient);
+            var response = await patch;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new RestResponseException(response.StatusCode, response.RequestMessage, string.Empty, await response.Content.ReadAsStringAsync());
+            }
+
+        }
+        public async Task<int> AddActivitySku(ActivitySku activity)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity","sku")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.PostJsonAsync(activity, DefaultClient);
+            var response = await post;
+
+
+            return await post.ReceiveJsonAsync<int>();
+
+        }
+
+        public async Task<int> AddActivity(Activity activity)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.PostJsonAsync(activity, DefaultClient);
+            var response = await post;
+
+
+            return await post.ReceiveJsonAsync<int>();
+
+        }
+
+        public async Task UpdateActivity(Activity activity)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var patch = request.PatchJsonAsync(activity, DefaultClient);
+            var response = await patch;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new RestResponseException(response.StatusCode, response.RequestMessage, string.Empty, await response.Content.ReadAsStringAsync());
+            }
+
+        }
 
         public async Task AddClaim(AppClaim claim)
         {

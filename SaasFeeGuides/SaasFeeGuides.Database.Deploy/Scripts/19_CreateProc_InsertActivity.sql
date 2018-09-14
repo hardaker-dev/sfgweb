@@ -1,20 +1,26 @@
 ﻿CREATE PROCEDURE Activities.InsertActivity
-	@Name nvarchar(max),
-	@Description nvarchar(max),
-	@MenuImageContentId int,
+	@Name nvarchar(450),
+	@TitleContentId varchar(50),
+	@DescriptionContentId varchar(50),
+	@MenuImageContentId varchar(50),
 	@VideoContentIds varchar(max),
-	@ImageContentIds varchar(max)	
+	@ImageContentIds varchar(max),
+	@IsActive bit
 AS
 BEGIN
 	SET NOCOUNT ON;
-
+  
 	INSERT INTO Activities.Activity ([Name],
-									[Description],
+									[TitleContentId],
+									[DescriptionContentId],
 									[MenuImageContentId],
 									[VideoContentIds],
-									[ImageContentIds])
-	VALUES (@Name,@Description,@MenuImageContentId,@VideoContentIds,@ImageContentIds)
+									[ImageContentIds],
+									[IsActive])
+	VALUES (@Name,@TitleContentId,@DescriptionContentId,
+	@MenuImageContentId,@VideoContentIds,@ImageContentIds,@IsActive)
 
 	SELECT CAST(SCOPE_IDENTITY() as INT)
+	
 
 END

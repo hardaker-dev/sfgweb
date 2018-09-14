@@ -22,7 +22,6 @@ namespace SaasFeeGuides.Controllers
     {
         private readonly IJwtFactory _jwtFactory;
         private readonly JwtIssuerOptions _jwtOptions;
-        private readonly JsonSerializerSettings _serializerSettings;
         private readonly UserManager<AppUser> _userManager;
 
 

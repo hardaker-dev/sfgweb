@@ -4,8 +4,8 @@ BEGIN TRAN
 
 	CREATE TABLE [Activities].[ActivitySkuPrice](	
 		[ActivitySkuId] [int] NULL,
-		[Name] nvarchar(max) not null,
-		[Description] nvarchar(max) not null,
+		[Name] nvarchar(max) not null,		
+		[DescriptionContentId] varchar(50) not null,
 		[DiscountCode] nvarchar(255) null,
 		[Price] float  NULL,
 		[MaxPersons] int not null,

@@ -25,18 +25,32 @@
     <None Remove="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
     <None Remove="Scripts\18_CreateProc_DeleteAccount.sql" />
     <None Remove="Scripts\19_CreateProc_InsertActivity.sql" />
-    <None Remove="Scripts\20_CreateTable_GuideAvailability.sql" />
+    <None Remove="Scripts\20_CreateProc_InsertActivitySku.sql" />
+    <None Remove="Scripts\21_CreateTable_GuideAvailability.sql" />
+    <None Remove="Scripts\22_CreateProc_InsertActivityPrice.sql" />
+    <None Remove="Scripts\23_CreateProc_UpdateActivity.sql" />
+    <None Remove="Scripts\24_CreateProc_UpsertContent.sql" />
+    <None Remove="Scripts\25_CreateProc_FindActivityByName.sql" />
+    <None Remove="Scripts\26_CreateProc_FindActivitySkuByName.sql" />
+    <None Remove="Scripts\27_CreateProc_UpdateActivitySku.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\04_CreateTable_Content.sql" />
-    <EmbeddedResource Include="Scripts\20_CreateTable_GuideAvailability.sql" />
+    <EmbeddedResource Include="Scripts\15_CreateProc_InsertCustomer.sql" />
+    <EmbeddedResource Include="Scripts\27_CreateProc_UpdateActivitySku.sql" />
+    <EmbeddedResource Include="Scripts\26_CreateProc_FindActivitySkuByName.sql" />
+    <EmbeddedResource Include="Scripts\25_CreateProc_FindActivityByName.sql" />
+    <EmbeddedResource Include="Scripts\23_CreateProc_UpdateActivity.sql" />
+    <EmbeddedResource Include="Scripts\22_CreateProc_InsertActivityPrice.sql" />
+    <EmbeddedResource Include="Scripts\20_CreateProc_InsertActivitySku.sql" />
+    <EmbeddedResource Include="Scripts\21_CreateTable_GuideAvailability.sql" />
     <EmbeddedResource Include="Scripts\19_CreateProc_InsertActivity.sql" />
     <EmbeddedResource Include="Scripts\18_CreateProc_DeleteAccount.sql" />
     <EmbeddedResource Include="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
     <EmbeddedResource Include="Scripts\16_CreateProc_UpdateCustomer.sql" />
-    <EmbeddedResource Include="Scripts\15_CreateProc_InsertCustomer.sql" />
+    <EmbeddedResource Include="Scripts\24_CreateProc_UpsertContent.sql" />
     <EmbeddedResource Include="Scripts\14_CreateTable_GuideRegistration.sql" />
     <EmbeddedResource Include="Scripts\10_CreateTable_Equiptment.sql" />
     <EmbeddedResource Include="Scripts\11_CreateTable_ActivityEquiptment.sql" />

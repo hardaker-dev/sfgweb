@@ -8,19 +8,19 @@ using System.Threading.Tasks;
 
 namespace SaasFeeGuides.Data
 {
-    public interface IActivitiesRepository
+    public interface ICustomerRepository
     {
         Task<int> UpsertCustomer(Customer customer);
         Task<Customer> SelectCustomerByUserId(string userId);
+        Task DeleteAccount(string userId);
     }
-    public class ActivitiesRepository : DataAccessBase, IActivitiesRepository
+    public class CustomerRepository : DataAccessBase, ICustomerRepository
     {
-        public ActivitiesRepository(string connectionString) : base(connectionString)
+        public CustomerRepository(string connectionString) : base(connectionString)
         {
         }
 
-
-        public async Task<Customer> SelectCustomerByUserId(string userId)
+        public async Task DeleteAccount(string userId)
         {
             using (var cn = await GetNewConnectionAsync())
             {
@@ -30,10 +30,28 @@ namespace SaasFeeGuides.Data
                     
                     command.CommandType = CommandType.StoredProcedure;
                    
+                    command.CommandText = "[Activities].[DeleteAccount]";
+
+                    await command.ExecuteNonQueryAsync();
+                    
+                }
+            }
+        }
+
+        public async Task<Customer> SelectCustomerByUserId(string userId)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    command.CommandType = CommandType.StoredProcedure;
+
                     command.CommandText = "[Activities].[SelectCustomerByUserId]";
 
-                    return await ReadSingleAsync(command,ReadCustomer);
-                    
+                    return await ReadSingleAsync(command, ReadCustomer);
+
                 }
             }
         }
@@ -51,7 +69,7 @@ namespace SaasFeeGuides.Data
                     DateOfBirth = (GetDateTime(reader, 4)).GetValueOrDefault(),
                     PhoneNumber = (GetString(reader, 5)),
                     UserId = GetString(reader, 6),
-                    Address = GetString(reader, 7)                   
+                    Address = GetString(reader, 7)
                 };
             }
             catch (Exception ex)
@@ -76,10 +94,10 @@ namespace SaasFeeGuides.Data
                     command.CommandType = CommandType.StoredProcedure;
                     if (customer.Id.HasValue)
                     {
-                        command.CommandText = "[Activities].[UpdateCustomer]";                      
+                        command.CommandText = "[Activities].[UpdateCustomer]";
 
                         command.Parameters.AddWithValue("@Id", customer.Id.Value);
-                        
+
                         await command.ExecuteNonQueryAsync();
                         return customer.Id.Value;
                     }
@@ -92,5 +110,7 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
+
+
     }
 }

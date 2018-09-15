@@ -12,7 +12,8 @@ BEGIN
 		UserId = null,
 		Email=null,
 		DateOfBirth=null,
-		[Address]=null
+		[Address]=null,
+		PhoneNumber = null
 	where UserId = @UserId
 
 	DELETE FROM [dbo].[AspNetUserClaims]

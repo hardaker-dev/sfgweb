@@ -27,7 +27,22 @@ namespace SaasFeeGuides.Controllers
             _contentRepository = contentRepository;
         }
 
+        [HttpGet("sku/{activitySkuId:int}/date")]
+        public async Task<IActionResult> GetActivitySkuDates(int activitySkuId,DateTime? dateFrom, DateTime? dateTo)
+        {
+            var dates = await _activityRepository.SelectActivitySkuDates(activitySkuId, dateFrom, dateTo);
 
+            return new OkObjectResult(dates);
+        }
+
+        [HttpGet("sku/{activitySkuId:int}")]
+        public async Task<IActionResult> GetActivitySku(int activitySkuId,string locale)
+        {
+
+            var activitySku = await _activityRepository.SelectActivitySku(activitySkuId, locale ?? "en");
+
+            return new OkObjectResult(activitySku);
+        }
         [Authorize("Admin")]
         [HttpPost("sku/date")]
         public async Task<IActionResult> AddActivitySkuDate(ViewModels.ActivitySkuDate activitySkuDate)
@@ -86,11 +101,40 @@ namespace SaasFeeGuides.Controllers
         [HttpGet("{activityId:int}")]
         public async Task<IActionResult> GetActivity(int activityId, string locale)
         {
-            var activity = await _activityRepository.SelectActivity(activityId,locale ?? "en");
+            var activity = await _activityRepository.SelectActivity(activityId, locale ?? "en");
 
-
-            return new OkObjectResult(activity);
+            return new OkObjectResult(MapToViewModel(activity));
         }
+
+        private static ViewModels.ActivityLoc MapToViewModel(Models.ActivityLoc activity)
+        {
+            return new ViewModels.ActivityLoc()
+            {
+                Id = activity.Id,
+                Description = activity.Description,
+                Images = activity.Images,
+                MenuImage = activity.MenuImage,
+                Name = activity.Name,
+                Skus = activity.Skus.Select(s => new ViewModels.ActivitySkuLoc()
+                {
+                    Description = s.Description,
+                    Title = s.Title,
+                    Name = s.Name,
+                    ActivityName = s.ActivityName,
+                    AdditionalRequirements = s.AdditionalRequirements,
+                    DurationDays = s.DurationDays,
+                    DurationHours = s.DurationHours,
+                    Id = s.Id,
+                    MaxPersons = s.MaxPersons,
+                    MinPersons = s.MinPersons,
+                    PricePerPerson = s.PricePerPerson,
+                    WebContent = s.WebContent
+                }).ToList(),
+                Title = activity.Title,
+                Videos = activity.Videos
+            };
+        }
+
         private void EnsureMatchingActivityName(ViewModels.Activity activity)
         {
             if (activity.Skus == null)

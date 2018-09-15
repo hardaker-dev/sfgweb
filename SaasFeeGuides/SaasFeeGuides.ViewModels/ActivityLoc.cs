@@ -14,7 +14,7 @@ namespace SaasFeeGuides.ViewModels
         public string Videos { get; set; }
         public string Images { get; set; }
 
-        public ActivitySkuLoc[] Skus { get; set; }
+        public IList<ActivitySkuLoc> Skus { get; set; }
     }
 
 }

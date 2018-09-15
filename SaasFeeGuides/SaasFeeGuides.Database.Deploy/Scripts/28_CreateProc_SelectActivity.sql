@@ -18,6 +18,7 @@ BEGIN
 	INNER JOIN App.Content cMenuImage on cMenuImage.Id = [MenuImageContentId] and (cMenuImage.Locale = @Locale OR cMenuImage.Locale= 'na')
 	LEFT JOIN App.Content cVideos on cVideos.Id = [VideoContentId] and (cVideos.Locale = @Locale OR cVideos.Locale= 'na')
 	LEFT JOIN App.Content cImages on cImages.Id = [ImageContentId] and (cImages.Locale = @Locale OR cImages.Locale= 'na')
+	where a.[Id] = @ActivityId
 
 	select actS.[Id],
 		a.[Name] as ActivityName,

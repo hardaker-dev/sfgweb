@@ -28,6 +28,37 @@ namespace SaasFeeGuides.RestClient
         {
             AutomaticDecompression = DecompressionMethods.GZip
         });
+        public async Task<IList<DateTime>> GetActivitySkuDates(int activitySkuId, DateTime? dateFrom,DateTime? dateTo)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity","sku", activitySkuId,"date")
+                  .WithQueryParameters(new Dictionary<string, object>()
+                {
+                    {"dateFrom",dateFrom?.ToString(ApiConstants.DateStringFormat) },
+                    {"dateTo",dateTo?.ToString(ApiConstants.DateStringFormat) }
+                })
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<IList<DateTime>>();
+        }
+        public async Task<ActivitySkuLoc> GetActivitySku(int activitySkuId, string locale)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity","sku", activitySkuId)
+                  .WithQueryParameters(new Dictionary<string, object>()
+                {
+                    {"locale",locale }
+                })
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<ActivitySkuLoc>();
+        }
         public async Task<ActivityLoc> GetActivity(int activityId,string locale)
         {
             var request = _serviceUri.AsRestRequest()

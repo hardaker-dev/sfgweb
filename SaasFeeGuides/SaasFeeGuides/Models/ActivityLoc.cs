@@ -7,7 +7,7 @@ namespace SaasFeeGuides.Models
 {
     public class ActivityLoc
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -15,7 +15,7 @@ namespace SaasFeeGuides.Models
         public string Videos { get; set; }
         public string Images { get; set; }
 
-        public IEnumerable<ActivitySkuLoc> Skus { get; set; }
+        public IList<ActivitySkuLoc> Skus { get; set; }
 
     }
 }

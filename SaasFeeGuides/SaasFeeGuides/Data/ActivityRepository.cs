@@ -14,19 +14,63 @@ namespace SaasFeeGuides.Data
     public interface IActivityRepository
     {
         Task<IEnumerable<Models.ActivityLoc>> SelectActivities(string locale);
-        Task<int> UpsertActivity(Models.Activity activity);
-        Task<int> FindActivityByName(string name);
+        Task<Models.ActivityLoc> SelectActivity(int activityId, string locale);
+        Task<Models.ActivitySkuLoc> SelectActivitySku(int activitySkuId, string locale);
+        Task<IEnumerable<DateTime>> SelectActivitySkuDates(int activitySkuId, DateTime? dateFrom, DateTime? dateTo);
+
+        Task<int> UpsertActivity(Models.Activity activity);       
         Task<int> UpsertActivitySku(Models.ActivitySku activitySku);
+
+        Task<int> FindActivityByName(string name);
         Task<int> FindActivitySkuByName(string name);
 
-        Task<Models.ActivityLoc> SelectActivity(int activityId, string v);
         Task<int> InsertActivitySkuDate(ActivitySkuDate activitySkuDate);
     }
     public class ActivityRepository : DataAccessBase, IActivityRepository
     {
         public ActivityRepository(string connectionString) : base(connectionString)
         {
+           
         }
+
+        public async Task<Models.ActivitySkuLoc> SelectActivitySku(int activitySkuId, string locale)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "[Activities].[SelectActivitySku]";
+                    command.Parameters.AddWithValue("@ActivitySkuId", activitySkuId);
+                    command.Parameters.AddWithValue("@Locale", locale);
+
+                    return await ReadSingleAsync(command, ReadActivitySku);
+                }
+            }
+        }
+
+        public async Task<IEnumerable<DateTime>> SelectActivitySkuDates(int activitySkuId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "[Activities].[SelectActivitySkuDates]";
+                    command.Parameters.AddWithValue("@ActivitySkuId", activitySkuId);
+                    command.Parameters.AddWithValue("@DateFrom",(object) dateFrom ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DateTo", (object)dateTo ?? DBNull.Value);
+
+                    return await ReadListAsync(command, ReadDateTime);
+                }
+            }
+        }
+
+        private DateTime ReadDateTime(SqlDataReader reader)
+        {
+            return GetDateTime(reader, 0).Value;
+        }
+
         public async Task<int> FindActivityByName(string name)
         {
             using (var cn = await GetNewConnectionAsync())
@@ -101,52 +145,7 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        private Models.ActivitySkuLoc ReadActivitySku(SqlDataReader reader)
-        {
-            try
-            {
-                return new Models.ActivitySkuLoc
-                {
-                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
-                    ActivityName = GetString(reader, 1),
-                    Name = GetString(reader,2),
-                    Title = GetString(reader, 3),
-                    Description = GetString(reader, 4),
-                    PricePerPerson = GetDouble(reader, 5) ?? 0,
-                    MinPersons = GetInt(reader, 6) ?? 0,
-                    MaxPersons = GetInt(reader, 7) ?? 0,
-                    AdditionalRequirements = GetString(reader, 8),
-                    DurationDays = GetDouble(reader, 9) ?? 0,
-                    DurationHours = GetDouble(reader, 10) ?? 0,
-                    WebContent = GetString(reader, 11),
-                };
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error reading ActivitySku", ex);
-            }
-        }
-
-        private Models.ActivityLoc ReadActivity(SqlDataReader reader)
-        {
-            try
-            {
-                return new Models.ActivityLoc
-                {
-                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
-                    Name = GetString(reader, 1),
-                    Title = GetString(reader, 2),
-                    Description = GetString(reader, 3),
-                   MenuImage = GetString(reader,4),
-                    Videos = GetString(reader,5),
-                    Images = GetString(reader, 6),
-                };
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error reading Activity", ex);
-            }
-        }
+      
 
         public async Task<int> UpsertActivity(Models.Activity activity)
         {
@@ -258,5 +257,54 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
+
+        private Models.ActivitySkuLoc ReadActivitySku(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.ActivitySkuLoc
+                {
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),                    
+                    ActivityName = GetString(reader, 1),
+                    Name = GetString(reader, 2),
+                    Title = GetString(reader, 3),
+                    Description = GetString(reader, 4),
+                    PricePerPerson = GetDouble(reader, 5) ?? 0,
+                    MinPersons = GetInt(reader, 6) ?? 0,
+                    MaxPersons = GetInt(reader, 7) ?? 0,
+                    AdditionalRequirements = GetString(reader, 8),
+                    DurationDays = GetDouble(reader, 9) ?? 0,
+                    DurationHours = GetDouble(reader, 10) ?? 0,
+                    WebContent = GetString(reader, 11),
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading ActivitySku", ex);
+            }
+        }
+
+        private Models.ActivityLoc ReadActivity(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.ActivityLoc
+                {
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
+                    Name = GetString(reader, 1),
+                    Title = GetString(reader, 2),
+                    Description = GetString(reader, 3),
+                    MenuImage = GetString(reader, 4),
+                    Videos = GetString(reader, 5),
+                    Images = GetString(reader, 6),
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading Activity", ex);
+            }
+        }
+
+        
     }
 }

@@ -7,6 +7,7 @@ BEGIN
 	SET NOCOUNT ON;
 	DECLARE @activitySkuId int
 	DECLARE @activityId int
+	DECLARE @activitySkuDateId int
 	DECLARE @message nvarchar(max)
 
 	SET @activityId = (SELECT Id from Activities.Activity where [Name] = @ActivityName)
@@ -30,10 +31,16 @@ BEGIN
 		set @message=  (SELECT 'Cannot find activity sku with name ''' + @ActivitySkuName + '''');
 		THROW 50001,@message,0 		
 	END
-
-	INSERT INTO Activities.[ActivitySkuDate] ([ActivitySkuId],[DateTime])
-	VALUES (@activitySkuId,@DateTime)
-
-	SELECT CAST(SCOPE_IDENTITY() as INT)
-
+	
+	SET @activitySkuDateId = (SELECT 1 FROM Activities.[ActivitySkuDate] WHERE [ActivitySkuId] = @activitySkuId and [DateTime] = @DateTime)
+	IF @activitySkuDateId is NULL
+	BEGIN
+		INSERT INTO Activities.[ActivitySkuDate] ([ActivitySkuId],[DateTime])
+		VALUES (@activitySkuId,@DateTime)
+		SELECT CAST(SCOPE_IDENTITY() as INT)
+	END
+	ELSE
+	BEGIN
+		SELECT @activitySkuDateId
+	END
 END

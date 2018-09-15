@@ -11,7 +11,7 @@ BEGIN TRAN
 	ALTER TABLE [Activities].[ActivitySkuDate]  
 	ADD CONSTRAINT PK_ActivitySkuDate PRIMARY KEY CLUSTERED ([Id]);   
 
-	CREATE NONCLUSTERED INDEX CIX_ActivitySkuDate ON [Activities].[ActivitySkuDate] ([ActivitySkuId],[DateTime]);
+	CREATE UNIQUE NONCLUSTERED INDEX CIX_ActivitySkuDate ON [Activities].[ActivitySkuDate] ([ActivitySkuId],[DateTime]);
 
 	ALTER TABLE [Activities].[ActivitySkuDate]
 	ADD CONSTRAINT FK_ActivitySkuDate_ActivitySkuId FOREIGN KEY (ActivitySkuId)     

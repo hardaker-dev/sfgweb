@@ -46,7 +46,8 @@ namespace SaasFeeGuides.IntegrationTests
                     Username = username,
                     IsAdmin = true,
                     DateOfBirth = new DateTime(1984, 10, 31),
-
+                    PhoneNumber = "+447495605347",
+                    Address = "Saas Fee"
                 });
             }
             catch (Exception e)

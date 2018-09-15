@@ -4,7 +4,7 @@ namespace SaasFeeGuides.Models
 {
     public class ActivitySkuLoc
     {
-        public int? Id { get; internal set; }
+        public int Id { get; internal set; }
         public string ActivityName { get; internal set; }
         public string Name { get; internal set; }
         public string Title { get; internal set; }

@@ -4,17 +4,17 @@ namespace SaasFeeGuides.ViewModels
 {
     public class ActivitySkuLoc
     {
-        public int? Id { get; internal set; }
-        public string ActivityName { get; internal set; }
-        public string Name { get; internal set; }
-        public string Title { get; internal set; }
-        public string Description { get; internal set; }
-        public double PricePerPerson { get; internal set; }
-        public int MinPersons { get; internal set; }
-        public int MaxPersons { get; internal set; }
-        public string AdditionalRequirements { get; internal set; }
-        public double DurationDays { get; internal set; }
-        public double DurationHours { get; internal set; }
-        public string WebContent { get; internal set; }
+        public int Id { get;  set; }
+        public string ActivityName { get;  set; }
+        public string Name { get;  set; }
+        public string Title { get;  set; }
+        public string Description { get;  set; }
+        public double PricePerPerson { get;  set; }
+        public int MinPersons { get;  set; }
+        public int MaxPersons { get;  set; }
+        public string AdditionalRequirements { get;  set; }
+        public double DurationDays { get;  set; }
+        public double DurationHours { get;  set; }
+        public string WebContent { get;  set; }
     }
 }

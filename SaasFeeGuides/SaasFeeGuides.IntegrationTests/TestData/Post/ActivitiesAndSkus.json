@@ -29,8 +29,8 @@
       "Locale": "na",
       "ContentType": "Image"
     },
-    "VideoContentIds": null,
-    "ImageContentIds": null,
+    "VideoContentId": null,
+    "ImageContentId": null,
     "IsActive": true,
     "Skus": [
       {
@@ -123,8 +123,8 @@
       "Locale": "na",
       "ContentType": "Image"
     },
-    "VideoContentIds": null,
-    "ImageContentIds": null,
+    "VideoContentId": null,
+    "ImageContentId": null,
     "IsActive": true,
     "Skus": [
       {

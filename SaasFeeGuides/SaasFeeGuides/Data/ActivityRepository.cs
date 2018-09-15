@@ -14,6 +14,7 @@ namespace SaasFeeGuides.Data
 {
     public interface IActivityRepository
     {
+        Task<IEnumerable<Models.ActivityLoc>> SelectActivities(string locale);
         Task<int> UpsertActivity(Models.Activity activity);
         Task<int> FindActivityByName(string name);
         Task<int> UpsertActivitySku(Models.ActivitySku activitySku);
@@ -56,6 +57,44 @@ namespace SaasFeeGuides.Data
             }
         }
 
+        public async Task<IEnumerable<Models.ActivityLoc>> SelectActivities(string locale)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "[Activities].[SelectActivities]";
+                    command.Parameters.AddWithValue("@Locale", locale);
+
+
+                    return await ReadListAsync(command, ReadActivity);
+                  
+                }
+            }
+        }
+
+        private Models.ActivityLoc ReadActivity(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.ActivityLoc
+                {
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
+                    Name = GetString(reader, 1),
+                    Title = GetString(reader, 2),
+                    Description = GetString(reader, 3),
+                   MenuImage = GetString(reader,4),
+                    Videos = GetString(reader,5),
+                    Images = GetString(reader, 6),
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading Activity", ex);
+            }
+        }
+
         public async Task<int> UpsertActivity(Models.Activity activity)
         {
             try
@@ -69,8 +108,8 @@ namespace SaasFeeGuides.Data
                         command.Parameters.AddWithValue("@TitleContentId", await activity.TitleContentId);
                         command.Parameters.AddWithValue("@DescriptionContentId",  await activity.DescriptionContentId);
                         command.Parameters.AddWithValue("@MenuImageContentId", await activity.MenuImageContentId);
-                        command.Parameters.AddWithValue("@VideoContentIds", (await activity.VideoContentIds) ?? string.Empty);
-                        command.Parameters.AddWithValue("@ImageContentIds", (await activity.ImageContentIds) ?? string.Empty);
+                        command.Parameters.AddWithValue("@VideoContentId", (await activity.VideoContentId) ?? string.Empty);
+                        command.Parameters.AddWithValue("@ImageContentId", (await activity.ImageContentId) ?? string.Empty);
                         command.Parameters.AddWithValue("@IsActive", activity.IsActive ?? false);
                         command.CommandType = CommandType.StoredProcedure;                       
                         command.CommandText = "[Activities].[UpsertActivity]";

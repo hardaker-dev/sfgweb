@@ -29,8 +29,8 @@
       "Locale": "na",
       "ContentType": "Image"
     },
-    "VideoContentIds": null,
-    "ImageContentIds": null,
+    "VideoContentId": null,
+    "ImageContentId": null,
     "IsActive": true
   },
   {
@@ -69,8 +69,8 @@
       "Locale": "na",
       "ContentType": "Image"
     },
-    "VideoContentIds": null,
-    "ImageContentIds": null,
+    "VideoContentId": null,
+    "ImageContentId": null,
     "IsActive": true
   }
 ]

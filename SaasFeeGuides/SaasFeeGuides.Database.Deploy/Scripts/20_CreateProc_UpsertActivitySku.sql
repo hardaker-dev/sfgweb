@@ -40,9 +40,9 @@ BEGIN
 		IF @activityId is null
 		BEGIN
 			DECLARE @message nvarchar(max)
-			set @message=  (SELECT 'Cannot find activity with name ''' + @ActivityName + '''')
+			set @message=  (SELECT 'Cannot find activity with name ''' + @ActivityName + '''');
 --15600,-1,-1, 'mysp_CreateCustomer'
-			RAISERROR(50001,11,-1, @message);    
+			THROW 50001,@message,0 
 		END
 		
 		INSERT INTO Activities.ActivitySku ([ActivityId],

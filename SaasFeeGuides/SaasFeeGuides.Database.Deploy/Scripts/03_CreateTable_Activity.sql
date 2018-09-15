@@ -8,8 +8,8 @@ CREATE TABLE [Activities].[Activity](
 	[TitleContentId] varchar(50) not null,
 	[DescriptionContentId] varchar(50) NOT NULL,
 	[MenuImageContentId] varchar(50) not null,
-	[VideoContentIds] varchar(max) not null,
-	[ImageContentIds] varchar(max) not null,
+	[VideoContentId] varchar(50) not null,
+	[ImageContentId] varchar(50) not null,
 	[IsActive] bit not null)
 
 ALTER TABLE [Activities].[Activity]  

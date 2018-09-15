@@ -11,7 +11,7 @@ using SaasFeeGuides.ViewModels;
 
 namespace SaasFeeGuides.Controllers
 {
-    [Authorize("Admin")]
+   
     [Route("api/[controller]")]
     [ApiController]
     public class ActivityController : ControllerBase
@@ -26,7 +26,7 @@ namespace SaasFeeGuides.Controllers
             _activityRepository = activityRepository;
             _contentRepository = contentRepository;
         }
-
+        [Authorize("Admin")]
         [HttpPut("sku")]
         public async Task<IActionResult> AddOrUpdateActivitySku(ViewModels.ActivitySku activitySku)
         {
@@ -35,8 +35,8 @@ namespace SaasFeeGuides.Controllers
             var id = await _activityRepository.UpsertActivitySku(activityModel);
 
             return new OkObjectResult(id);
-        }      
-
+        }
+        [Authorize("Admin")]
         [HttpPost]
         public async Task<IActionResult> AddActivity(ViewModels.Activity activity)
         {
@@ -47,8 +47,8 @@ namespace SaasFeeGuides.Controllers
             await UpsertSkus(activity.Skus);
 
             return new OkObjectResult(activityId);
-        }        
-
+        }
+        [Authorize("Admin")]
         [HttpPatch]
         public async Task<IActionResult> UpdateActivity(ViewModels.Activity activity)
         {
@@ -61,6 +61,15 @@ namespace SaasFeeGuides.Controllers
             await UpsertSkus(activity.Skus);
 
             return new OkObjectResult(activityId);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetActivities(string locale)
+        {
+            var activities = await _activityRepository.SelectActivities(locale ?? "en");
+           
+
+            return new OkObjectResult(activities);
         }
 
         private void EnsureMatchingActivityName(ViewModels.Activity activity)
@@ -93,8 +102,8 @@ namespace SaasFeeGuides.Controllers
                 Id = activityId,
                 TitleContentId = _contentRepository.InsertContent(activity.TitleContent),
                 MenuImageContentId = _contentRepository.InsertContent(activity.MenuImageContentId),
-                ImageContentIds = _contentRepository.InsertContent(activity.ImageContentIds),
-                VideoContentIds = _contentRepository.InsertContent(activity.VideoContentIds),
+                ImageContentId = _contentRepository.InsertContent(activity.ImageContentId),
+                VideoContentId = _contentRepository.InsertContent(activity.VideoContentId),
                 Name = activity.Name,
                 DescriptionContentId = _contentRepository.InsertContent(activity.DescriptionContent),
                 IsActive = activity.IsActive

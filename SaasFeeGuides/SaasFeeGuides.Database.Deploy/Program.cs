@@ -1,4 +1,5 @@
 ﻿using DbUp;
+using DbUp.SqlServer;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
@@ -9,9 +10,7 @@ namespace SaasFeeGuides.Database.Deploy
     public class Program
     {
         static int Main(string[] args)
-        {
-            //        ?? "Server=tcp:testsfgsql01.database.windows.net,1433;Initial Catalog=sfg;Persist Security Info=False;User ID=JamesHardaker;Password=Trek4ever!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-
+        {       
             var env = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var config = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -19,10 +18,7 @@ namespace SaasFeeGuides.Database.Deploy
               .Build();
             var connectionString = config["ConnectionStrings:DefaultConnection"];
       
-          //  var connectionString =
-                
-           //     ?? "Server=tcp:testsfgsql01.database.windows.net,1433;Initial Catalog=sfg;Persist Security Info=False;User ID=JamesHardaker;Password=Trek4ever!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
-            return DeployDatabase(connectionString);
+          return DeployDatabase(connectionString);
         }
 
         public static void DeleteDatabase(string connectionString)
@@ -30,10 +26,17 @@ namespace SaasFeeGuides.Database.Deploy
             DropDatabase.For.SqlDatabase(connectionString);
         }
 
-        public static int DeployDatabase(string connectionString)
+        public static int DeployDatabase(string connectionString,bool azure=true)
         {
-            EnsureDatabase.For.SqlDatabase(connectionString);
+            if (azure)
+            {
+                EnsureDatabase.For.SqlDatabase(connectionString, 300);
+            }
+            else
+            {
 
+                EnsureDatabase.For.SqlDatabase(connectionString, 300);
+            }
             var upgrader =
                 DeployChanges.To
                     .SqlDatabase(connectionString)

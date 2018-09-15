@@ -27,6 +27,16 @@ namespace SaasFeeGuides.IntegrationTests
         }
 
         [Fact]
+        public async Task GetActivities()
+        {
+            var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
+
+            await AddActivityAndSkus(authClient);
+            var activitiesEnglish = await _client.GetActivities("en");
+            var activitiesGerman = await _client.GetActivities("de");
+        }
+
+        [Fact]
         public async Task AddAndUpdateActivityThenSkus()
         {
             var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");

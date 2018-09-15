@@ -4,8 +4,8 @@
 	@TitleContentId varchar(50),
 	@DescriptionContentId varchar(50),
 	@MenuImageContentId varchar(50),
-	@VideoContentIds varchar(max),
-	@ImageContentIds varchar(max),
+	@VideoContentId varchar(50),
+	@ImageContentId varchar(50),
 	@IsActive bit
 AS
 BEGIN
@@ -19,8 +19,8 @@ BEGIN
 			TitleContentId = COALESCE(@TitleContentId,TitleContentId),
 			DescriptionContentId = COALESCE(@DescriptionContentId,DescriptionContentId),
 			MenuImageContentId = COALESCE(@MenuImageContentId,MenuImageContentId),
-			VideoContentIds = COALESCE(@VideoContentIds,VideoContentIds),
-			ImageContentIds = COALESCE(@ImageContentIds,ImageContentIds),
+			VideoContentId = COALESCE(@VideoContentId,VideoContentId),
+			ImageContentId = COALESCE(@ImageContentId,ImageContentId),
 			IsActive = COALESCE(@IsActive,IsActive)
 		WHERE Id = @Id
 		SELECT @Id
@@ -31,11 +31,11 @@ BEGIN
 										[TitleContentId],
 										[DescriptionContentId],
 										[MenuImageContentId],
-										[VideoContentIds],
-										[ImageContentIds],
+										[VideoContentId],
+										[ImageContentId],
 										[IsActive])
 		VALUES (@Name,@TitleContentId,@DescriptionContentId,
-		@MenuImageContentId,@VideoContentIds,@ImageContentIds,@IsActive)
+		@MenuImageContentId,@VideoContentId,@ImageContentId,@IsActive)
 
 		SELECT CAST(SCOPE_IDENTITY() as INT)
 	END

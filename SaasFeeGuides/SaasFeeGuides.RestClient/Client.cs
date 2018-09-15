@@ -3,6 +3,7 @@ using RiskFirst.RestClient;
 using SaasFeeGuides.RestClient.Extensions;
 using SaasFeeGuides.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -28,6 +29,21 @@ namespace SaasFeeGuides.RestClient
             AutomaticDecompression = DecompressionMethods.GZip
         });
 
+        public async Task<IEnumerable<ActivityLoc>> GetActivities(string locale)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity")
+                  .WithQueryParameters(new Dictionary<string, object>()
+                {
+                    {"locale",locale }
+                })
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<IEnumerable<ActivityLoc>>();
+        }
         public async Task AddAccount(Registration registrationViewModel)
         {
             var request = _serviceUri.AsRestRequest()

@@ -12,8 +12,8 @@ namespace SaasFeeGuides.Models
         public Task<string> TitleContentId { get; set; }
         public Task<string> DescriptionContentId { get; set; }
         public Task<string> MenuImageContentId { get; set; }
-        public Task<string> VideoContentIds { get; set; }
-        public Task<string> ImageContentIds { get; set; }
+        public Task<string> VideoContentId { get; set; }
+        public Task<string> ImageContentId { get; set; }
         public bool? IsActive { get; set; }
     }
 }

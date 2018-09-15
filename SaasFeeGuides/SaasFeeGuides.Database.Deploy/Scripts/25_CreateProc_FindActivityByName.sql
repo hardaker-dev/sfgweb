@@ -10,8 +10,8 @@ BEGIN
 				[TitleContentId],
 				[DescriptionContentId],
 				[MenuImageContentId],
-				[VideoContentIds],
-				[ImageContentIds],
+				[VideoContentId],
+				[ImageContentId],
 				[IsActive]
 		FROM Activities.Activity 
 		WHERE [Name] = @Name

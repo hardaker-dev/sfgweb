@@ -18,7 +18,22 @@ namespace SaasFeeGuides.RestClient
         {
             _bearerToken = bearerToken;
         }
-     
+
+        public async Task<int> AddActivitySkuDate(ActivitySkuDate activitySkuDate)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", "sku","date")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.PostJsonAsync(activitySkuDate, DefaultClient);
+            var response = await post;
+
+
+            return await post.ReceiveJsonAsync<int>();
+
+        }
+
         public async Task<int> AddOrUpdateActivitySku(ActivitySku activitySku)
         {
             var request = _serviceUri.AsRestRequest()

@@ -4,7 +4,7 @@ BEGIN TRAN
 
 	CREATE TABLE [Activities].[ActivityEquiptment](	
 		[ActivityId] [int] NOT NULL,
-		[ActivitySkuId] [int] NOT NULL,
+		[ActivitySkuId] [int] NULL,
 		[EquiptmentId] int not null		
 	)
    

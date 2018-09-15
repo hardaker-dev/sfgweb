@@ -28,7 +28,24 @@ namespace SaasFeeGuides.IntegrationTests
                 await AddActivityAndSkus(authClient);
             }
         }
+        [Fact]
+        public async Task AddActivitySkuDate()
+        {
+            var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
 
+
+            var activitiesEnglish = await _client.GetActivities("en");
+            if (activitiesEnglish.Count == 0)
+            {
+                await AddActivityAndSkus(authClient);
+            }
+            var activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
+            {
+                ActivityName ="Allalin",
+                DateTime = new DateTime(2018,10,15)
+            });
+
+        }
         [Fact]
         public async Task GetActivities()
         {

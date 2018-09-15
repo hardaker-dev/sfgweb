@@ -26,6 +26,18 @@ namespace SaasFeeGuides.Controllers
             _activityRepository = activityRepository;
             _contentRepository = contentRepository;
         }
+
+
+        [Authorize("Admin")]
+        [HttpPost("sku/date")]
+        public async Task<IActionResult> AddActivitySkuDate(ViewModels.ActivitySkuDate activitySkuDate)
+        {
+
+            var id = await _activityRepository.InsertActivitySkuDate(activitySkuDate);
+
+            return new OkObjectResult(id);
+        }
+
         [Authorize("Admin")]
         [HttpPut("sku")]
         public async Task<IActionResult> AddOrUpdateActivitySku(ViewModels.ActivitySku activitySku)

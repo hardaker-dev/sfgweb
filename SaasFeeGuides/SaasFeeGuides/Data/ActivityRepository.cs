@@ -20,6 +20,7 @@ namespace SaasFeeGuides.Data
         Task<int> FindActivitySkuByName(string name);
 
         Task<Models.ActivityLoc> SelectActivity(int activityId, string v);
+        Task<int> InsertActivitySkuDate(ActivitySkuDate activitySkuDate);
     }
     public class ActivityRepository : DataAccessBase, IActivityRepository
     {
@@ -226,6 +227,36 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        
+        public async Task<int> InsertActivitySkuDate(ActivitySkuDate activitySkuDate)
+        {
+            try
+            {
+                using (var cn = await GetNewConnectionAsync())
+                {
+                    using (var command = cn.CreateCommand())
+                    {
+                        command.Parameters.AddWithValue("@ActivityName", activitySkuDate.ActivityName);
+                        command.Parameters.AddWithValue("@ActivitySkuName", activitySkuDate.ActivitySkuName);
+                        command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime);
+
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.CommandText = "[Activities].[InsertActivitySkuDate]";
+
+                        return (int)await command.ExecuteScalarAsync();
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                switch ((DataError)e.Number)
+                {
+                    case DataError.CannotFindRecord:
+                        var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
+                        throw new BadRequestException(error.Message, e);
+                    default: throw e;
+                }
+            }
+        }
     }
 }

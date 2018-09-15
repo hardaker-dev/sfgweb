@@ -41,7 +41,6 @@ BEGIN
 		BEGIN
 			DECLARE @message nvarchar(max)
 			set @message=  (SELECT 'Cannot find activity with name ''' + @ActivityName + '''');
---15600,-1,-1, 'mysp_CreateCustomer'
 			THROW 50001,@message,0 
 		END
 		

@@ -9,6 +9,7 @@ using Xunit.Abstractions;
 
 namespace SaasFeeGuides.IntegrationTests
 {
+    [Collection("Database collection")]
     public class ClientTestFixture : BaseTestFixture
     {
        

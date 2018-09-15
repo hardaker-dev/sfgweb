@@ -7,6 +7,7 @@ namespace SaasFeeGuides.Helpers
 {
     public enum DataError
     {
-        UniqueIndexViolation = 2601
+        UniqueIndexViolation = 2601,
+        CannotFindRecord = 50001
     }
 }

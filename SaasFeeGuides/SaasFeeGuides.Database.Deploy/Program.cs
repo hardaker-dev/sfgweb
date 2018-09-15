@@ -25,6 +25,11 @@ namespace SaasFeeGuides.Database.Deploy
             return DeployDatabase(connectionString);
         }
 
+        public static void DeleteDatabase(string connectionString)
+        {
+            DropDatabase.For.SqlDatabase(connectionString);
+        }
+
         public static int DeployDatabase(string connectionString)
         {
             EnsureDatabase.For.SqlDatabase(connectionString);

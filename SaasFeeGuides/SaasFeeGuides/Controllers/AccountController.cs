@@ -62,6 +62,7 @@ namespace SaasFeeGuides.Controllers
                 PhoneNumber = model.PhoneNumber,
                 UserId = userIdentity.Id
             });
+            await _userManager.AddClaimAsync(userIdentity, new System.Security.Claims.Claim(Constants.Strings.JwtClaimIdentifiers.Role, Constants.Strings.JwtClaims.ApiAccess));
 
             return new OkResult();
         }

@@ -8,6 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace SaasFeeGuides.Data
 {
@@ -63,6 +64,7 @@ namespace SaasFeeGuides.Data
                 {
                     using (var command = cn.CreateCommand())
                     {
+                        command.Parameters.AddWithValue("@Id",(object)activity.Id ?? DBNull.Value);
                         command.Parameters.AddWithValue("@Name", activity.Name);
                         command.Parameters.AddWithValue("@TitleContentId", await activity.TitleContentId);
                         command.Parameters.AddWithValue("@DescriptionContentId",  await activity.DescriptionContentId);
@@ -70,22 +72,10 @@ namespace SaasFeeGuides.Data
                         command.Parameters.AddWithValue("@VideoContentIds", (await activity.VideoContentIds) ?? string.Empty);
                         command.Parameters.AddWithValue("@ImageContentIds", (await activity.ImageContentIds) ?? string.Empty);
                         command.Parameters.AddWithValue("@IsActive", activity.IsActive ?? false);
-                        command.CommandType = CommandType.StoredProcedure;
-                        if (activity.Id.HasValue)
-                        {
-                            command.CommandText = "[Activities].[UpdateActivity]";
+                        command.CommandType = CommandType.StoredProcedure;                       
+                        command.CommandText = "[Activities].[UpsertActivity]";
 
-                            command.Parameters.AddWithValue("@Id", activity.Id.Value);
-
-                            await command.ExecuteNonQueryAsync();
-                            return activity.Id.Value;
-                        }
-                        else
-                        {
-                            command.CommandText = "[Activities].[InsertActivity]";
-                            var result = await command.ExecuteScalarAsync();
-                            return (int)result;
-                        }
+                        return (int) await command.ExecuteScalarAsync();              
                     }
                 }
             }
@@ -110,6 +100,7 @@ namespace SaasFeeGuides.Data
                     using (var command = cn.CreateCommand())
                     {
                         command.Parameters.AddWithValue("@Name", activitySku.Name);
+                        command.Parameters.AddWithValue("@ActivityName", activitySku.ActivityName);
                         command.Parameters.AddWithValue("@TitleContentId", await activitySku.TitleContentId);
                         command.Parameters.AddWithValue("@DescriptionContentId", await activitySku.DescriptionContentId);
                         command.Parameters.AddWithValue("@PricePerPerson", activitySku.PricePerPerson);
@@ -120,21 +111,12 @@ namespace SaasFeeGuides.Data
                         command.Parameters.AddWithValue("@DurationHours", activitySku.DurationHours);
                         command.Parameters.AddWithValue("@WebContentId", await activitySku.WebContentId);
                         command.CommandType = CommandType.StoredProcedure;
-                        if (activitySku.Id.HasValue)
-                        {
-                            command.CommandText = "[Activities].[UpdateActivitySku]";
-                            command.Parameters.AddWithValue("@Id", activitySku.Id.Value);
+                       
+                        command.CommandText = "[Activities].[UpsertActivitySku]";
+                        command.Parameters.AddWithValue("@Id", (object)activitySku.Id ?? DBNull.Value);
 
-                            await command.ExecuteNonQueryAsync();
-                            return activitySku.Id.Value;
-                        }
-                        else
-                        {
-                            command.Parameters.AddWithValue("@ActivityName", activitySku.ActivityName);
-                            command.CommandText = "[Activities].[InsertActivitySku]";
-                            var result = await command.ExecuteScalarAsync();
-                            return (int)result;
-                        }
+                        return (int)await command.ExecuteScalarAsync();
+
                     }
                 }
             }
@@ -145,6 +127,9 @@ namespace SaasFeeGuides.Data
                     case DataError.UniqueIndexViolation:
                         throw new BadRequestException($"Activity Sku already exists with Name '{activitySku.Name}'", e);
 
+                    case DataError.CannotFindRecord:
+                        var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
+                        throw new BadRequestException(error.Message, e);
                     default: throw e;
                 }
             }

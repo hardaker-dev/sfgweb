@@ -28,6 +28,7 @@ namespace SaasFeeGuides.IntegrationTests.TestFramework
 #else
             var env = "Development";
 #endif
+
             var config = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                .AddJsonFile($"appsettings.{env}.json", optional: true)

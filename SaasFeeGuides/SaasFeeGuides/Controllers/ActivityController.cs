@@ -27,92 +27,97 @@ namespace SaasFeeGuides.Controllers
             _contentRepository = contentRepository;
         }
 
-        [HttpPost("sku")]
-        public async Task<IActionResult> CreateActivitySku(ViewModels.ActivitySku activitySku)
+        [HttpPut("sku")]
+        public async Task<IActionResult> AddOrUpdateActivitySku(ViewModels.ActivitySku activitySku)
         {
-            var activityModel = new Models.ActivitySku
-            {
-                ActivityName = activitySku.ActivityName,
-                Name = activitySku.Name,
-                TitleContentId =  _contentRepository.InsertContent(activitySku.TitleContent),
-                DescriptionContentId =  _contentRepository.InsertContent(activitySku.DescriptionContent),
-                PricePerPerson = activitySku.PricePerPerson,
-                MinPersons = activitySku.MinPersons,
-                MaxPersons = activitySku.MaxPersons,
-                AdditionalRequirementsContentId =  _contentRepository.InsertContent(activitySku.AdditionalRequirementsContent),
-                DurationDays = activitySku.DurationDays,
-                DurationHours = activitySku.DurationHours,
-                WebContentId =  _contentRepository.InsertContent(activitySku.WebContent),
-            };
+            Models.ActivitySku activityModel = MapToModel(activitySku);
 
             var id = await _activityRepository.UpsertActivitySku(activityModel);
 
             return new OkObjectResult(id);
-        }
+        }      
 
         [HttpPost]
-        public async Task<IActionResult> CreateActivity(ViewModels.Activity activity)
+        public async Task<IActionResult> AddActivity(ViewModels.Activity activity)
         {
-            var activityModel = new Models.Activity
-            {
-                TitleContentId =  _contentRepository.InsertContent(activity.TitleContent),
-                MenuImageContentId =  _contentRepository.InsertContent( activity.MenuImageContentId),
-                ImageContentIds =  _contentRepository.InsertContent(activity.ImageContentIds),
-                VideoContentIds =  _contentRepository.InsertContent(activity.VideoContentIds),
-                Name = activity.Name,
-                DescriptionContentId =  _contentRepository.InsertContent(activity.DescriptionContent),
-                IsActive = activity.IsActive
-            };
+            var activityModel = MapToModel(activity, null);
 
-            var id = await _activityRepository.UpsertActivity(activityModel);
+            var activityId = await _activityRepository.UpsertActivity(activityModel);
+            EnsureMatchingActivityName(activity);
+            await UpsertSkus(activity.Skus);
 
-            return new OkObjectResult(id);
-        }
+            return new OkObjectResult(activityId);
+        }        
 
         [HttpPatch]
         public async Task<IActionResult> UpdateActivity(ViewModels.Activity activity)
         {
             var activityId = await _activityRepository.FindActivityByName(activity.Name);
-            var activityModel = new Models.Activity
-            {
-                Id = activityId,
-                TitleContentId =  _contentRepository.InsertContent(activity.TitleContent),
-                MenuImageContentId =  _contentRepository.InsertContent( activity.MenuImageContentId),
-                ImageContentIds =  _contentRepository.InsertContent(activity.ImageContentIds),
-                VideoContentIds =  _contentRepository.InsertContent(activity.VideoContentIds),
-                Name = activity.Name,
-                DescriptionContentId =  _contentRepository.InsertContent(activity.DescriptionContent),
-                IsActive = activity.IsActive
-            };
+            var activityModel = MapToModel(activity, activityId);
 
-            var id = await _activityRepository.UpsertActivity(activityModel);
+           
+            await _activityRepository.UpsertActivity(activityModel);
+            EnsureMatchingActivityName(activity);
+            await UpsertSkus(activity.Skus);
 
-            return new OkObjectResult(id);
+            return new OkObjectResult(activityId);
         }
 
-        [HttpPatch("sku")]
-        public async Task<IActionResult> UpdateActivitySku(ViewModels.ActivitySku activitySku)
+        private void EnsureMatchingActivityName(ViewModels.Activity activity)
         {
-            var activitySkuId = await _activityRepository.FindActivitySkuByName(activitySku.Name);
-            var activityModel = new Models.ActivitySku
+            if (activity.Skus == null)
+                return;
+            foreach(var activitySku in activity.Skus)
             {
-                Id = activitySkuId,
+                activitySku.ActivityName = activity.Name;
+            }
+        }
+
+        private async Task<IEnumerable<(string name,int id)>> UpsertSkus(ViewModels.ActivitySku[] activitySkus)
+        {
+            if (activitySkus == null)
+                return Enumerable.Empty<(string name, int id)>();
+
+            return await Task.WhenAll(activitySkus.Select(sku =>
+                   {
+                       Models.ActivitySku activitySkuModel = MapToModel(sku);
+                        
+                       return  _activityRepository.UpsertActivitySku(activitySkuModel).ContinueWith(skuTask => (sku.Name,skuTask.Result));
+                   }));
+        }
+
+        private Models.Activity MapToModel(ViewModels.Activity activity, int? activityId)
+        {
+            return new Models.Activity
+            {
+                Id = activityId,
+                TitleContentId = _contentRepository.InsertContent(activity.TitleContent),
+                MenuImageContentId = _contentRepository.InsertContent(activity.MenuImageContentId),
+                ImageContentIds = _contentRepository.InsertContent(activity.ImageContentIds),
+                VideoContentIds = _contentRepository.InsertContent(activity.VideoContentIds),
+                Name = activity.Name,
+                DescriptionContentId = _contentRepository.InsertContent(activity.DescriptionContent),
+                IsActive = activity.IsActive
+            };
+        }
+
+        private Models.ActivitySku MapToModel(ViewModels.ActivitySku activitySku)
+        {
+            return new Models.ActivitySku
+            {
                 ActivityName = activitySku.ActivityName,
                 Name = activitySku.Name,
-                TitleContentId =  _contentRepository.InsertContent(activitySku.TitleContent),
-                DescriptionContentId =  _contentRepository.InsertContent(activitySku.DescriptionContent),
+                TitleContentId = _contentRepository.InsertContent(activitySku.TitleContent),
+                DescriptionContentId = _contentRepository.InsertContent(activitySku.DescriptionContent),
                 PricePerPerson = activitySku.PricePerPerson,
                 MinPersons = activitySku.MinPersons,
                 MaxPersons = activitySku.MaxPersons,
-                AdditionalRequirementsContentId =  _contentRepository.InsertContent(activitySku.AdditionalRequirementsContent),
+                AdditionalRequirementsContentId = _contentRepository.InsertContent(activitySku.AdditionalRequirementsContent),
                 DurationDays = activitySku.DurationDays,
                 DurationHours = activitySku.DurationHours,
-                WebContentId =  _contentRepository.InsertContent(activitySku.WebContent),
+                WebContentId = _contentRepository.InsertContent(activitySku.WebContent),
             };
-
-            var id = await _activityRepository.UpsertActivitySku(activityModel);
-
-            return new OkObjectResult(id);
         }
+
     }
 }

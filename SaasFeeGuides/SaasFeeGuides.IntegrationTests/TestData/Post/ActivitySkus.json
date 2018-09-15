@@ -1,0 +1,116 @@
+﻿[
+  {
+    "ActivityName": "Allalin",
+    "Name": "AllalinSku",
+    "TitleContent": [
+      {
+        "Id": "AllalinSku_Title",
+        "Value": "ALLALINHORN 4027M",
+        "Locale": "na",
+        "ContentType": "Text"
+      }
+    ],
+    "DescriptionContent": [
+      {
+        "Id": "AllalinSku_Desc",
+        "Value": "<b>MY FIRST 4000M PEAK!</b>\r\nThe Allalin is known as one of the easier 4000m peaks in the Alps and offers an unforgetable experience for good hikers which aim higher!\r\n\r\n\r\n\r\nSome regard the Allalinhorn as a training tour, others take it on for acclimatisation and for quite a few others it is a real holiday highlight and possibly the only 4000er they will ever climb.Whatever your goal, it will be an unforgettable experience.",
+        "Locale": "en",
+        "ContentType": "HTML"
+      },
+      {
+        "Id": "AllalinSku_Desc",
+        "Value": "<b>MEIN 1. VIERTAUSENDER!</b>\r\nDas Allalinhorn gilt als einer der leichteren 4000er der Alpen und bietet ein unvergessliches Erlebnis für sportliche Wanderer, die nach \"Höherem\" streben.\r\n\r\n\r\n\r\nDie einen betrachten ihn als Trainingstour, die anderen nehmen den Gipfel zum Akklimatisieren in Angriff und für etliche ist es der eigentliche Höhepunkt ihrer Ferien. Wie auch immer: Wir führen Sie mit sicherer Hand zum Ziel. ",
+        "Locale": "de",
+        "ContentType": "HTML"
+      }
+    ],
+    "PricePerPerson": 210.0,
+    "MinPersons": 1,
+    "MaxPersons": 8,
+    "AdditionalRequirementsContent": [
+      {
+        "Id": "AllalinSku_AddRequirements",
+        "Value": "+  Easy glacier tour. Minimal gradient.\r\n\r\n+  Good basic fitness level required.",
+        "Locale": "en",
+        "ContentType": "HTML"
+      },
+      {
+        "Id": "AllalinSku_AddRequirements",
+        "Value": "+  Leichte Gletschertour. Geringe Steilheit.\r\n\r\n+  Gute Grundkondition erforderlich.",
+        "Locale": "de",
+        "ContentType": "HTML"
+      }
+    ],
+    "DurationDays": 0.0,
+    "DurationHours": 4.0,
+    "WebContent": [
+      {
+        "Id": "AllalinSku_WebContent",
+        "Value": "test",
+        "Locale": "en",
+        "ContentType": "HTML"
+      }
+    ]
+  },
+
+
+  {
+    "ActivityName": "AllalinEast",
+    "Name": "AllalinEastSku",
+    "TitleContent": [
+      {
+        "Id": "AllalinEastSku_Title",
+        "Value": "ALLALINHORN EAST RIDGE 4027M",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "AllalinEastSku_Title",
+        "Value": "ALLALINHORN OSTGRAT 4027M",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "DescriptionContent": [
+      {
+        "Id": "AllalinEastSku_Desc",
+        "Value": "The Hohlaubgrat (East Ridge) of the Allalin is tranquil and scenically grand. It is a very popular climb that is not too demanding. The point of departure is the Hohlaub/Metro-Window at 3200m. Once exiting the tunnel you step into a different world free from skiers and tourists. The trail leads you along an impressive snow ridge that provides excellent views and assumes the full character of an alpine ascent. Before reaching the summit you will conquer a short, but exhilarating rock step that will require easy scrambling. The descent is via the normal route.",
+        "Locale": "en",
+        "ContentType": "HTML"
+      },
+      {
+        "Id": "AllalinEastSku_Desc",
+        "Value": "Der Hohlaubgrat (Allalin Ostgrat) ist eine äusserst abwechslungsreiche Tour, die alle Aspekte des Bergsteigens vereint. Ausgangspunkt ist das Hohlaub/ Metro-Fenster auf 3200m. Einmal durch den Tunnel gestiegen, erwartet Sie eine atemberaubende Gletscherwelt. Die Route selbst führt an einem eindrücklichen Schneegrat entlang. Bevor Sie den Gipfel erreichen, gilt es, eine kurze, aber interessante Kletterpartie im Fels zu überwinden. Der Abstieg erfolgt über die Allalin Normalroute zurück zum Mittelallalin.",
+        "Locale": "de",
+        "ContentType": "HTML"
+      }
+    ],
+    "PricePerPerson": 210.0,
+    "MinPersons": 1,
+    "MaxPersons": 8,
+    "AdditionalRequirementsContent": [
+      {
+        "Id": "AllalinEastSku_AddRequirements",
+        "Value": "+  Easy glacier tour. Minimal gradient.\r\n\r\n+  Good basic fitness level required.",
+        "Locale": "en",
+        "ContentType": "HTML"
+      },
+      {
+        "Id": "AllalinEastSku_AddRequirements",
+        "Value": "+  Leichte Gletschertour. Geringe Steilheit.\r\n\r\n+  Gute Grundkondition erforderlich.",
+        "Locale": "de",
+        "ContentType": "HTML"
+      }
+    ],
+    "DurationDays": 0.0,
+    "DurationHours": 4.0,
+    "WebContent": [
+      {
+        "Id": "AllalinEastSku_WebContent",
+        "Value": "test",
+        "Locale": "en",
+        "ContentType": "HTML"
+      }
+    ]
+  }
+]

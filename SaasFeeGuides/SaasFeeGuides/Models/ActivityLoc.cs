@@ -14,5 +14,8 @@ namespace SaasFeeGuides.Models
         public string MenuImage { get; set; }
         public string Videos { get; set; }
         public string Images { get; set; }
+
+        public IEnumerable<ActivitySkuLoc> Skus { get; set; }
+
     }
 }

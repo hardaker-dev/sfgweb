@@ -28,8 +28,22 @@ namespace SaasFeeGuides.RestClient
         {
             AutomaticDecompression = DecompressionMethods.GZip
         });
+        public async Task<ActivityLoc> GetActivity(int activityId,string locale)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity",activityId)
+                  .WithQueryParameters(new Dictionary<string, object>()
+                {
+                    {"locale",locale }
+                })
+                .AcceptGzipCompression();
 
-        public async Task<IEnumerable<ActivityLoc>> GetActivities(string locale)
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<ActivityLoc>();
+        }
+        public async Task<IList<ActivityLoc>> GetActivities(string locale)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "activity")
@@ -42,7 +56,7 @@ namespace SaasFeeGuides.RestClient
             var get = request.GetAsync(DefaultClient);
             var response = await get;
 
-            return await get.ReceiveJsonAsync<IEnumerable<ActivityLoc>>();
+            return await get.ReceiveJsonAsync<IList<ActivityLoc>>();
         }
         public async Task AddAccount(Registration registrationViewModel)
         {

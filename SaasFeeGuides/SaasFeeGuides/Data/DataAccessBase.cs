@@ -45,15 +45,20 @@ namespace SaasFeeGuides.Data
         {
             using (var reader = await command.ExecuteReaderAsync())
             {
-                var bldr = new List<T>();
-
-                while (await reader.ReadAsync())
-                {
-                    bldr.Add(readerFunc(reader));
-                }
-
-                return bldr;
+                return await ReadListAsync( reader, readerFunc);
             }
+        }
+
+        protected static async Task<IList<T>> ReadListAsync<T>(SqlDataReader reader, Func<SqlDataReader, T> readerFunc )
+        {
+            var bldr = new List<T>();
+
+            while (await reader.ReadAsync())
+            {
+                bldr.Add(readerFunc(reader));
+            }
+
+            return bldr;
         }
 
         #region Parameter Conversion

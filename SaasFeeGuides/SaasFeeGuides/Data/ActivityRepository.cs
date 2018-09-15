@@ -8,7 +8,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace SaasFeeGuides.Data
 {
@@ -19,6 +18,8 @@ namespace SaasFeeGuides.Data
         Task<int> FindActivityByName(string name);
         Task<int> UpsertActivitySku(Models.ActivitySku activitySku);
         Task<int> FindActivitySkuByName(string name);
+
+        Task<Models.ActivityLoc> SelectActivity(int activityId, string v);
     }
     public class ActivityRepository : DataAccessBase, IActivityRepository
     {
@@ -71,6 +72,57 @@ namespace SaasFeeGuides.Data
                     return await ReadListAsync(command, ReadActivity);
                   
                 }
+            }
+        }
+
+        public async Task<Models.ActivityLoc> SelectActivity(int activityId, string locale)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "[Activities].[SelectActivity]";
+                    command.Parameters.AddWithValue("@ActivityId", activityId);
+                    command.Parameters.AddWithValue("@Locale", locale);
+
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        await reader.ReadAsync();
+                        var activity= ReadActivity(reader);
+                        await reader.NextResultAsync();
+                        activity.Skus = await ReadListAsync(reader, ReadActivitySku);
+                        return activity;
+                    }
+                 
+                }
+            }
+        }
+
+        private Models.ActivitySkuLoc ReadActivitySku(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.ActivitySkuLoc
+                {
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
+                    ActivityName = GetString(reader, 1),
+                    Name = GetString(reader,2),
+                    Title = GetString(reader, 3),
+                    Description = GetString(reader, 4),
+                    PricePerPerson = GetDouble(reader, 5) ?? 0,
+                    MinPersons = GetInt(reader, 6) ?? 0,
+                    MaxPersons = GetInt(reader, 7) ?? 0,
+                    AdditionalRequirements = GetString(reader, 8),
+                    DurationDays = GetDouble(reader, 9) ?? 0,
+                    DurationHours = GetDouble(reader, 10) ?? 0,
+                    WebContent = GetString(reader, 11),
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading ActivitySku", ex);
             }
         }
 
@@ -173,5 +225,7 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
+
+        
     }
 }

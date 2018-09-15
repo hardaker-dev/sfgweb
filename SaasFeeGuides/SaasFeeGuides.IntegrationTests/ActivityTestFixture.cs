@@ -22,8 +22,11 @@ namespace SaasFeeGuides.IntegrationTests
         public async Task AddAndUpdateActivityAndSkus()
         {
             var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
-
-            await AddActivityAndSkus(authClient);
+            var activitiesEnglish = await _client.GetActivities("en");
+            if (activitiesEnglish.Count == 0)
+            {
+                await AddActivityAndSkus(authClient);
+            }
         }
 
         [Fact]
@@ -31,18 +34,41 @@ namespace SaasFeeGuides.IntegrationTests
         {
             var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
 
-            await AddActivityAndSkus(authClient);
+         
             var activitiesEnglish = await _client.GetActivities("en");
+            if(activitiesEnglish.Count==0)
+            {
+                await AddActivityAndSkus(authClient);
+            }
+            activitiesEnglish = await _client.GetActivities("en");
             var activitiesGerman = await _client.GetActivities("de");
         }
+        [Fact]
+        public async Task GetActivity()
+        {
+            var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
 
+            var activitiesEnglish = await _client.GetActivities("en");
+            if (activitiesEnglish.Count == 0)
+            {
+                await AddActivityAndSkus(authClient);
+            }
+         
+            activitiesEnglish = await _client.GetActivities("en");
+            var activityEnglish = await _client.GetActivity(activitiesEnglish[0].Id,"en");
+        }
         [Fact]
         public async Task AddAndUpdateActivityThenSkus()
         {
             var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
-                       
-            await AddActivities(authClient);
-            await Updatectivities(authClient);
+
+            var activitiesEnglish = await _client.GetActivities("en");
+            if (activitiesEnglish.Count == 0)
+            {
+                await AddActivities(authClient);
+            }
+           
+            await UpdateActivities(authClient);
             await AddOrUpdatectivitySkus(authClient);
             await AddOrUpdatectivitySkus(authClient);
         }
@@ -65,7 +91,7 @@ namespace SaasFeeGuides.IntegrationTests
             }
         }
 
-        private static async Task Updatectivities(AuthenticatedClient authClient)
+        private static async Task UpdateActivities(AuthenticatedClient authClient)
         {
             var activities = BuildActivities();
             foreach (var activity in activities)

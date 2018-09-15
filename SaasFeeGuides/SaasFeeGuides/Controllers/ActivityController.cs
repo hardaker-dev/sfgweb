@@ -71,7 +71,14 @@ namespace SaasFeeGuides.Controllers
 
             return new OkObjectResult(activities);
         }
+        [HttpGet("{activityId:int}")]
+        public async Task<IActionResult> GetActivity(int activityId, string locale)
+        {
+            var activity = await _activityRepository.SelectActivity(activityId,locale ?? "en");
 
+
+            return new OkObjectResult(activity);
+        }
         private void EnsureMatchingActivityName(ViewModels.Activity activity)
         {
             if (activity.Skus == null)

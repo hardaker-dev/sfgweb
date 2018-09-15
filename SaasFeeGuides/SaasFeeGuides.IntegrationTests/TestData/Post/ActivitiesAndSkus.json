@@ -82,6 +82,12 @@
             "Value": "test",
             "Locale": "en",
             "ContentType": "HTML"
+          },
+          {
+            "Id": "AllalinSku_WebContent",
+            "Value": "test",
+            "Locale": "de",
+            "ContentType": "HTML"
           }
         ]
       }
@@ -181,6 +187,12 @@
             "Id": "AllalinEastSku_WebContent",
             "Value": "test",
             "Locale": "en",
+            "ContentType": "HTML"
+          },
+          {
+            "Id": "AllalinEastSku_WebContent",
+            "Value": "test",
+            "Locale": "de",
             "ContentType": "HTML"
           }
         ]

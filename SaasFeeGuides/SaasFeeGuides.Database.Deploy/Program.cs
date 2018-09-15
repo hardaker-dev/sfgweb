@@ -1,4 +1,5 @@
 ﻿using DbUp;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -9,9 +10,18 @@ namespace SaasFeeGuides.Database.Deploy
     {
         static int Main(string[] args)
         {
-            var connectionString =
-                args.FirstOrDefault()
-                ?? "Server=.; Database=SaasFeeGuides; Trusted_connection=true";
+            //        ?? "Server=tcp:testsfgsql01.database.windows.net,1433;Initial Catalog=sfg;Persist Security Info=False;User ID=JamesHardaker;Password=Trek4ever!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+
+            var env = System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var config = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+               .AddJsonFile($"appsettings.{env}.json", optional: true)
+              .Build();
+            var connectionString = config["ConnectionStrings:DefaultConnection"];
+      
+          //  var connectionString =
+                
+           //     ?? "Server=tcp:testsfgsql01.database.windows.net,1433;Initial Catalog=sfg;Persist Security Info=False;User ID=JamesHardaker;Password=Trek4ever!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
             return DeployDatabase(connectionString);
         }
 

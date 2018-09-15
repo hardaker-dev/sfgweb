@@ -10,6 +10,7 @@
 
     <!-- Set this to true if you enable server-side prerendering -->
     <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <UserSecretsId>b4dd129a-df21-484e-b617-8184458c442e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,9 +57,16 @@
     <None Remove="ClientApp\src\app\winter\DashboardIndex.ts" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SaasFeeGuides.Database.Deploy\SaasFeeGuides.Database.Deploy.csproj" />
     <ProjectReference Include="..\SaasFeeGuides.ViewModels\SaasFeeGuides.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Update="appsettings.AzureTest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -84,8 +92,8 @@
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
     <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build -- --prod" />
-    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr -- --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build --prod" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build:ssr --prod" Condition=" '$(BuildServerSideRenderer)' == 'true' " />
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>

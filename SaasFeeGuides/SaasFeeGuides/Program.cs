@@ -16,17 +16,12 @@ namespace SaasFeeGuides
        
         public static void Main(string[] args)
         {
+            Startup.CommandLineArguments = args;
             ProgramHelper.BuildHost<Startup>().Run();
            // CreateWebHostBuilder(args).Build().Run();
 
             
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-          
-            return WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
-        }
     }
 }

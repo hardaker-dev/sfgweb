@@ -2,6 +2,7 @@
 using SaasFeeGuides.IntegrationTests.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,18 +23,34 @@ namespace SaasFeeGuides.IntegrationTests.TestFramework
 
         protected ServiceIntegrationTestBase(ITestOutputHelper output, int minPort, int maxPort)
         {
+#if AZURETEST
+            var env = "AzureTest";
+#else
+            var env = "Development";
+#endif
             var config = new ConfigurationBuilder()
-          .AddJsonFile("appsettings.json")
-          .Build();
+               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+               .AddJsonFile($"appsettings.{env}.json", optional: true)
+              .Build();
+            var connectionString = config["ConnectionStrings:DefaultConnection"];
 
+         
+            var serviceEndpoint = config["serviceEndpoint"];
 
-            SaasFeeGuides.Database.Deploy.Program.DeployDatabase(config["ConnectionStrings:DefaultConnection"]);
+            SaasFeeGuides.Database.Deploy.Program.DeployDatabase(connectionString);
             Output = output;
-            var url = TcpSocketHelper.GetNextLocalhostUrl(minPort, maxPort, null);
-            Output.WriteLine($"{this.GetType()} StartServiceForTest<{typeof(TStartup)} on {url}");
-            ServiceUri = new Uri(url);
-            Fixture = new ServiceIntegrationTestFixture();
-            Fixture.StartServiceForTest<TStartup>(new[] { url });
+            if (string.IsNullOrEmpty(serviceEndpoint))
+            {
+                var url =  TcpSocketHelper.GetNextLocalhostUrl(minPort, maxPort, null);
+                Output.WriteLine($"{this.GetType()} StartServiceForTest<{typeof(TStartup)} on {url}");
+                ServiceUri = new Uri(url);
+                Fixture = new ServiceIntegrationTestFixture();
+                Fixture.StartServiceForTest<TStartup>(new[] { url });
+            }
+            else
+            {
+                ServiceUri = new Uri(serviceEndpoint);
+            }
         }
 
         #region IDisposable

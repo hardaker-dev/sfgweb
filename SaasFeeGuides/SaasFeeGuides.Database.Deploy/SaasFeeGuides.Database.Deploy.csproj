@@ -6,6 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="appsettings.AzureTest.json" />
+    <None Remove="appsettings.Development.json" />
+    <None Remove="appsettings.json" />
     <None Remove="Scripts\01_Initial.sql" />
     <None Remove="Scripts\02_CreateSchemas.sql" />
     <None Remove="Scripts\03_CreateTable_Activity.sql" />
@@ -33,6 +36,21 @@
     <None Remove="Scripts\25_CreateProc_FindActivityByName.sql" />
     <None Remove="Scripts\26_CreateProc_FindActivitySkuByName.sql" />
     <None Remove="Scripts\27_CreateProc_UpdateActivitySku.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.AzureTest.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.Development.json">
+      <DependentUpon>appsettings.json</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -67,6 +85,7 @@
 
   <ItemGroup>
     <PackageReference Include="dbup" Version="4.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
   </ItemGroup>
 
 </Project>

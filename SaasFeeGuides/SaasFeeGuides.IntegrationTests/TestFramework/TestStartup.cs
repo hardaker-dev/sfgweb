@@ -8,7 +8,7 @@ namespace SaasFeeGuides.IntegrationTests.TestFramework
 {
     public class TestStartup : Startup
     {
-        public TestStartup(IConfiguration configuration) : base(configuration)
+        public TestStartup(IHostingEnvironment env) : base(env)
         {
         }
 

@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Authentication;
 using SaasFeeGuides.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
+using System.Linq;
 
 namespace SaasFeeGuides
 {
@@ -34,23 +35,28 @@ namespace SaasFeeGuides
         private const string SecretKey = "iNivDmHLpUA223sqsfhqGbMRdRj1PVkm"; // todo: get this from somewhere secure
         private readonly SymmetricSecurityKey _signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey));
 
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+               .SetBasePath(env.ContentRootPath)
+               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+               .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+               .AddEnvironmentVariables();
+
+            Configuration = builder.Build();
         }
         public IConfiguration Configuration { get; }
 
-       
+        public static string[] CommandLineArguments { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            var config = new ConfigurationBuilder()
-           .AddJsonFile("appsettings.json")
-           .Build();
+         
 
-            var connectionString = config["ConnectionStrings:DefaultConnection"];
+            var connectionString = Configuration["ConnectionStrings:DefaultConnection"];
+            SaasFeeGuides.Database.Deploy.Program.DeployDatabase(connectionString);
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -72,7 +78,7 @@ namespace SaasFeeGuides
             // jwt wire up
             // Get options from app settings
 
-            var jwtAppSettingOptions = config.GetSection(nameof(JwtIssuerOptions));
+            var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
           
             //Configure JwtIssuerOptions
             services.Configure<JwtIssuerOptions>(options =>
@@ -195,21 +201,21 @@ namespace SaasFeeGuides
             //        template: "DashboardController/{action=Index}/{id?}");
             //});
 
-            //app.UseSpa(spa =>
-            //{
-            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
-            //    // see https://go.microsoft.com/fwlink/?linkid=864501
+            app.UseSpa(spa =>
+            {
+                // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                // see https://go.microsoft.com/fwlink/?linkid=864501
 
-            //    spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "ClientApp";
 
-            //    if (IsDevelopment(env))
-            //    {
-            //        spa.Options.SourcePath = @"ClientApp";
+                if (IsDevelopment(env))
+                {
+                    spa.Options.SourcePath = @"ClientApp";
 
-            //        spa.UseAngularCliServer(npmScript: "start");
+                    spa.UseAngularCliServer(npmScript: "start");
 
-            //    }
-            //});
+                }
+            });
         }
 
         protected virtual bool IsDevelopment(IHostingEnvironment env)

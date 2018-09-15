@@ -215,9 +215,6 @@ namespace SaasFeeGuides.Data
             {
                 switch ((DataError)e.Number)
                 {
-                    case DataError.UniqueIndexViolation:
-                        throw new BadRequestException($"Activity Sku already exists with Name '{activitySku.Name}'", e);
-
                     case DataError.CannotFindRecord:
                         var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
                         throw new BadRequestException(error.Message, e);

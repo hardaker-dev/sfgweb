@@ -33,7 +33,20 @@ namespace SaasFeeGuides.RestClient
             return await post.ReceiveJsonAsync<int>();
 
         }
+        public async Task<int> AddOrUpdateEquiptment(Equiptment equiptment)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "equiptment")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
 
+            var post = request.PutJsonAsync(equiptment, DefaultClient);
+            var response = await post;
+
+
+            return await post.ReceiveJsonAsync<int>();
+
+        }
         public async Task<int> AddOrUpdateActivitySku(ActivitySku activitySku)
         {
             var request = _serviceUri.AsRestRequest()

@@ -17,21 +17,18 @@ namespace SaasFeeGuides.Controllers
     public class AccountController : ControllerBase
     {
 
-        private readonly ApplicationDbContext _appDbContext;
         private readonly UserManager<AppUser> _userManager;
         private readonly ICustomerRepository _accountRepository;
 
         public AccountController(
             UserManager<AppUser> userManager,
-            ApplicationDbContext appDbContext,
             ICustomerRepository accountRepository)
         {
-            _userManager = userManager;         
-            _appDbContext = appDbContext;
+            _userManager = userManager;     
             _accountRepository = accountRepository;
         }
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Registration model)
+        public async Task<IActionResult> AddCustomerAccount([FromBody]Customer model)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +66,7 @@ namespace SaasFeeGuides.Controllers
 
         [HttpDelete]
         [Authorize("User")]
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> DeleteCustomerAccount()
         {
             if (!ModelState.IsValid)
             {

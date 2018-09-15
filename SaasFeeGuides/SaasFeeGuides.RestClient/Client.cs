@@ -89,7 +89,7 @@ namespace SaasFeeGuides.RestClient
 
             return await get.ReceiveJsonAsync<IList<ActivityLoc>>();
         }
-        public async Task AddAccount(Registration registrationViewModel)
+        public async Task AddAccount(Customer registrationViewModel)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "account")

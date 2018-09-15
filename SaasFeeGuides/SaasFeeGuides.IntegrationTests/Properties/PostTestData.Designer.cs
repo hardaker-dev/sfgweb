@@ -139,5 +139,39 @@ namespace SaasFeeGuides.IntegrationTests.Properties {
                 return ResourceManager.GetString("ActivitySkus", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  {
+        ///    &quot;Name&quot;: &quot;Ice axe&quot;,
+        ///    &quot;TitleContent&quot;: [
+        ///      {
+        ///        &quot;Id&quot;: &quot;IceAxeTitle&quot;,
+        ///        &quot;Value&quot;: &quot;Ice Axe&quot;,
+        ///        &quot;Locale&quot;: &quot;en&quot;,
+        ///        &quot;ContentType&quot;: &quot;Text&quot;
+        ///      },
+        ///      {
+        ///        &quot;Id&quot;: &quot;IceAxeTitle&quot;,
+        ///        &quot;Value&quot;: &quot;Pickel&quot;,
+        ///        &quot;Locale&quot;: &quot;de&quot;,
+        ///        &quot;ContentType&quot;: &quot;Text&quot;
+        ///      }
+        ///    ],
+        ///    &quot;RentalPrice&quot;: 10.0,
+        ///    &quot;ReplacementPrice&quot;: 150.0
+        ///  },
+        ///  {
+        ///    &quot;Name&quot;: &quot;Climbing Harness&quot;,
+        ///    &quot;TitleContent&quot;: [
+        ///      {
+        ///        &quot;Id&quot;: &quot;HarnessTitle&quot;,
+        ///        &quot;Value&quot;: &quot;c [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Equiptment {
+            get {
+                return ResourceManager.GetString("Equiptment", resourceCulture);
+            }
+        }
     }
 }

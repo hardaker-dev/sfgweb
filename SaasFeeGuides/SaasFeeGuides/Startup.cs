@@ -149,6 +149,7 @@ namespace SaasFeeGuides
             services.AddSingleton<IActivityRepository>(new ActivityRepository(connectionString));
             services.AddSingleton<ICustomerRepository>(new CustomerRepository(connectionString));
             services.AddSingleton<IContentRepository>(new ContentRepository(connectionString));
+            services.AddSingleton<IEquiptmentRepository>(new EquiptmentRepository(connectionString));
             services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
             services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
 

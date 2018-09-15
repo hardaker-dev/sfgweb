@@ -13,31 +13,27 @@ namespace SaasFeeGuides.IntegrationTests
     {
         protected readonly Client _client;
         private AuthenticatedClient _authenticatedClient;
-        protected async Task<AuthenticatedClient> AuthenticatedClient(string username, string password, string email)
+        protected async Task<AuthenticatedClient> AuthClient()
         {
             if (_authenticatedClient == null)
             {
-                var loginResponse = await Login(username, password, email);
+                var loginResponse = await Login("testadmin", "password", "test.admin@sfg.ch");
                 _authenticatedClient = new AuthenticatedClient(ServiceUri, loginResponse.auth_token);
             }
             return _authenticatedClient;
         }
-
+       
         public BaseTestFixture(ITestOutputHelper output)
             : base(output, 5000, 6000)
         {
             this._client = new Client(ServiceUri);
-
-
-
-
         }
 
         private async Task<LoginResponse> Login(string username, string password, string email)
         {
             try
             {
-                await _client.AddAccount(new ViewModels.Registration()
+                await _client.AddAccount(new ViewModels.Customer()
                 {
                     Email = email,
                     FirstName = "james",

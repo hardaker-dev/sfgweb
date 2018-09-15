@@ -16,12 +16,12 @@ BEGIN
 		Update Activities.Activity 
 		set 
 			Name = COALESCE(@Name,Name),
-			TitleContentId = COALESCE(@TitleContentId,TitleContentId),
-			DescriptionContentId = COALESCE(@DescriptionContentId,DescriptionContentId),
-			MenuImageContentId = COALESCE(@MenuImageContentId,MenuImageContentId),
-			VideoContentId = COALESCE(@VideoContentId,VideoContentId),
-			ImageContentId = COALESCE(@ImageContentId,ImageContentId),
-			IsActive = COALESCE(@IsActive,IsActive)
+			TitleContentId = @TitleContentId,
+			DescriptionContentId = @DescriptionContentId,
+			MenuImageContentId = @MenuImageContentId,
+			VideoContentId = @VideoContentId,
+			ImageContentId = @ImageContentId,
+			IsActive = @IsActive
 		WHERE Id = @Id
 		SELECT @Id
 	END

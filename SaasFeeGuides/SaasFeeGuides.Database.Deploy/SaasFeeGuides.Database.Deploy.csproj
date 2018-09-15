@@ -39,6 +39,7 @@
     <None Remove="Scripts\29_CreateProc_InsertActivitySkuDate.sql" />
     <None Remove="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
     <None Remove="Scripts\31_CreateProc_SelectActivitySku.sql" />
+    <None Remove="Scripts\32_CreateProc_UpsertEquiptment.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +61,7 @@
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\04_CreateTable_Content.sql" />
     <EmbeddedResource Include="Scripts\15_CreateProc_InsertCustomer.sql" />
+    <EmbeddedResource Include="Scripts\32_CreateProc_UpsertEquiptment.sql" />
     <EmbeddedResource Include="Scripts\31_CreateProc_SelectActivitySku.sql" />
     <EmbeddedResource Include="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
     <EmbeddedResource Include="Scripts\29_CreateProc_InsertActivitySkuDate.sql" />

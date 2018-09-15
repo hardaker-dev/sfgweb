@@ -16,6 +16,11 @@
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
     <None Remove="Properties\launchSettings.json" />
+    <None Remove="TestData\Post\Equiptment.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestData\Post\Equiptment.json" />
   </ItemGroup>
 
   <ItemGroup>

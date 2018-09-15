@@ -193,10 +193,7 @@ namespace SaasFeeGuides.IntegrationTests
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Activity[]>(SaasFeeGuides.IntegrationTests.Properties.PostTestData.Activities);
         }
 
-        private async Task<AuthenticatedClient> AuthClient()
-        {
-            return await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
-        }
+        
 
 
         private async Task AddActivitiesIfNeeded(AuthenticatedClient authClient)

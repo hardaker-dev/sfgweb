@@ -10,22 +10,18 @@ using Xunit.Abstractions;
 namespace SaasFeeGuides.IntegrationTests
 {
     [Collection("Database collection")]
-    public class ClientTestFixture : BaseTestFixture
+    public class AccountTestFixture : BaseTestFixture
     {
        
 
-        public ClientTestFixture(ITestOutputHelper output)
+        public AccountTestFixture(ITestOutputHelper output)
             : base(output)
         {
-
-
-
-
         }
         [Fact]
         public async Task GetDashboardIndex()
         {
-            var authClient = await AuthenticatedClient("test","password","test.user@sfg.ch");
+            var authClient = await AuthClient();
             try
             {
                 await authClient.AddClaim(new AppClaim()
@@ -44,9 +40,9 @@ namespace SaasFeeGuides.IntegrationTests
         [Fact]
         public async Task AddAdminAccount()
         {
-            var authClient = await AuthenticatedClient("testadmin", "password", "test.admin@sfg.ch");
-            
-                await authClient.AddClaim(new AppClaim()
+            var authClient = await AuthClient();
+
+            await authClient.AddClaim(new AppClaim()
                 {
                     ClaimType = "role",
                     ClaimValue = "api_access"
@@ -58,7 +54,7 @@ namespace SaasFeeGuides.IntegrationTests
         [Fact]
         public async Task AddClaim()
         {
-            var authClient = await AuthenticatedClient("test", "password", "test.user@sfg.ch");
+            var authClient = await AuthClient();
             try
             {
                 await authClient.AddClaim(new AppClaim()

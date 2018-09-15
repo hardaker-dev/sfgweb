@@ -4,11 +4,11 @@ BEGIN TRAN
 
 	CREATE TABLE [Activities].[Equiptment](	
 		[Id] [int] NOT NULL identity(1,1),
-		[Name] nvarchar(max) not null,
-		[TitleContentId] int not null,
-		[DescriptionContentId] int null,
+		[Name] nvarchar(450) not null,
+		[TitleContentId] varchar(50) not null,
 		[RentalPrice] float not null,
-		[ReplacementPrice] float not null	
+		[ReplacementPrice] float not null,
+		[CanRent] bit not null
 	)
 	
 	ALTER TABLE [Activities].[Equiptment]  

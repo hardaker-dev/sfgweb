@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SaasFeeGuides.ViewModels.Validation
 {
-    public class RegistrationViewModelValidator : AbstractValidator<Registration>
+    public class RegistrationViewModelValidator : AbstractValidator<Customer>
     {
         public RegistrationViewModelValidator()
         {

@@ -16,22 +16,22 @@ BEGIN
 	SET NOCOUNT ON;
 	DECLARE @activityId int
 	SET @activityId = (SELECT Id from Activities.Activity where [Name] = @ActivityName)
-	SET @id = (SELECT Id From Activities.ActivitySku WHERE ActivityId = @activityId and Name = @Name)
+	SET @id = COALESCE(@Id, (SELECT Id From Activities.ActivitySku WHERE ActivityId = @activityId and Name = @Name))
 	
 	IF @id is not null
 	BEGIN
 		Update Activities.ActivitySku
 		set 
-			Name = COALESCE(@Name,Name),
-			TitleContentId = COALESCE(@TitleContentId,TitleContentId),
-			DescriptionContentId = COALESCE(@DescriptionContentId,DescriptionContentId),
-			PricePerPerson = COALESCE(@PricePerPerson,PricePerPerson),
-			MinPersons = COALESCE(@MinPersons,MinPersons),
-			MaxPersons = COALESCE(@MaxPersons,MaxPersons),
-			AdditionalRequirementsContentId = COALESCE(@AdditionalRequirementsContentId,AdditionalRequirementsContentId),
-			DurationDays = COALESCE(@DurationDays,DurationDays),
-			DurationHours = COALESCE(@DurationHours,DurationHours),
-			WebContentId = COALESCE(@WebContentId,WebContentId)
+			Name = @Name,
+			TitleContentId = @TitleContentId,
+			DescriptionContentId = @DescriptionContentId,
+			PricePerPerson = @PricePerPerson,
+			MinPersons = @MinPersons,
+			MaxPersons = @MaxPersons,
+			AdditionalRequirementsContentId = @AdditionalRequirementsContentId,
+			DurationDays = @DurationDays,
+			DurationHours = @DurationHours,
+			WebContentId = @WebContentId
 		WHERE Id = @Id
 		SELECT @Id
 	END

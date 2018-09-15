@@ -1,0 +1,162 @@
+﻿[
+  {
+    "Name": "Ice axe",
+    "TitleContent": [
+      {
+        "Id": "IceAxeTitle",
+        "Value": "Ice Axe",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "IceAxeTitle",
+        "Value": "Pickel",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 10.0,
+    "ReplacementPrice": 150.0,
+    "CanRent": true
+  },
+  {
+    "Name": "Climbing Harness",
+    "TitleContent": [
+      {
+        "Id": "HarnessTitle",
+        "Value": "climbing harness",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "HarnessTitle",
+        "Value": "Klettergurt",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 10.0,
+    "ReplacementPrice": 150.0,
+    "CanRent": true
+  },
+  {
+    "Name": "Crampons",
+    "TitleContent": [
+      {
+        "Id": "CramponsTitle",
+        "Value": "crampons with antibott",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "CramponsTitle",
+        "Value": "Steigeisen mit Antistoll",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 10.0,
+    "ReplacementPrice": 150.0,
+    "CanRent": true
+  },
+  {
+    "Name": "Hiking Pole",
+    "TitleContent": [
+      {
+        "Id": "HikingPoleTitle",
+        "Value": "hiking pole",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "HikingPoleTitle",
+        "Value": "Wanderstock",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 10.0,
+    "ReplacementPrice": 150.0,
+    "CanRent": true
+  },
+  {
+    "Name": "WindWarmClothes",
+    "TitleContent": [
+      {
+        "Id": "WindWarmClothesTitle",
+        "Value": "windproof and warm clothing\r\n(possibly gaiters)",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "WindWarmClothesTitle",
+        "Value": "warme und windfeste Kleidung\r\n(evtl. Gamaschen)",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 0,
+    "ReplacementPrice": 0.0,
+    "CanRent": false
+  },
+  {
+    "Name": "Gloves",
+    "TitleContent": [
+      {
+        "Id": "GlovesTitle",
+        "Value": "gloves",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "GlovesTitle",
+        "Value": "Handschuhe",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 0.0,
+    "ReplacementPrice": 0.0,
+    "CanRent": false
+  },
+  {
+    "Name": "Hat",
+    "TitleContent": [
+      {
+        "Id": "HatTitle",
+        "Value": "beanie or hat",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "HatTitle",
+        "Value": "Hut oder Mütze",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 0.0,
+    "ReplacementPrice": 0.0,
+    "CanRent": false
+  },
+  {
+    "Name": "SunProtection",
+    "TitleContent": [
+      {
+        "Id": "SunProtectionTitle",
+        "Value": "sunglasses and sun protection",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "SunProtectionTitle",
+        "Value": "Sonnenbrille und Sonnenschutz",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "RentalPrice": 0.0,
+    "ReplacementPrice": 0.0,
+    "CanRent": false
+  }
+]

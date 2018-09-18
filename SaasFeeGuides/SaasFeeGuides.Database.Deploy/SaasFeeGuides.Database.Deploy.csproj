@@ -10,19 +10,20 @@
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
     <None Remove="Scripts\01_Initial.sql" />
+    <None Remove="Scripts\02b_CreateTable_Content.sql" />
     <None Remove="Scripts\02_CreateSchemas.sql" />
-    <None Remove="Scripts\03_CreateTable_Activity.sql" />
-    <None Remove="Scripts\04_CreateTable_Content.sql" />
+    <None Remove="Scripts\03_CreateTable_Category.sql" />
+    <None Remove="Scripts\04_CreateTable_Activity.sql" />
     <None Remove="Scripts\05_CreateTable_ActivitySku.sql" />
     <None Remove="Scripts\06_CreateTable_ActivitySkuPrice.sql" />
     <None Remove="Scripts\07_CreateTable_ActivitySkuDate.sql" />
     <None Remove="Scripts\08_CreateTable_Customer.sql" />
-    <None Remove="Scripts\09_CreateTable_CustomerRegistration.sql" />
+    <None Remove="Scripts\09_CreateTable_CustomerBooking.sql" />
     <None Remove="Scripts\10_CreateTable_Equiptment.sql" />
     <None Remove="Scripts\11_CreateTable_ActivityEquiptment.sql" />
     <None Remove="Scripts\12_CreateTable_Guide.sql" />
-    <None Remove="Scripts\13_CreateTable_CustomerRegistrationEquiptment.sql" />
-    <None Remove="Scripts\14_CreateTable_GuideRegistration.sql" />
+    <None Remove="Scripts\13_CreateTable_CustomerBookingEquiptment.sql" />
+    <None Remove="Scripts\14_CreateTable_GuideBooking.sql" />
     <None Remove="Scripts\15_CreateProc_InsertCustomer.sql" />
     <None Remove="Scripts\16_CreateProc_UpdateCustomer.sql" />
     <None Remove="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
@@ -40,6 +41,9 @@
     <None Remove="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
     <None Remove="Scripts\31_CreateProc_SelectActivitySku.sql" />
     <None Remove="Scripts\32_CreateProc_UpsertEquiptment.sql" />
+    <None Remove="Scripts\33_CreateProc_UpsertActivityEquiptment.sql" />
+    <None Remove="Scripts\34_CreateProc_InsertCustomerBooking.sql" />
+    <None Remove="Scripts\35_CreateProc_SelectCustomers.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -58,9 +62,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\03_CreateTable_Category.sql" />
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
-    <EmbeddedResource Include="Scripts\04_CreateTable_Content.sql" />
+    <EmbeddedResource Include="Scripts\02b_CreateTable_Content.sql" />
+    <EmbeddedResource Include="Scripts\35_CreateProc_SelectCustomers.sql" />
+    <EmbeddedResource Include="Scripts\34_CreateProc_InsertCustomerBooking.sql" />
     <EmbeddedResource Include="Scripts\15_CreateProc_InsertCustomer.sql" />
+    <EmbeddedResource Include="Scripts\33_CreateProc_UpsertActivityEquiptment.sql" />
     <EmbeddedResource Include="Scripts\32_CreateProc_UpsertEquiptment.sql" />
     <EmbeddedResource Include="Scripts\31_CreateProc_SelectActivitySku.sql" />
     <EmbeddedResource Include="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
@@ -77,17 +85,17 @@
     <EmbeddedResource Include="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
     <EmbeddedResource Include="Scripts\16_CreateProc_UpdateCustomer.sql" />
     <EmbeddedResource Include="Scripts\24_CreateProc_UpsertContent.sql" />
-    <EmbeddedResource Include="Scripts\14_CreateTable_GuideRegistration.sql" />
+    <EmbeddedResource Include="Scripts\14_CreateTable_GuideBooking.sql" />
     <EmbeddedResource Include="Scripts\10_CreateTable_Equiptment.sql" />
     <EmbeddedResource Include="Scripts\11_CreateTable_ActivityEquiptment.sql" />
-    <EmbeddedResource Include="Scripts\13_CreateTable_CustomerRegistrationEquiptment.sql" />
-    <EmbeddedResource Include="Scripts\09_CreateTable_CustomerRegistration.sql" />
+    <EmbeddedResource Include="Scripts\13_CreateTable_CustomerBookingEquiptment.sql" />
+    <EmbeddedResource Include="Scripts\09_CreateTable_CustomerBooking.sql" />
     <EmbeddedResource Include="Scripts\08_CreateTable_Customer.sql" />
     <EmbeddedResource Include="Scripts\07_CreateTable_ActivitySkuDate.sql" />
     <EmbeddedResource Include="Scripts\12_CreateTable_Guide.sql" />
     <EmbeddedResource Include="Scripts\06_CreateTable_ActivitySkuPrice.sql" />
     <EmbeddedResource Include="Scripts\05_CreateTable_ActivitySku.sql" />
-    <EmbeddedResource Include="Scripts\03_CreateTable_Activity.sql" />
+    <EmbeddedResource Include="Scripts\04_CreateTable_Activity.sql" />
     <EmbeddedResource Include="Scripts\01_Initial.sql" />
   </ItemGroup>
 

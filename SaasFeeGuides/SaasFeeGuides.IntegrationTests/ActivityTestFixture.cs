@@ -57,7 +57,7 @@ namespace SaasFeeGuides.IntegrationTests
         {
             var authClient = await AuthClient();
 
-            await AddActivitiesIfNeeded(authClient);
+            await AddActivitiesAndSkusIfNeeded(authClient);
             await AddDates(authClient);
 
             {
@@ -76,7 +76,7 @@ namespace SaasFeeGuides.IntegrationTests
         {
             var authClient = await AuthClient();
 
-            await AddActivitiesIfNeeded(authClient);
+            await AddActivitiesAndSkusIfNeeded(authClient);
             await AddDates(authClient);
             var activitiesGerman = await _client.GetActivities("de");
             var activity = await _client.GetActivity(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id,"de");
@@ -131,8 +131,11 @@ namespace SaasFeeGuides.IntegrationTests
             Assert.True(activitiesEnglish.Count > 0);
 
             var activityEnglish = await _client.GetActivity(activitiesEnglish[0].Id,"en");
+            var activityGerman = await _client.GetActivity(activitiesEnglish[0].Id, "de");
 
             Assert.NotNull(activityEnglish);
+            Assert.NotNull(activityEnglish.Equiptment);
+            Assert.Equal(8, activityEnglish.Equiptment.Count);
         }
         [Fact]
         public async Task AddAndUpdateActivityThenSkus()
@@ -146,14 +149,7 @@ namespace SaasFeeGuides.IntegrationTests
             await AddOrUpdatectivitySkus(authClient);
         }
 
-        private static async Task AddActivityAndSkus(AuthenticatedClient authClient)
-        {
-            var activities = BuildActivityAndSkus();
-            foreach (var activity in activities)
-            {
-                await authClient.AddActivity(activity);
-            }
-        }
+     
 
         private static async Task AddActivities(AuthenticatedClient authClient)
         {
@@ -172,38 +168,20 @@ namespace SaasFeeGuides.IntegrationTests
                 await authClient.UpdateActivity(activity);
             }
         }
-        private static async Task AddOrUpdatectivitySkus(AuthenticatedClient authClient)
-        {
-            var activitySkus = BuildActivitySkus();
-            foreach (var activitySku in activitySkus)
-            {
-                await authClient.AddOrUpdateActivitySku(activitySku);
-            }
-        }
-        private static Activity[] BuildActivityAndSkus()
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Activity[]>(SaasFeeGuides.IntegrationTests.Properties.PostTestData.ActivitiesAndSkus);
-        }
-        private static ActivitySku[] BuildActivitySkus()
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ActivitySku[]>(SaasFeeGuides.IntegrationTests.Properties.PostTestData.ActivitySkus);
-        }
-        private static Activity[] BuildActivities()
-        {
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Activity[]>(SaasFeeGuides.IntegrationTests.Properties.PostTestData.Activities);
-        }
-
-        
-
 
         private async Task AddActivitiesIfNeeded(AuthenticatedClient authClient)
         {
             var activitiesEnglish = await _client.GetActivities("en");
             if (activitiesEnglish.Count == 0)
             {
-                await AddActivityAndSkus(authClient);
+                await AddActivities(authClient);
             }
         }
+
+
+
+
+
         private static List<DateTime>  _dates = new List<DateTime>()
             {
                 new DateTime(2018,9,20),

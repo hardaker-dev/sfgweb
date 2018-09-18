@@ -28,7 +28,7 @@ namespace SaasFeeGuides.Controllers
             _accountRepository = accountRepository;
         }
         [HttpPost]
-        public async Task<IActionResult> AddCustomerAccount([FromBody]Customer model)
+        public async Task<IActionResult> AddCustomerAccount([FromBody]CustomerAccount model)
         {
             if (!ModelState.IsValid)
             {

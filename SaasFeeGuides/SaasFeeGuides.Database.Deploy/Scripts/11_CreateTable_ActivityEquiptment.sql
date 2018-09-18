@@ -5,9 +5,11 @@ BEGIN TRAN
 	CREATE TABLE [Activities].[ActivityEquiptment](	
 		[ActivityId] [int] NOT NULL,
 		[ActivitySkuId] [int] NULL,
-		[EquiptmentId] int not null		
+		[EquiptmentId] int not null,
+		[Count] int not null,
+		[GuideOnly] bit not null
 	)
-   
+    CREATE UNIQUE CLUSTERED INDEX CIX_ActivityEquiptmentd ON [Activities].[ActivityEquiptment]  ([ActivityId],[ActivitySkuId],[EquiptmentId]);
 
 	ALTER TABLE [Activities].[ActivityEquiptment]
 	ADD CONSTRAINT FK_ActivityEquiptment_ActivitySkuId FOREIGN KEY ([ActivitySkuId])     

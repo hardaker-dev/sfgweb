@@ -4,6 +4,7 @@ BEGIN TRAN
 
 CREATE TABLE [Activities].[Activity](
 	[Id] [int] NOT NULL IDENTITY(1,1),
+	[CategoryId] int not null,
 	[Name] [nvarchar](450) NOT NULL,
 	[TitleContentId] varchar(50) not null,
 	[DescriptionContentId] varchar(50) NOT NULL,
@@ -18,6 +19,10 @@ ALTER TABLE [Activities].[Activity]
 
 	CREATE UNIQUE NONCLUSTERED INDEX UIX_Activity_Name
 	ON  [Activities].[Activity] ([Name])
+
+	ALTER TABLE [Activities].[Activity]
+	ADD CONSTRAINT FK_Activity_CategoryId FOREIGN KEY (CategoryId)     
+		REFERENCES Activities.[Category](Id)    
 GO
 
 COMMIT TRAN

@@ -18,15 +18,48 @@ namespace SaasFeeGuides.Controllers
     {
 
         private readonly UserManager<AppUser> _userManager;
-        private readonly ICustomerRepository _accountRepository;
+        private readonly ICustomerRepository _customerRepository;
 
         public CustomerController(
             UserManager<AppUser> userManager,
             ICustomerRepository accountRepository)
         {
             _userManager = userManager;      
-            _accountRepository = accountRepository;
+            _customerRepository = accountRepository;
         }
-      
+        [Authorize("Admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddCustomer(ViewModels.Customer customer)
+        {
+            var customerModel = customer.Map();
+
+            var customerId = await _customerRepository.UpsertCustomer(customerModel);
+          
+
+            return new OkObjectResult(customerId);
+        }
+
+        [Authorize("Admin")]
+        [HttpGet]
+        public async Task<IActionResult> GetCustomers()
+        {
+
+            var customers = await _customerRepository.SelectCustomers();
+
+
+            return new OkObjectResult(customers);
+        }
+
+        [Authorize("Admin")]
+        [HttpPost("booking/historic")]
+        public async Task<IActionResult> AddHistoricCustomerBooking(ViewModels.HistoricCustomerBooking customerBooking)
+        {
+            var customerModel = customerBooking.Map();
+
+            var customerId = await _customerRepository.UpsertCustomerBooking(customerModel);
+
+
+            return new OkObjectResult(customerId);
+        }
     }
 }

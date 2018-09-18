@@ -16,13 +16,16 @@ namespace SaasFeeGuides.Controllers
     [ApiController]
     public class ActivityController : ControllerBase
     {
+        private readonly IEquiptmentRepository _equiptmentRepository;
         private readonly IActivityRepository _activityRepository;
         private readonly IContentRepository _contentRepository;
 
         public ActivityController(
+            IEquiptmentRepository equiptmentRepository,
             IActivityRepository activityRepository,
             IContentRepository contentRepository)
         {
+            _equiptmentRepository = equiptmentRepository;
             _activityRepository = activityRepository;
             _contentRepository = contentRepository;
         }
@@ -68,13 +71,31 @@ namespace SaasFeeGuides.Controllers
         [HttpPost]
         public async Task<IActionResult> AddActivity(ViewModels.Activity activity)
         {
-            var activityModel = activity.Map(null,_contentRepository);
+            var activityModel = activity.Map(null, _contentRepository);
 
             var activityId = await _activityRepository.UpsertActivity(activityModel);
             EnsureMatchingActivityName(activity);
             await UpsertSkus(activity.Skus);
+            await InsertEquiptment(activity.Equiptment, activityId);
 
             return new OkObjectResult(activityId);
+        }
+
+        private async Task InsertEquiptment(ViewModels.ActivityEquiptment[] equiptments, int activityId)
+        {
+            if (equiptments == null)
+                return;
+
+            foreach (var equiptment in equiptments)
+            {
+                var equiptmentId = await _equiptmentRepository.UpsertEquiptment(equiptment.Map(_contentRepository));
+                await _equiptmentRepository.InsertActivityEquiptment(new Models.ActivityEquiptment()
+                {
+                    ActivityId = activityId,
+                    EquiptmentId = equiptmentId,
+                    GuideOnly = equiptment.GuideOnly
+                });
+            }
         }
 
         [Authorize("Admin")]

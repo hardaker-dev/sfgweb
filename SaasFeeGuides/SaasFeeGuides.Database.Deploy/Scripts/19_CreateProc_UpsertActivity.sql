@@ -6,11 +6,20 @@
 	@MenuImageContentId varchar(50),
 	@VideoContentId varchar(50),
 	@ImageContentId varchar(50),
-	@IsActive bit
+	@IsActive bit,
+	@CategoryName nvarchar(450)
 AS
 BEGIN
 	SET NOCOUNT ON;
   
+	DECLARE @categoryId int
+	set @categoryId = (Select id from Activities.Category where Name = @CategoryName)
+	if @categoryId is null
+	BEGIN
+		DECLARE @message nvarchar(max)
+		set @message=  (SELECT 'Cannot find category with name ''' + @CategoryName + '''');
+		THROW 50001,@message,0 
+	END
 	IF @Id is not null
 	BEGIN
 		Update Activities.Activity 
@@ -21,7 +30,8 @@ BEGIN
 			MenuImageContentId = @MenuImageContentId,
 			VideoContentId = @VideoContentId,
 			ImageContentId = @ImageContentId,
-			IsActive = @IsActive
+			IsActive = @IsActive,
+			CategoryId = @categoryId
 		WHERE Id = @Id
 		SELECT @Id
 	END
@@ -33,9 +43,10 @@ BEGIN
 										[MenuImageContentId],
 										[VideoContentId],
 										[ImageContentId],
-										[IsActive])
+										[IsActive],
+										[CategoryId])
 		VALUES (@Name,@TitleContentId,@DescriptionContentId,
-		@MenuImageContentId,@VideoContentId,@ImageContentId,@IsActive)
+		@MenuImageContentId,@VideoContentId,@ImageContentId,@IsActive,@categoryId)
 
 		SELECT CAST(SCOPE_IDENTITY() as INT)
 	END

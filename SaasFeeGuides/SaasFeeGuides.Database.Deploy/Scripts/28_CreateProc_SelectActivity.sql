@@ -40,4 +40,15 @@ BEGIN
 	INNER JOIN App.Content cWebContent on cWebContent.Id = actS.[WebContentId] and (cWebContent.Locale = @Locale OR cWebContent.Locale= 'na')
 	where activityId = @ActivityId
 
+	select  e.Id,
+		    e.[Name],
+			cTitle.[Value],
+		    e.RentalPrice,
+			e.CanRent
+	from Activities.ActivityEquiptment ae
+	INNER JOIN Activities.Activity a on a.Id = ae.ActivityId
+	INNER JOIN Activities.Equiptment e on e.Id = ae.EquiptmentId
+	INNER JOIN App.Content cTitle on cTitle.Id = e.[TitleContentId] and (cTitle.Locale = @Locale OR cTitle.Locale= 'na')	
+	where ae.activityId = @ActivityId
+
 END

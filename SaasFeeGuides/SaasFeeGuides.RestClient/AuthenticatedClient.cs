@@ -3,6 +3,7 @@ using RiskFirst.RestClient;
 using SaasFeeGuides.RestClient.Extensions;
 using SaasFeeGuides.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -62,6 +63,34 @@ namespace SaasFeeGuides.RestClient
 
         }
 
+        public async Task<int> AddHistoricCustomerBooking(HistoricCustomerBooking booking)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "customer","booking","historic")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.PostJsonAsync(booking, DefaultClient);
+            var response = await post;
+
+
+            return await post.ReceiveJsonAsync<int>();
+
+        }
+        public async Task<int> AddCustomer(Customer customer)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "customer")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.PostJsonAsync(customer, DefaultClient);
+            var response = await post;
+
+
+            return await post.ReceiveJsonAsync<int>();
+
+        }
         public async Task<int> AddActivity(Activity activity)
         {
             var request = _serviceUri.AsRestRequest()
@@ -76,7 +105,20 @@ namespace SaasFeeGuides.RestClient
             return await post.ReceiveJsonAsync<int>();
 
         }
+        public async Task<IList<Customer>> GetCustomers()
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "customer")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
 
+            var get = request.GetAsync( DefaultClient);
+            var response = await get;
+
+
+            return await get.ReceiveJsonAsync<IList<Customer>>();
+
+        }
         public async Task UpdateActivity(Activity activity)
         {
             var request = _serviceUri.AsRestRequest()

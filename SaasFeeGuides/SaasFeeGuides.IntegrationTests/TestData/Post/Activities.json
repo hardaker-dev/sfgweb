@@ -31,7 +31,8 @@
     },
     "VideoContentId": null,
     "ImageContentId": null,
-    "IsActive": true
+    "IsActive": true,
+    "CategoryName": "Day Tours"
   },
   {
     "Name": "AllalinEast",
@@ -71,6 +72,7 @@
     },
     "VideoContentId": null,
     "ImageContentId": null,
-    "IsActive": true
+    "IsActive": true,
+    "CategoryName": "Day Tours"
   }
 ]

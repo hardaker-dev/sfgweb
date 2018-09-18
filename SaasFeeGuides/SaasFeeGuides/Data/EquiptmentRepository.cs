@@ -13,6 +13,7 @@ namespace SaasFeeGuides.Data
 {
     public interface IEquiptmentRepository
     {
+        Task InsertActivityEquiptment(Models.ActivityEquiptment activityEquiptmentModel);
         Task<int> UpsertEquiptment(Models.Equiptment equiptmentModel);
     }
     public class EquiptmentRepository : DataAccessBase, IEquiptmentRepository
@@ -42,6 +43,26 @@ namespace SaasFeeGuides.Data
 
                 }
             }        
+        }
+
+        public async Task InsertActivityEquiptment(Models.ActivityEquiptment activityEquiptmentModel)
+        {            
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.Parameters.AddWithValue("@ActivityId", activityEquiptmentModel.ActivityId);
+                    command.Parameters.AddWithValue("@ActivitySkuId", (object)activityEquiptmentModel.ActivitySkuId ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@EquiptmentId", activityEquiptmentModel.EquiptmentId);
+                    command.Parameters.AddWithValue("@Count", activityEquiptmentModel.Count);
+                    command.Parameters.AddWithValue("@GuideOnly", activityEquiptmentModel.GuideOnly);
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "[Activities].[UpsertActivityEquiptment]";
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }           
         }
     }
 }

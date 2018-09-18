@@ -13,8 +13,10 @@ namespace SaasFeeGuides.ViewModels
         public Content[] VideoContentId { get; set; }
         public Content[] ImageContentId { get; set; }
         public bool? IsActive { get; set; }
+        public string CategoryName { get; set; }
 
         public ActivitySku[] Skus { get; set; }
+        public ActivityEquiptment[] Equiptment { get; set; }
     }
 
 }

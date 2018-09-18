@@ -16,6 +16,6 @@ namespace SaasFeeGuides.Models
         public string Images { get; set; }
 
         public IList<ActivitySkuLoc> Skus { get; set; }
-
+        public IList<EquiptmentLoc> Equiptment { get; internal set; }
     }
 }

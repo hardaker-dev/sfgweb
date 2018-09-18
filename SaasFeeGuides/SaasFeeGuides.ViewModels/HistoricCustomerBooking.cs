@@ -2,14 +2,14 @@
 
 namespace SaasFeeGuides.ViewModels
 {
-    public class CustomerRegistration
+    public class HistoricCustomerBooking
     {
         public string ActivitySkuName { get; set; }
         public DateTime Date { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
+        public string CustomerEmail { get; set; }
+     
         public int NumPersons { get; set; }
-        public string Notes { get; set; }
+        public double AmountPaid { get; set; }
         
     }
 }

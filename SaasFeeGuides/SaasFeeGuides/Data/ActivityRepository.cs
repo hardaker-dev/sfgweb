@@ -138,6 +138,8 @@ namespace SaasFeeGuides.Data
                         var activity= ReadActivity(reader);
                         await reader.NextResultAsync();
                         activity.Skus = await ReadListAsync(reader, ReadActivitySku);
+                        await reader.NextResultAsync();
+                        activity.Equiptment = await ReadListAsync(reader, ReadEquiptment);
                         return activity;
                     }
                  
@@ -145,7 +147,24 @@ namespace SaasFeeGuides.Data
             }
         }
 
-      
+        private Models.EquiptmentLoc ReadEquiptment(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.EquiptmentLoc
+                {
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),                  
+                    Name = GetString(reader, 1),
+                    Title = GetString(reader, 2),
+                    RentalPrice = GetDouble(reader, 3) ?? 0,
+                    CanRent = GetBool(reader, 4) ?? false                    
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading Equiptment", ex);
+            }
+        }
 
         public async Task<int> UpsertActivity(Models.Activity activity)
         {
@@ -163,6 +182,7 @@ namespace SaasFeeGuides.Data
                         command.Parameters.AddWithValue("@VideoContentId", (await activity.VideoContentId) ?? string.Empty);
                         command.Parameters.AddWithValue("@ImageContentId", (await activity.ImageContentId) ?? string.Empty);
                         command.Parameters.AddWithValue("@IsActive", activity.IsActive ?? false);
+                        command.Parameters.AddWithValue("@CategoryName", activity.CategoryName );
                         command.CommandType = CommandType.StoredProcedure;                       
                         command.CommandText = "[Activities].[UpsertActivity]";
 
@@ -176,7 +196,9 @@ namespace SaasFeeGuides.Data
                 {
                     case DataError.UniqueIndexViolation:
                         throw new BadRequestException($"Activity already exists with Name '{activity.Name}'", e);
-
+                    case DataError.CannotFindRecord:
+                        var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
+                        throw new BadRequestException(error.Message, e);
                     default: throw e;
                 }
             }

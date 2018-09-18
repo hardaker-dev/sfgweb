@@ -1,4 +1,6 @@
-﻿using SaasFeeGuides.Models;
+﻿using SaasFeeGuides.Exceptions;
+using SaasFeeGuides.Helpers;
+using SaasFeeGuides.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,13 +13,35 @@ namespace SaasFeeGuides.Data
     public interface ICustomerRepository
     {
         Task<int> UpsertCustomer(Customer customer);
+        Task<int> UpsertCustomerBooking(CustomerBooking booking);
         Task<Customer> SelectCustomerByUserId(string userId);
         Task DeleteAccount(string userId);
+        Task<IEnumerable<Customer>> SelectCustomers();
     }
     public class CustomerRepository : DataAccessBase, ICustomerRepository
     {
         public CustomerRepository(string connectionString) : base(connectionString)
         {
+        }
+        public async Task<int> UpsertCustomerBooking(CustomerBooking booking)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
+                    command.Parameters.AddWithValue("@AmountPaid", booking.AmountPaid);
+                    command.Parameters.AddWithValue("@Email", booking.CustomerEmail);
+                    command.Parameters.AddWithValue("@Date", booking.Date);
+                    command.Parameters.AddWithValue("@NumPersons", booking.NumPersons);
+                    command.CommandType = CommandType.StoredProcedure;
+                   
+                    command.CommandText = "[Activities].[InsertCustomerBooking]";
+                    var result = await command.ExecuteScalarAsync();
+                    return (int)result;
+                    
+                }
+            }
         }
 
         public async Task DeleteAccount(string userId)
@@ -34,6 +58,23 @@ namespace SaasFeeGuides.Data
 
                     await command.ExecuteNonQueryAsync();
                     
+                }
+            }
+        }
+
+        public async Task<IEnumerable<Customer>> SelectCustomers()
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "[Activities].[SelectCustomers]";
+
+                    return await ReadListAsync(command, ReadCustomer);
+
                 }
             }
         }
@@ -55,6 +96,53 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
+
+
+        public async Task<int> UpsertCustomer(Customer customer)
+        {
+            try
+            {
+                using (var cn = await GetNewConnectionAsync())
+                {
+                    using (var command = cn.CreateCommand())
+                    {
+                        command.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                        command.Parameters.AddWithValue("@LastName", customer.LastName);
+                        command.Parameters.AddWithValue("@Email", customer.Email);
+                        command.Parameters.AddWithValue("@DateOfBirth", customer.DateOfBirth == DateTime.MinValue ? DBNull.Value : (object)customer.DateOfBirth);
+                        command.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
+                        command.Parameters.AddWithValue("@UserId", customer.UserId);
+                        command.Parameters.AddWithValue("@Address", customer.Address);
+                        command.CommandType = CommandType.StoredProcedure;
+                        if (customer.Id.HasValue)
+                        {
+                            command.CommandText = "[Activities].[UpdateCustomer]";
+
+                            command.Parameters.AddWithValue("@Id", customer.Id.Value);
+
+                            await command.ExecuteNonQueryAsync();
+                            return customer.Id.Value;
+                        }
+                        else
+                        {
+                            command.CommandText = "[Activities].[InsertCustomer]";
+                            var result = await command.ExecuteScalarAsync();
+                            return (int)result;
+                        }
+                    }
+                }
+            }
+            catch(SqlException e)
+            {
+                switch ((DataError)e.Number)
+                {
+                    case DataError.UniqueIndexViolation:
+                        throw new BadRequestException($"Customer already exists with Email '{customer.Email}'", e);
+                    default: throw e;
+                }
+            }
+        }
+
 
         private Customer ReadCustomer(SqlDataReader reader)
         {
@@ -78,39 +166,6 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        public async Task<int> UpsertCustomer(Customer customer)
-        {
-            using (var cn = await GetNewConnectionAsync())
-            {
-                using (var command = cn.CreateCommand())
-                {
-                    command.Parameters.AddWithValue("@FirstName", customer.FirstName);
-                    command.Parameters.AddWithValue("@LastName", customer.LastName);
-                    command.Parameters.AddWithValue("@Email", customer.Email);
-                    command.Parameters.AddWithValue("@DateOfBirth", customer.DateOfBirth == DateTime.MinValue ? DBNull.Value : (object)customer.DateOfBirth);
-                    command.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
-                    command.Parameters.AddWithValue("@UserId", customer.UserId);
-                    command.Parameters.AddWithValue("@Address", customer.Address);
-                    command.CommandType = CommandType.StoredProcedure;
-                    if (customer.Id.HasValue)
-                    {
-                        command.CommandText = "[Activities].[UpdateCustomer]";
-
-                        command.Parameters.AddWithValue("@Id", customer.Id.Value);
-
-                        await command.ExecuteNonQueryAsync();
-                        return customer.Id.Value;
-                    }
-                    else
-                    {
-                        command.CommandText = "[Activities].[InsertCustomer]";
-                        var result = await command.ExecuteScalarAsync();
-                        return (int)result;
-                    }
-                }
-            }
-        }
-
-
+        
     }
 }

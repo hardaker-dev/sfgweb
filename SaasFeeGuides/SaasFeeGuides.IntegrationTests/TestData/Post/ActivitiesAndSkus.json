@@ -32,6 +32,7 @@
     "VideoContentId": null,
     "ImageContentId": null,
     "IsActive": true,
+    "CategoryName": "Day Tours",
     "Skus": [
       {
         "Name": "AllalinSku",
@@ -95,6 +96,7 @@
   },
   {
     "Name": "AllalinEast",
+    "CategoryName": "Day Tours",
     "TitleContent": [
       {
         "Id": "AllalinEast_Title",

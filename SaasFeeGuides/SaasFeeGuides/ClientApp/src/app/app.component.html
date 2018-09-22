@@ -1,11 +1,30 @@
 <!-- main app container -->
-<div class="jumbotron">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-6 offset-sm-3">
-        <alert></alert>
-        <router-outlet></router-outlet>
-      </div>
-    </div>
-  </div>
+<div>
+  <table style="width:100%">
+    <tr>
+      <td class="navbar">
+
+        <div >
+          <div>
+            <a  routerLink="">
+              <img src="../assets/Images/logo.png" />
+            </a>
+          </div>
+          <div>
+            <ul>
+              <li routerLink="activities">Activities</li>
+              <li routerLink="customers">Customers</li>
+              <li routerLink="bookings">Bookings</li>
+            </ul>
+          </div>
+        </div>
+      </td>
+      <td class="main">
+        <div>
+          <alert></alert>
+          <router-outlet></router-outlet>
+        </div>
+      </td>
+    </tr>
+  </table>
 </div>

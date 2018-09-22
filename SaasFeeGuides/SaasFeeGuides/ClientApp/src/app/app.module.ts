@@ -15,7 +15,9 @@ import { AlertService } from './services/alert.service';
 import { AuthenticationService } from './services/authentication.service';
 import { AccountService } from './services/account.service';
 import { CustomerService } from './services/customer.service';
-import { HomeComponent } from './home/home.component';
+import { CustomersComponent } from './customers/customers.component';
+import { ActivitiesComponent } from './activities/activities.component';
+import { BookingsComponent } from './bookings/bookings.component';
 import { AuthenticateComponent } from './authenticate/authenticate.component';
 import { RegisterComponent } from './register/register.component';
 
@@ -29,7 +31,9 @@ import { RegisterComponent } from './register/register.component';
   declarations: [
     AppComponent,
     AlertComponent,
-    HomeComponent,
+    CustomersComponent,
+    BookingsComponent,
+    ActivitiesComponent,
     AuthenticateComponent,
     RegisterComponent
   ],

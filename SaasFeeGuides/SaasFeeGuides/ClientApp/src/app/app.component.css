@@ -1,10 +1,39 @@
-.body-content {
-  padding-top: 10px;
+img {
+  max-width:100%;
+  max-height:100%;
+}
+ul {
+  padding: 0px;
+  margin-top:10px;
+}
+li {
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-width: 1px;
+  border-color: cadetblue;
+  list-style: none;
+  padding: 10px;
+  font-weight: bold;
+  background-color: lightsteelblue;
 }
 
-/*@media (max-width: 767px) {
-  /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
-  /*.body-content {
-    padding-top: 50px;
-  }
-}*/
+li:hover {
+  background-color:cornflowerblue;
+  cursor:pointer;    
+}
+
+.navbar {
+  min-width: 153px;
+  vertical-align: top;
+  padding: 0px;
+}
+
+.main {
+  width: 100%;
+  padding:15px;
+}
+
+.navbar-brand{
+  width:153px;
+  height:120px;
+}

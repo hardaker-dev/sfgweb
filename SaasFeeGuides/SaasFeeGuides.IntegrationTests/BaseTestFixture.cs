@@ -19,7 +19,7 @@ namespace SaasFeeGuides.IntegrationTests
             if (_authenticatedClient == null)
             {
                 var loginResponse = await Login("testadmin", "password", "test.admin@sfg.ch");
-                _authenticatedClient = new AuthenticatedClient(ServiceUri, loginResponse.auth_token);
+                _authenticatedClient = new AuthenticatedClient(ServiceUri, loginResponse.AuthToken);
             }
             return _authenticatedClient;
         }
@@ -30,7 +30,7 @@ namespace SaasFeeGuides.IntegrationTests
             this._client = new Client(ServiceUri);
         }
 
-        private async Task<LoginResponse> Login(string username, string password, string email)
+        private async Task<User> Login(string username, string password, string email)
         {
             try
             {

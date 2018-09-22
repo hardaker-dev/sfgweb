@@ -47,7 +47,17 @@ namespace SaasFeeGuides.Controllers
             var customers = await _customerRepository.SelectCustomers();
 
 
-            return new OkObjectResult(customers);
+            return new OkObjectResult(customers.Select(Mapping.Map));
+        }
+        [Authorize("Admin")]
+        [HttpGet("{customerId}")]
+        public async Task<IActionResult> GetCustomer(int customerId)
+        {
+
+            var customer = await _customerRepository.SelectCustomer(customerId);
+
+
+            return new OkObjectResult(customer);
         }
 
         [Authorize("Admin")]

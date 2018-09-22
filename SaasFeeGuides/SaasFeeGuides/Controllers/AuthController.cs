@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SaasFeeGuides.Auth;
+using SaasFeeGuides.Data;
 using SaasFeeGuides.Helpers;
 using SaasFeeGuides.Models;
 using SaasFeeGuides.Models.Entities;
 using SaasFeeGuides.ViewModels;
+using Customer = SaasFeeGuides.ViewModels.Customer;
 
 namespace SaasFeeGuides.Controllers
 {
@@ -23,13 +25,18 @@ namespace SaasFeeGuides.Controllers
         private readonly IJwtFactory _jwtFactory;
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly UserManager<AppUser> _userManager;
+        private readonly ICustomerRepository _customerRepository;
 
 
-        public AuthController(UserManager<AppUser> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions)
+        public AuthController(UserManager<AppUser> userManager, 
+            IJwtFactory jwtFactory, 
+            IOptions<JwtIssuerOptions> jwtOptions,
+            ICustomerRepository customerRepository)
         {
             _userManager = userManager;
             _jwtFactory = jwtFactory;
             _jwtOptions = jwtOptions.Value;
+            _customerRepository = customerRepository;
 
         }
         // POST api/auth/login
@@ -46,13 +53,13 @@ namespace SaasFeeGuides.Controllers
             {
                 return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
             }
-
+            var customer = await _customerRepository.SelectCustomerByUserId(identity.Claims.Single(c => c.Type == "id").Value);
             // Serialize and return the response
-            var response = new LoginResponse
+            var response = new User
             {
-                id = identity.Claims.Single(c => c.Type == "id").Value,
-                auth_token = await _jwtFactory.GenerateEncodedToken(credentials.UserName, identity),
-                expires_in = (int)_jwtOptions.ValidFor.TotalSeconds
+                Customer = customer.Map(),
+                AuthToken = await _jwtFactory.GenerateEncodedToken(credentials.UserName, identity),
+                ExpiresIn = (int)_jwtOptions.ValidFor.TotalSeconds
             };
 
             return new OkObjectResult(response);

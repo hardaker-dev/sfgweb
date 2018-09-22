@@ -44,6 +44,7 @@
     <None Remove="Scripts\33_CreateProc_UpsertActivityEquiptment.sql" />
     <None Remove="Scripts\34_CreateProc_InsertCustomerBooking.sql" />
     <None Remove="Scripts\35_CreateProc_SelectCustomers.sql" />
+    <None Remove="Scripts\36_CreateProc_SelectCustomer.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -65,6 +66,7 @@
     <EmbeddedResource Include="Scripts\03_CreateTable_Category.sql" />
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\02b_CreateTable_Content.sql" />
+    <EmbeddedResource Include="Scripts\36_CreateProc_SelectCustomer.sql" />
     <EmbeddedResource Include="Scripts\35_CreateProc_SelectCustomers.sql" />
     <EmbeddedResource Include="Scripts\34_CreateProc_InsertCustomerBooking.sql" />
     <EmbeddedResource Include="Scripts\15_CreateProc_InsertCustomer.sql" />

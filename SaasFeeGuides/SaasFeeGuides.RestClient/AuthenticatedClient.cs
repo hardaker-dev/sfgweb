@@ -105,6 +105,20 @@ namespace SaasFeeGuides.RestClient
             return await post.ReceiveJsonAsync<int>();
 
         }
+        public async Task<Customer> GetCustomer(int customerId)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "customer", customerId)
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+
+            return await get.ReceiveJsonAsync<Customer>();
+
+        }
         public async Task<IList<Customer>> GetCustomers()
         {
             var request = _serviceUri.AsRestRequest()

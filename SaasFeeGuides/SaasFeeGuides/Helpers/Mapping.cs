@@ -19,6 +19,21 @@ namespace SaasFeeGuides.Helpers
                 NumPersons = booking.NumPersons
             };
         }
+
+        public static ViewModels.Customer Map(this Models.Customer customer)
+        {
+            return new ViewModels.Customer()
+            {
+                Id = customer.Id,
+                Address = customer.Address,
+                FirstName = customer.FirstName,
+                Email = customer.Email,
+                DateOfBirth = customer.DateOfBirth,
+                LastName = customer.LastName,
+                PhoneNumber = customer.PhoneNumber
+            };
+        }
+   
         public static Models.Customer Map(this ViewModels.Customer customer)
         {
             return new Models.Customer()

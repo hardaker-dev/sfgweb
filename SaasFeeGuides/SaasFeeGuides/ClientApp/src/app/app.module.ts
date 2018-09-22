@@ -1,40 +1,48 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
+
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { HomeComponent } from './home/home.component';
-import { SummerComponent } from './summer/summer.component';
-import { WinterComponent } from './winter/winter.component';
-import { AuthenticateComponent } from './authenticate/authenticate.component';
-import { AuthenticateFormComponent } from './authenticate/authenticate-form.component';
+import { routing } from './app.routing';
 
+import { AlertComponent } from './dailogs/alert/alert.component';
+import { AuthGuard } from './guards/auth.guard';
+import {  ErrorInterceptor } from './interceptors/error.interceptor';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { AlertService } from './services/alert.service';
+import { AuthenticationService } from './services/authentication.service';
+import { AccountService } from './services/account.service';
+import { CustomerService } from './services/customer.service';
+import { HomeComponent } from './home/home.component';
+import { AuthenticateComponent } from './authenticate/authenticate.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    routing
+  ],
   declarations: [
     AppComponent,
-    NavMenuComponent,
+    AlertComponent,
     HomeComponent,
-    SummerComponent,
-    WinterComponent,
     AuthenticateComponent,
-    AuthenticateFormComponent
+    RegisterComponent
   ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'summer', component: SummerComponent },
-      { path: 'winter', component: WinterComponent },
-      { path: 'authenticate', component: AuthenticateComponent },
-    ])
+  providers: [
+    AuthGuard,
+    AlertService,
+    AuthenticationService,
+    AccountService,
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    CustomerService
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

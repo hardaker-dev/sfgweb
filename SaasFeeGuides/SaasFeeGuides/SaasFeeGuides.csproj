@@ -54,7 +54,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
+    <None Remove="ClientApp\src\app\models\account.ts" />
+    <None Remove="ClientApp\src\app\models\customer.ts" />
+    <None Remove="ClientApp\src\app\models\historicCustomerBooking.ts" />
+    <None Remove="ClientApp\src\app\models\user.ts" />
+    <None Remove="ClientApp\src\app\register\register.component.ts" />
+    <None Remove="ClientApp\src\app\services\account.service.ts" />
+    <None Remove="ClientApp\src\app\services\authentication.service.ts" />
+    <None Remove="ClientApp\src\app\services\customer.service.ts" />
     <None Remove="ClientApp\src\app\winter\DashboardIndex.ts" />
+    <None Remove="ClientApp\src\assets\Images\logo.png" />
+    <None Remove="ClientApp\src\tsconfig.app.json" />
+    <None Remove="ClientApp\src\tsconfig.spec.json" />
+    <None Remove="ClientApp\tsconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ClientApp\src\assets\Images\logo.png" />
+    <Content Include="ClientApp\src\tsconfig.app.json" />
+    <Content Include="ClientApp\src\tsconfig.spec.json" />
+    <Content Include="ClientApp\tsconfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SaasFeeGuides.Database.Deploy\SaasFeeGuides.Database.Deploy.csproj" />
@@ -75,8 +95,24 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\authenticate\LoginInputs.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\customer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\account.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\historicCustomerBooking.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\login.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\register\register.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\customer.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\authentication.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\account.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\winter\DashboardIndex.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="ClientApp\src\app\models\user.js">
+      <DependentUpon>user.ts</DependentUpon>
+    </None>
+    <None Update="ClientApp\src\app\models\customer.js">
+      <DependentUpon>customer.ts</DependentUpon>
+    </None>
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

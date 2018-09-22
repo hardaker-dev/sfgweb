@@ -17,6 +17,7 @@ namespace SaasFeeGuides.Data
         Task<Customer> SelectCustomerByUserId(string userId);
         Task DeleteAccount(string userId);
         Task<IEnumerable<Customer>> SelectCustomers();
+        Task<Customer> SelectCustomer(int id);
     }
     public class CustomerRepository : DataAccessBase, ICustomerRepository
     {
@@ -58,6 +59,24 @@ namespace SaasFeeGuides.Data
 
                     await command.ExecuteNonQueryAsync();
                     
+                }
+            }
+        }
+
+        public async Task<Customer> SelectCustomer(int customerId)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@customerId", customerId);
+                    command.CommandText = "[Activities].[SelectCustomer]";
+
+                    return await ReadSingleAsync(command, ReadCustomer);
+
                 }
             }
         }
@@ -166,6 +185,6 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        
+     
     }
 }

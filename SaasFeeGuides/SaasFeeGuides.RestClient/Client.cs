@@ -104,7 +104,7 @@ namespace SaasFeeGuides.RestClient
             }
         }
 
-        public async Task<LoginResponse> Login(Credentials credentialsViewModel)
+        public async Task<User> Login(Credentials credentialsViewModel)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "auth","login")
@@ -113,7 +113,7 @@ namespace SaasFeeGuides.RestClient
             var post = request.PostJsonAsync(credentialsViewModel, DefaultClient);
             var response = await post;
 
-            return await post.ReceiveJsonAsync<LoginResponse>();
+            return await post.ReceiveJsonAsync<User>();
 
         }   
       

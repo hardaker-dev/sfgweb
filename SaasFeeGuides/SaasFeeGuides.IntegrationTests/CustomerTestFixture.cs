@@ -27,7 +27,9 @@ namespace SaasFeeGuides.IntegrationTests
             var authClient = await AuthClient();
             await AddCustomersIfNeeded(authClient);
             var customers =  await authClient.GetCustomers();
+            var customer = await authClient.GetCustomer(customers[0].Id.Value);
 
+            Assert.Equal(customer.FirstName, customers[0].FirstName);
             Assert.Equal(3, customers.Count);
         }
 

@@ -5,7 +5,9 @@ import { User } from '../models/User';
 import { Customer } from '../models/Customer';
 import { CustomerService } from '../services/customer.service';
 
-@Component({ templateUrl: 'customers.component.html' })
+@Component({
+  templateUrl: 'customers.component.html',
+  styleUrls: ['./customers.component.css'] })
 export class CustomersComponent implements OnInit {
   currentAccount: User;
   customers: Customer[] = [];

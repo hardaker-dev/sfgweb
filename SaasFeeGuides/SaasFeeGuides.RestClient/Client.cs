@@ -59,7 +59,7 @@ namespace SaasFeeGuides.RestClient
 
             return await get.ReceiveJsonAsync<ActivitySkuLoc>();
         }
-        public async Task<ActivityLoc> GetActivity(int activityId,string locale)
+        public async Task<ActivityLoc> GetActivityLoc(int activityId,string locale)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "activity",activityId)
@@ -74,7 +74,10 @@ namespace SaasFeeGuides.RestClient
 
             return await get.ReceiveJsonAsync<ActivityLoc>();
         }
-        public async Task<IList<ActivityLoc>> GetActivities(string locale)
+
+     
+
+        public async Task<IList<ActivityLoc>> GetActivitiesLoc(string locale)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "activity")

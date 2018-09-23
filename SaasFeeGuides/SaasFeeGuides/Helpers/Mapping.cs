@@ -8,12 +8,23 @@ namespace SaasFeeGuides.Helpers
 {
     public static class Mapping
     {
+        public static Models.CustomerBooking Map(this ViewModels.CustomerBooking booking)
+        {
+            return new Models.CustomerBooking()
+            {
+                ActivitySkuName = booking.ActivitySkuName,
+                CustomerEmail = booking.CustomerEmail,
+                Date = booking.Date,
+                NumPersons = booking.NumPersons
+            };
+        }
+
         public static Models.CustomerBooking Map(this ViewModels.HistoricCustomerBooking booking)
         {
             return new Models.CustomerBooking()
             {
                 ActivitySkuName = booking.ActivitySkuName,
-                AmountPaid = booking.AmountPaid,
+                PriceAgreed = booking.AmountPaid,
                 CustomerEmail = booking.CustomerEmail,
                 Date = booking.Date,
                 NumPersons = booking.NumPersons
@@ -72,7 +83,27 @@ namespace SaasFeeGuides.Helpers
                 Id = e.Id
             };
         }
-
+        private static async Task<ViewModels.ActivitySku> Map(this Models.ActivitySku sku,IContentRepository contentRepository)
+        {
+            var titleContent = contentRepository.SelectContent(sku.TitleContentId);
+            var descContent = contentRepository.SelectContent(sku.DescriptionContentId);
+            var additionalRequirementsContent = contentRepository.SelectContent(sku.AdditionalRequirementsContentId);
+            var webContent = contentRepository.SelectContent(sku.WebContentId);
+            return new ViewModels.ActivitySku()
+            {
+                DescriptionContent = await descContent,
+               TitleContent = await titleContent,
+                Name = sku.Name,
+                ActivityName = sku.ActivityName,
+                AdditionalRequirementsContent =await additionalRequirementsContent,
+                DurationDays = sku.DurationDays,
+                DurationHours = sku.DurationHours,               
+                MaxPersons = sku.MaxPersons,
+                MinPersons = sku.MinPersons,
+                PricePerPerson = sku.PricePerPerson,
+                WebContent = await webContent
+            };
+        }
         private static ViewModels.ActivitySkuLoc Map(this Models.ActivitySkuLoc s)
         {
             return new ViewModels.ActivitySkuLoc()
@@ -113,37 +144,71 @@ namespace SaasFeeGuides.Helpers
                 CanRent = equiptment.CanRent
             };
         }
-        public static Models.Activity Map(this ViewModels.Activity activity, int? activityId, IContentRepository contentRepository )
+
+        public static async Task<ViewModels.Activity> Map(this Models.Activity activity, IContentRepository contentRepository)
         {
+            var titleContent = contentRepository.SelectContent(activity.TitleContentId);
+            var menuImage = contentRepository.SelectContent(activity.MenuImageContentId);
+            var imageContent = contentRepository.SelectContent(activity.ImageContentId);
+            var videoContent = contentRepository.SelectContent(activity.VideoContentId);
+            var descContent = contentRepository.SelectContent(activity.DescriptionContentId);
+
+            return new ViewModels.Activity
+            {
+                Id = activity.Id,
+                TitleContent = await titleContent,
+                MenuImageContent = await menuImage,
+                ImageContent = await imageContent,
+                VideoContent = await videoContent,
+                Name = activity.Name,
+                DescriptionContent = await descContent,
+                IsActive = activity.IsActive,
+                CategoryName = activity.CategoryName,
+                Skus = activity.Skus != null ? await Task.WhenAll( activity.Skus.Select(s => s.Map(contentRepository))) : null,
+                Equiptment = activity.Equiptment != null ? activity.Equiptment.Select(e=> new ViewModels.ActivityEquiptment()
+                { EquiptmentId = e.EquiptmentId}).ToList() : null
+            };
+        }
+        public static async Task<Models.Activity> Map(this ViewModels.Activity activity, int? activityId, IContentRepository contentRepository )
+        {
+            var title = contentRepository.InsertContent(activity.TitleContent);
+            var menuImage = contentRepository.InsertContent(activity.MenuImageContent);
+            var imageContent = contentRepository.InsertContent(activity.ImageContent);
+            var videoContent = contentRepository.InsertContent(activity.VideoContent);
+            var descContent = contentRepository.InsertContent(activity.DescriptionContent);
             return new Models.Activity
             {
                 Id = activityId,
-                TitleContentId = contentRepository.InsertContent(activity.TitleContent),
-                MenuImageContentId = contentRepository.InsertContent(activity.MenuImageContentId),
-                ImageContentId = contentRepository.InsertContent(activity.ImageContentId),
-                VideoContentId = contentRepository.InsertContent(activity.VideoContentId),
+                TitleContentId = await title,
+                MenuImageContentId =await menuImage ,
+                ImageContentId = await imageContent,
+                VideoContentId = await videoContent,
                 Name = activity.Name,
-                DescriptionContentId = contentRepository.InsertContent(activity.DescriptionContent),
-                IsActive = activity.IsActive,
+                DescriptionContentId = await descContent,
+                IsActive = activity.IsActive ?? false,
                 CategoryName = activity.CategoryName
             };
         }
 
-        public static Models.ActivitySku Map(this ViewModels.ActivitySku activitySku, IContentRepository contentRepository)
+        public static async Task<Models.ActivitySku> Map(this ViewModels.ActivitySku activitySku, IContentRepository contentRepository)
         {
+            var title = contentRepository.InsertContent(activitySku.TitleContent);
+            var add = contentRepository.InsertContent(activitySku.AdditionalRequirementsContent);
+            var webContent = contentRepository.InsertContent(activitySku.WebContent);
+            var descContent = contentRepository.InsertContent(activitySku.DescriptionContent);
             return new Models.ActivitySku
             {
                 ActivityName = activitySku.ActivityName,
                 Name = activitySku.Name,
-                TitleContentId = contentRepository.InsertContent(activitySku.TitleContent),
-                DescriptionContentId = contentRepository.InsertContent(activitySku.DescriptionContent),
+                TitleContentId = await title,
+                DescriptionContentId = await descContent,
                 PricePerPerson = activitySku.PricePerPerson,
                 MinPersons = activitySku.MinPersons,
                 MaxPersons = activitySku.MaxPersons,
-                AdditionalRequirementsContentId = contentRepository.InsertContent(activitySku.AdditionalRequirementsContent),
+                AdditionalRequirementsContentId =await add,
                 DurationDays = activitySku.DurationDays,
                 DurationHours = activitySku.DurationHours,
-                WebContentId = contentRepository.InsertContent(activitySku.WebContent),
+                WebContentId = await webContent,
             };
         }
     }

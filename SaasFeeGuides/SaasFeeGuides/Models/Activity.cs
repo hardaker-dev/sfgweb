@@ -9,12 +9,16 @@ namespace SaasFeeGuides.Models
     {
         public int? Id { get; set; }
         public string Name { get; set; }
-        public Task<string> TitleContentId { get; set; }
-        public Task<string> DescriptionContentId { get; set; }
-        public Task<string> MenuImageContentId { get; set; }
-        public Task<string> VideoContentId { get; set; }
-        public Task<string> ImageContentId { get; set; }
-        public bool? IsActive { get; set; }
+        public string TitleContentId { get; set; }
+        public string DescriptionContentId { get; set; }
+        public string MenuImageContentId { get; set; }
+        public string VideoContentId { get; set; }
+        public string ImageContentId { get; set; }
+        public bool IsActive { get; set; }
         public string CategoryName { get; set; }
+
+
+        public IList<ActivitySku> Skus { get; set; }
+        public IList<ActivityEquiptment> Equiptment { get; set; }
     }
 }

@@ -34,6 +34,33 @@ namespace SaasFeeGuides.RestClient
             return await post.ReceiveJsonAsync<int>();
 
         }
+
+        public async Task<Activity> GetActivity(int activityId)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", activityId, "edit")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<Activity>();
+        }
+
+        public async Task<IList<Activity>> GetActivities()
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", "edit")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<IList<Activity>>();
+        }
+
         public async Task<int> AddOrUpdateEquiptment(Equiptment equiptment)
         {
             var request = _serviceUri.AsRestRequest()

@@ -18,6 +18,7 @@ namespace SaasFeeGuides.Data
         Task DeleteAccount(string userId);
         Task<IEnumerable<Customer>> SelectCustomers();
         Task<Customer> SelectCustomer(int id);
+        Task<CustomerBooking> SelectCustomerBookings(int customerId);
     }
     public class CustomerRepository : DataAccessBase, ICustomerRepository
     {
@@ -31,7 +32,7 @@ namespace SaasFeeGuides.Data
                 using (var command = cn.CreateCommand())
                 {
                     command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
-                    command.Parameters.AddWithValue("@AmountPaid", booking.AmountPaid);
+                    command.Parameters.AddWithValue("@PriceAgreed", booking.PriceAgreed);
                     command.Parameters.AddWithValue("@Email", booking.CustomerEmail);
                     command.Parameters.AddWithValue("@Date", booking.Date);
                     command.Parameters.AddWithValue("@NumPersons", booking.NumPersons);
@@ -185,6 +186,9 @@ namespace SaasFeeGuides.Data
             }
         }
 
-     
+        public Task<CustomerBooking> SelectCustomerBookings(int customerId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

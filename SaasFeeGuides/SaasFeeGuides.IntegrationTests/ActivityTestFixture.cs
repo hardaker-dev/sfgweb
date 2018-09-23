@@ -23,7 +23,7 @@ namespace SaasFeeGuides.IntegrationTests
         public async Task AddAndUpdateActivityAndSkus()
         {
             var authClient = await AuthClient();
-            var activitiesEnglish = await _client.GetActivities("en");
+            var activitiesEnglish = await _client.GetActivitiesLoc("en");
             if (activitiesEnglish.Count == 0)
             {
                 await AddActivityAndSkus(authClient);
@@ -78,8 +78,8 @@ namespace SaasFeeGuides.IntegrationTests
 
             await AddActivitiesAndSkusIfNeeded(authClient);
             await AddDates(authClient);
-            var activitiesGerman = await _client.GetActivities("de");
-            var activity = await _client.GetActivity(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id,"de");
+            var activitiesGerman = await _client.GetActivitiesLoc("de");
+            var activity = await _client.GetActivityLoc(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id,"de");
             var dates = await _client.GetActivitySkuDates(activity.Skus[0].Id,null,null);
             Assert.All(dates,(d=> _dates.Contains(d)));
             Assert.Equal(3, dates.Count);
@@ -92,14 +92,39 @@ namespace SaasFeeGuides.IntegrationTests
         }
 
         [Fact]
+        public async Task GetActivity()
+        {
+            var authClient = await AuthClient();
+
+            await AddActivitiesIfNeeded(authClient);
+
+            var activities = await authClient.GetActivities();
+            Assert.True(activities.Count > 0);
+
+            var activity = await authClient.GetActivity(activities[0].Id.Value);
+
+            Assert.NotNull(activity);
+            Assert.NotNull(activity.Equiptment);
+            Assert.Equal(8, activity.Equiptment.Count);
+        }
+        [Fact]
         public async Task GetActivities()
         {
             var authClient = await AuthClient();
 
             await AddActivitiesIfNeeded(authClient);
 
-            var activitiesEnglish = await _client.GetActivities("en");
-            var activitiesGerman = await _client.GetActivities("de");
+            var activities = await authClient.GetActivities();
+        }
+        [Fact]
+        public async Task GetActivitiesLoc()
+        {
+            var authClient = await AuthClient();
+
+            await AddActivitiesIfNeeded(authClient);
+
+            var activitiesEnglish = await _client.GetActivitiesLoc("en");
+            var activitiesGerman = await _client.GetActivitiesLoc("de");
 
             Assert.Equal(activitiesEnglish.Count, activitiesGerman.Count);
         }
@@ -108,12 +133,12 @@ namespace SaasFeeGuides.IntegrationTests
         {
             var authClient = await AuthClient();
 
-            await AddActivitiesIfNeeded(authClient);
+            await AddActivitiesAndSkusIfNeeded(authClient);
 
-            var activitiesEnglish = await _client.GetActivities("en");
+            var activitiesEnglish = await _client.GetActivitiesLoc("en");
             Assert.True(activitiesEnglish.Count > 0);
 
-            var activityEnglish = await _client.GetActivity(activitiesEnglish[0].Id, "en");
+            var activityEnglish = await _client.GetActivityLoc(activitiesEnglish[0].Id, "en");
 
             var activitySkuEnglish = await _client.GetActivitySku(activityEnglish.Skus[0].Id, "en");
 
@@ -121,17 +146,17 @@ namespace SaasFeeGuides.IntegrationTests
         }
 
         [Fact]
-        public async Task GetActivity()
+        public async Task GetActivityLoc()
         {
             var authClient = await AuthClient();
 
             await AddActivitiesIfNeeded(authClient);
 
-            var activitiesEnglish = await _client.GetActivities("en");
+            var activitiesEnglish = await _client.GetActivitiesLoc("en");
             Assert.True(activitiesEnglish.Count > 0);
 
-            var activityEnglish = await _client.GetActivity(activitiesEnglish[0].Id,"en");
-            var activityGerman = await _client.GetActivity(activitiesEnglish[0].Id, "de");
+            var activityEnglish = await _client.GetActivityLoc(activitiesEnglish[0].Id,"en");
+            var activityGerman = await _client.GetActivityLoc(activitiesEnglish[0].Id, "de");
 
             Assert.NotNull(activityEnglish);
             Assert.NotNull(activityEnglish.Equiptment);
@@ -171,7 +196,7 @@ namespace SaasFeeGuides.IntegrationTests
 
         private async Task AddActivitiesIfNeeded(AuthenticatedClient authClient)
         {
-            var activitiesEnglish = await _client.GetActivities("en");
+            var activitiesEnglish = await _client.GetActivitiesLoc("en");
             if (activitiesEnglish.Count == 0)
             {
                 await AddActivities(authClient);

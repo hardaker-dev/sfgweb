@@ -60,7 +60,7 @@ namespace SaasFeeGuides.IntegrationTests
         }
         protected async Task AddActivitiesAndSkusIfNeeded(AuthenticatedClient authClient)
         {
-            var activitiesEnglish = await _client.GetActivities("en");
+            var activitiesEnglish = await _client.GetActivitiesLoc("en");
 
             if (activitiesEnglish.Count == 0)
             {

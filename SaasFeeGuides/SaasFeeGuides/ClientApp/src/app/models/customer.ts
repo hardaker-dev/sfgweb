@@ -6,7 +6,7 @@ export class Customer {
     public firstName: string,
     public lastName: string,
     public address: string,
-    public dateOfBirth: string,
+    public dateOfBirth: Date,
     public phoneNumber: string
   ) {
   }

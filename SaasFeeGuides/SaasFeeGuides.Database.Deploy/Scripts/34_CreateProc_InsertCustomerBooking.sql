@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE Activities.InsertCustomerBooking
 	@ActivitySkuName nvarchar(450),
-	@AmountPaid float,
+	@PriceAgreed float,
 	@Email nvarchar(400),
     @Date datetime2,
 	@NumPersons int
@@ -48,7 +48,7 @@ BEGIN
 		[PriceAgreed] ,
 		[Created],
 		[Modified]	)
-	VALUES (@customerId,@activitySkuDateId,1,1,0,@NumPersons,@AmountPaid,GETUTCDATE(),GETUTCDATE())
+	VALUES (@customerId,@activitySkuDateId,1,1,0,@NumPersons,@PriceAgreed,GETUTCDATE(),GETUTCDATE())
 
 	SELECT CAST(SCOPE_IDENTITY() as INT)
 

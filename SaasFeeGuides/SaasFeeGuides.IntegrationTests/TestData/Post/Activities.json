@@ -23,14 +23,16 @@
         "ContentType": "Text"
       }
     ],
-    "MenuImageContentId": {
-      "Id": "Allalin_MenuImage",
-      "Value": "Allalin.jpg",
-      "Locale": "na",
-      "ContentType": "Image"
-    },
-    "VideoContentId": null,
-    "ImageContentId": null,
+    "MenuImageContent": [
+      {
+        "Id": "Allalin_MenuImage",
+        "Value": "Allalin.jpg",
+        "Locale": "na",
+        "ContentType": "Image"
+      }
+    ],
+    "VideoContent": null,
+    "ImageContent": null,
     "IsActive": true,
     "CategoryName": "Day Tours"
   },
@@ -64,14 +66,16 @@
         "ContentType": "Text"
       }
     ],
-    "MenuImageContentId": {
-      "Id": "AllalinEast_MenuImage",
-      "Value": "AllalinEast.jpg",
-      "Locale": "na",
-      "ContentType": "Image"
-    },
-    "VideoContentId": null,
-    "ImageContentId": null,
+    "MenuImageContent": [
+      {
+        "Id": "AllalinEast_MenuImage",
+        "Value": "AllalinEast.jpg",
+        "Locale": "na",
+        "ContentType": "Image"
+      }
+    ],
+    "VideoContent": null,
+    "ImageContent": null,
     "IsActive": true,
     "CategoryName": "Day Tours"
   }

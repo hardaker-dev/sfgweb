@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE Activities.SelectActivity
+﻿CREATE PROCEDURE Activities.SelectActivityLoc
 	@ActivityId int,
 	@Locale varchar(3)
 AS

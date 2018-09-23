@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SaasFeeGuides.Models
+namespace SaasFeeGuides.ViewModels
 {
     public class CustomerBooking
     {
@@ -8,8 +8,6 @@ namespace SaasFeeGuides.Models
         public DateTime Date { get; set; }
         public string CustomerEmail { get; set; }
      
-        public int NumPersons { get; set; }
-        public double PriceAgreed { get; set; }
-        
+        public int NumPersons { get; set; }        
     }
 }

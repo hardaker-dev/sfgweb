@@ -1,3 +1,82 @@
-<h1>Hi {{currentUser.firstName}}!</h1>
-<h3>Activities</h3>
+<h1>Activities</h1>
+<ul>
+  <li *ngFor="let activity of activities">
+    <table>
 
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Name</span>
+        </td>
+        <td>
+          {{activity.name}}
+        </td>
+      </tr>
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Category</span>
+        </td>
+        <td>
+          {{activity.categoryName}}
+        </td>
+      </tr>
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Title</span>
+        </td>
+        <td>
+          <div *ngFor="let title of activity.titleContent">
+            <b>{{title.locale}}:</b> {{title.value}}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Description</span>
+        </td>
+        <td>
+          <div *ngFor="let desc of activity.descriptionContent">
+            <b>{{desc.locale}}:</b> {{desc.value}}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Menu Image</span>
+        </td>
+        <td>
+          <div *ngFor="let menuImage of activity.menuImageContent">
+            <b>{{menuImage.locale}}:</b> {{menuImage.value}}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Videos</span>
+        </td>
+        <td>
+          <div *ngFor="let video of activity.videoContent">
+            <b>{{video.locale}}:</b> {{video.value}}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Images</span>
+        </td>
+        <td>
+          <div *ngFor="let image of activity.imageContent">
+            <b>{{image.locale}}:</b> {{image.value}}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="leftColumn">
+          <span class="label">Is Active</span>
+        </td>
+        <td>
+          {{activity.isActive}}
+        </td>
+      </tr>
+    </table>
+  </li>
+</ul>

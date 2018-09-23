@@ -60,7 +60,7 @@ namespace SaasFeeGuides.Controllers
         [HttpPut("sku")]
         public async Task<IActionResult> AddOrUpdateActivitySku(ViewModels.ActivitySku activitySku)
         {
-            Models.ActivitySku activitySkuModel = activitySku.Map(_contentRepository);
+            var activitySkuModel = await activitySku.Map(_contentRepository);
 
             var id = await _activityRepository.UpsertActivitySku(activitySkuModel);
 
@@ -71,7 +71,7 @@ namespace SaasFeeGuides.Controllers
         [HttpPost]
         public async Task<IActionResult> AddActivity(ViewModels.Activity activity)
         {
-            var activityModel = activity.Map(null, _contentRepository);
+            var activityModel = await activity.Map(null, _contentRepository);
 
             var activityId = await _activityRepository.UpsertActivity(activityModel);
             EnsureMatchingActivityName(activity);
@@ -81,7 +81,7 @@ namespace SaasFeeGuides.Controllers
             return new OkObjectResult(activityId);
         }
 
-        private async Task InsertEquiptment(ViewModels.ActivityEquiptment[] equiptments, int activityId)
+        private async Task InsertEquiptment(IList<ViewModels.ActivityEquiptment> equiptments, int activityId)
         {
             if (equiptments == null)
                 return;
@@ -103,7 +103,7 @@ namespace SaasFeeGuides.Controllers
         public async Task<IActionResult> UpdateActivity(ViewModels.Activity activity)
         {
             var activityId = await _activityRepository.FindActivityByName(activity.Name);
-            var activityModel = activity.Map(activityId,_contentRepository);
+            var activityModel = await activity.Map(activityId,_contentRepository);
 
            
             await _activityRepository.UpsertActivity(activityModel);
@@ -111,6 +111,23 @@ namespace SaasFeeGuides.Controllers
             await UpsertSkus(activity.Skus);
 
             return new OkObjectResult(activityId);
+        }
+        [Authorize("Admin")]
+        [HttpGet("{activityId:int}/edit")]
+        public async Task<IActionResult> GetActivity(int activityId)
+        {
+            var activity = await _activityRepository.SelectActivity(activityId);
+
+            return new OkObjectResult(await activity.Map(_contentRepository));
+        }
+        [Authorize("Admin")]
+        [HttpGet("edit")]
+        public async Task<IActionResult> GetActivities()
+        {
+            var activities = await _activityRepository.SelectActivities();
+
+            var mapped =  await Task.WhenAll( activities.Select(a => a.Map(_contentRepository)));
+            return new OkObjectResult(mapped);
         }
 
         [HttpGet]
@@ -140,16 +157,16 @@ namespace SaasFeeGuides.Controllers
             }
         }
        
-        private async Task<IEnumerable<(string name, int id)>> UpsertSkus(ViewModels.ActivitySku[] activitySkus)
+        private async Task<IEnumerable<(string name, int id)>> UpsertSkus(IList<ViewModels.ActivitySku> activitySkus)
         {
             if (activitySkus == null)
                 return Enumerable.Empty<(string name, int id)>();
 
             return await Task.WhenAll(activitySkus.Select(sku =>
             {
-                var activitySkuModel = sku.Map(_contentRepository);
-
-                return _activityRepository.UpsertActivitySku(activitySkuModel).ContinueWith(skuTask => (sku.Name, skuTask.Result));
+                return  sku.Map(_contentRepository)
+                .ContinueWith(activitySkuModel => _activityRepository.UpsertActivitySku(activitySkuModel.Result))
+                .ContinueWith(skuTask => (sku.Name, skuTask.Result.Result));
             }));
         }
     }

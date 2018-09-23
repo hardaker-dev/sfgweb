@@ -11,9 +11,10 @@ namespace SaasFeeGuides.Data
 {
     public interface IContentRepository
     {
-        Task<string> InsertContent(Content[] contents);
-        Task<string> InsertContentList(Content[] contents);
+        Task<string> InsertContent(IList<Content> contents);
+        Task<string> InsertContentList(IList<Content> contents);
         Task<string> InsertContent(Content activity);
+        Task<IList<Content>> SelectContent(string contentId);
     }
     public class ContentRepository : DataAccessBase, IContentRepository
     {
@@ -21,7 +22,7 @@ namespace SaasFeeGuides.Data
         {
         }
 
-        public async Task<string> InsertContentList(Content[] contents)
+        public async Task<string> InsertContentList(IList<Content> contents)
         {
             if (contents?.Any() ?? false)
             {
@@ -35,7 +36,7 @@ namespace SaasFeeGuides.Data
 
             return null;
         }
-        public async Task<string> InsertContent(Content[] contents)
+        public async Task<string> InsertContent(IList<Content> contents)
         {
             if (contents?.Any() ?? false)
             {
@@ -48,6 +49,43 @@ namespace SaasFeeGuides.Data
             }
 
             return null;
+        }
+        public async Task<IList<Content>> SelectContent(string contentId)
+        {
+            if (string.IsNullOrEmpty(contentId))
+                return new List<Content>();
+
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.Parameters.AddWithValue("@ContentId", contentId);
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "[Activities].[SelectContent]";
+                    return await ReadListAsync(command,ReadContent);
+                  
+                }
+            }
+        }
+
+        private Content ReadContent(SqlDataReader reader)
+        {
+            try
+            {
+                return new Content
+                {
+                    Id = GetString(reader, 0),
+                    Value = GetString(reader, 1),             
+                    Locale = GetString(reader, 2),
+                    ContentType = GetString(reader, 3)
+
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading ActivityLoc", ex);
+            }
         }
 
         public async Task<string> InsertContent(Content content)

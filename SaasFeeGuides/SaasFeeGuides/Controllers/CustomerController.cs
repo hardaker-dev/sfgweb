@@ -19,13 +19,16 @@ namespace SaasFeeGuides.Controllers
 
         private readonly UserManager<AppUser> _userManager;
         private readonly ICustomerRepository _customerRepository;
+        private readonly IActivityRepository _activityRepository;
 
         public CustomerController(
             UserManager<AppUser> userManager,
-            ICustomerRepository accountRepository)
+            ICustomerRepository accountRepository,
+            IActivityRepository activityRepository)
         {
             _userManager = userManager;      
             _customerRepository = accountRepository;
+            _activityRepository = activityRepository;
         }
         [Authorize("Admin")]
         [HttpPost]
@@ -50,7 +53,7 @@ namespace SaasFeeGuides.Controllers
             return new OkObjectResult(customers.Select(Mapping.Map));
         }
         [Authorize("Admin")]
-        [HttpGet("{customerId}")]
+        [HttpGet("{customerId:int}")]
         public async Task<IActionResult> GetCustomer(int customerId)
         {
 
@@ -66,10 +69,34 @@ namespace SaasFeeGuides.Controllers
         {
             var customerModel = customerBooking.Map();
 
-            var customerId = await _customerRepository.UpsertCustomerBooking(customerModel);
+            var customerBookingId = await _customerRepository.UpsertCustomerBooking(customerModel);
 
 
-            return new OkObjectResult(customerId);
+            return new OkObjectResult(customerBookingId);
+        }
+
+        [Authorize("Admin")]
+        [HttpPost("booking")]
+        public async Task<IActionResult> AddCustomerBooking(ViewModels.CustomerBooking customerBooking)
+        {
+            var customerModel = customerBooking.Map();
+
+            var activitySkuId = await this._activityRepository.FindActivitySkuByName(customerBooking.ActivitySkuName);
+            var activitySku = await this._activityRepository.SelectActivitySku(activitySkuId, "en");
+            customerModel.PriceAgreed = activitySku.PricePerPerson * customerBooking.NumPersons;
+
+            var customerBookingId = await _customerRepository.UpsertCustomerBooking(customerModel);
+
+
+            return new OkObjectResult(customerBookingId);
+        }
+
+        [Authorize("Admin")]
+        [HttpGet("{customerId:int}/booking")]
+        public async Task<IActionResult> GetCustomerBookings(int customerId)
+        {
+            var customerBookings = await _customerRepository.SelectCustomerBookings(customerId);
+            return new OkObjectResult(customerBookings);
         }
     }
 }

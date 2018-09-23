@@ -36,7 +36,7 @@
     <None Remove="Scripts\25_CreateProc_FindActivityByName.sql" />
     <None Remove="Scripts\26_CreateProc_FindActivitySkuByName.sql" />
     <None Remove="Scripts\27_CreateProc_SelectActivities.sql" />
-    <None Remove="Scripts\28_CreateProc_SelectActivity.sql" />
+    <None Remove="Scripts\28_CreateProc_SelectActivityLoc.sql" />
     <None Remove="Scripts\29_CreateProc_InsertActivitySkuDate.sql" />
     <None Remove="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
     <None Remove="Scripts\31_CreateProc_SelectActivitySku.sql" />
@@ -45,6 +45,9 @@
     <None Remove="Scripts\34_CreateProc_InsertCustomerBooking.sql" />
     <None Remove="Scripts\35_CreateProc_SelectCustomers.sql" />
     <None Remove="Scripts\36_CreateProc_SelectCustomer.sql" />
+    <None Remove="Scripts\37_CreateProc_SelectActivitiesLoc.sql" />
+    <None Remove="Scripts\38_CreateProc_SelectContent.sql" />
+    <None Remove="Scripts\39_CreateProc_SelectActivity.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,6 +69,9 @@
     <EmbeddedResource Include="Scripts\03_CreateTable_Category.sql" />
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\02b_CreateTable_Content.sql" />
+    <EmbeddedResource Include="Scripts\27_CreateProc_SelectActivities.sql" />
+    <EmbeddedResource Include="Scripts\39_CreateProc_SelectActivity.sql" />
+    <EmbeddedResource Include="Scripts\38_CreateProc_SelectContent.sql" />
     <EmbeddedResource Include="Scripts\36_CreateProc_SelectCustomer.sql" />
     <EmbeddedResource Include="Scripts\35_CreateProc_SelectCustomers.sql" />
     <EmbeddedResource Include="Scripts\34_CreateProc_InsertCustomerBooking.sql" />
@@ -75,8 +81,8 @@
     <EmbeddedResource Include="Scripts\31_CreateProc_SelectActivitySku.sql" />
     <EmbeddedResource Include="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
     <EmbeddedResource Include="Scripts\29_CreateProc_InsertActivitySkuDate.sql" />
-    <EmbeddedResource Include="Scripts\28_CreateProc_SelectActivity.sql" />
-    <EmbeddedResource Include="Scripts\27_CreateProc_SelectActivities.sql" />
+    <EmbeddedResource Include="Scripts\28_CreateProc_SelectActivityLoc.sql" />
+    <EmbeddedResource Include="Scripts\37_CreateProc_SelectActivitiesLoc.sql" />
     <EmbeddedResource Include="Scripts\26_CreateProc_FindActivitySkuByName.sql" />
     <EmbeddedResource Include="Scripts\25_CreateProc_FindActivityByName.sql" />
     <EmbeddedResource Include="Scripts\22_CreateProc_InsertActivityPrice.sql" />

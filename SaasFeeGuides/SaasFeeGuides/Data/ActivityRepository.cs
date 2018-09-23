@@ -14,7 +14,11 @@ namespace SaasFeeGuides.Data
     public interface IActivityRepository
     {
         Task<IEnumerable<Models.ActivityLoc>> SelectActivities(string locale);
+        Task<IEnumerable<Models.Activity>> SelectActivities();
+
         Task<Models.ActivityLoc> SelectActivity(int activityId, string locale);
+        Task<Models.Activity> SelectActivity(int activityId);
+
         Task<Models.ActivitySkuLoc> SelectActivitySku(int activitySkuId, string locale);
         Task<IEnumerable<DateTime>> SelectActivitySkuDates(int activitySkuId, DateTime? dateFrom, DateTime? dateTo);
 
@@ -33,6 +37,33 @@ namespace SaasFeeGuides.Data
            
         }
 
+
+        public async Task<Models.Activity> SelectActivity(int activityId)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "[Activities].[SelectActivity]";
+                    command.Parameters.AddWithValue("@ActivityId", activityId);
+
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        await reader.ReadAsync();
+                        var activity = ReadActivity(reader);
+                        await reader.NextResultAsync();
+                        activity.Skus = await ReadListAsync(reader, ReadActivitySku);
+                        await reader.NextResultAsync();
+                        activity.Equiptment = await ReadListAsync(reader, ReadActivityEquiptment);
+                        return activity;
+                    }
+
+                }
+            }
+        }
+
         public async Task<Models.ActivitySkuLoc> SelectActivitySku(int activitySkuId, string locale)
         {
             using (var cn = await GetNewConnectionAsync())
@@ -44,7 +75,7 @@ namespace SaasFeeGuides.Data
                     command.Parameters.AddWithValue("@ActivitySkuId", activitySkuId);
                     command.Parameters.AddWithValue("@Locale", locale);
 
-                    return await ReadSingleAsync(command, ReadActivitySku);
+                    return await ReadSingleAsync(command, ReadActivitySkuLoc);
                 }
             }
         }
@@ -102,8 +133,7 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
-
-        public async Task<IEnumerable<Models.ActivityLoc>> SelectActivities(string locale)
+        public async Task<IEnumerable<Models.Activity>> SelectActivities()
         {
             using (var cn = await GetNewConnectionAsync())
             {
@@ -111,10 +141,25 @@ namespace SaasFeeGuides.Data
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = "[Activities].[SelectActivities]";
-                    command.Parameters.AddWithValue("@Locale", locale);
 
 
                     return await ReadListAsync(command, ReadActivity);
+
+                }
+            }
+        }
+        public async Task<IEnumerable<Models.ActivityLoc>> SelectActivities(string locale)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.CommandText = "[Activities].[SelectActivitiesLoc]";
+                    command.Parameters.AddWithValue("@Locale", locale);
+
+
+                    return await ReadListAsync(command, ReadActivityLoc);
                   
                 }
             }
@@ -127,7 +172,7 @@ namespace SaasFeeGuides.Data
                 using (var command = cn.CreateCommand())
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.CommandText = "[Activities].[SelectActivity]";
+                    command.CommandText = "[Activities].[SelectActivityLoc]";
                     command.Parameters.AddWithValue("@ActivityId", activityId);
                     command.Parameters.AddWithValue("@Locale", locale);
 
@@ -135,11 +180,11 @@ namespace SaasFeeGuides.Data
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         await reader.ReadAsync();
-                        var activity= ReadActivity(reader);
+                        var activity= ReadActivityLoc(reader);
                         await reader.NextResultAsync();
-                        activity.Skus = await ReadListAsync(reader, ReadActivitySku);
+                        activity.Skus = await ReadListAsync(reader, ReadActivitySkuLoc);
                         await reader.NextResultAsync();
-                        activity.Equiptment = await ReadListAsync(reader, ReadEquiptment);
+                        activity.Equiptment = await ReadListAsync(reader, ReadEquiptmentLoc);
                         return activity;
                     }
                  
@@ -147,7 +192,24 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        private Models.EquiptmentLoc ReadEquiptment(SqlDataReader reader)
+        private Models.ActivityEquiptment ReadActivityEquiptment(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.ActivityEquiptment
+                {
+                    ActivityId = GetInt(reader, 0).GetValueOrDefault(),
+                    EquiptmentId = GetInt(reader, 1).GetValueOrDefault(),
+                    Count = GetInt(reader, 2).GetValueOrDefault(),
+                    GuideOnly = GetBool(reader, 3) ?? false,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading ActivityEquiptment", ex);
+            }
+        }
+        private Models.EquiptmentLoc ReadEquiptmentLoc(SqlDataReader reader)
         {
             try
             {
@@ -176,12 +238,12 @@ namespace SaasFeeGuides.Data
                     {
                         command.Parameters.AddWithValue("@Id",(object)activity.Id ?? DBNull.Value);
                         command.Parameters.AddWithValue("@Name", activity.Name);
-                        command.Parameters.AddWithValue("@TitleContentId", await activity.TitleContentId);
-                        command.Parameters.AddWithValue("@DescriptionContentId",  await activity.DescriptionContentId);
-                        command.Parameters.AddWithValue("@MenuImageContentId", await activity.MenuImageContentId);
-                        command.Parameters.AddWithValue("@VideoContentId", (await activity.VideoContentId) ?? string.Empty);
-                        command.Parameters.AddWithValue("@ImageContentId", (await activity.ImageContentId) ?? string.Empty);
-                        command.Parameters.AddWithValue("@IsActive", activity.IsActive ?? false);
+                        command.Parameters.AddWithValue("@TitleContentId", activity.TitleContentId);
+                        command.Parameters.AddWithValue("@DescriptionContentId",  activity.DescriptionContentId);
+                        command.Parameters.AddWithValue("@MenuImageContentId", activity.MenuImageContentId);
+                        command.Parameters.AddWithValue("@VideoContentId", activity.VideoContentId ?? string.Empty);
+                        command.Parameters.AddWithValue("@ImageContentId", activity.ImageContentId ?? string.Empty);
+                        command.Parameters.AddWithValue("@IsActive", activity.IsActive );
                         command.Parameters.AddWithValue("@CategoryName", activity.CategoryName );
                         command.CommandType = CommandType.StoredProcedure;                       
                         command.CommandText = "[Activities].[UpsertActivity]";
@@ -214,15 +276,15 @@ namespace SaasFeeGuides.Data
                     {
                         command.Parameters.AddWithValue("@Name", activitySku.Name);
                         command.Parameters.AddWithValue("@ActivityName", activitySku.ActivityName);
-                        command.Parameters.AddWithValue("@TitleContentId", await activitySku.TitleContentId);
-                        command.Parameters.AddWithValue("@DescriptionContentId", await activitySku.DescriptionContentId);
+                        command.Parameters.AddWithValue("@TitleContentId", activitySku.TitleContentId);
+                        command.Parameters.AddWithValue("@DescriptionContentId", activitySku.DescriptionContentId);
                         command.Parameters.AddWithValue("@PricePerPerson", activitySku.PricePerPerson);
                         command.Parameters.AddWithValue("@MinPersons", activitySku.MinPersons);
                         command.Parameters.AddWithValue("@MaxPersons", activitySku.MaxPersons);
-                        command.Parameters.AddWithValue("@AdditionalRequirementsContentId", await activitySku.AdditionalRequirementsContentId);
+                        command.Parameters.AddWithValue("@AdditionalRequirementsContentId", activitySku.AdditionalRequirementsContentId);
                         command.Parameters.AddWithValue("@DurationDays", activitySku.DurationDays);
                         command.Parameters.AddWithValue("@DurationHours", activitySku.DurationHours);
-                        command.Parameters.AddWithValue("@WebContentId", await activitySku.WebContentId);
+                        command.Parameters.AddWithValue("@WebContentId", activitySku.WebContentId);
                         command.CommandType = CommandType.StoredProcedure;
                        
                         command.CommandText = "[Activities].[UpsertActivitySku]";
@@ -276,8 +338,32 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
-
-        private Models.ActivitySkuLoc ReadActivitySku(SqlDataReader reader)
+        private Models.ActivitySku ReadActivitySku(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.ActivitySku
+                {
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
+                    ActivityName = GetString(reader, 1),
+                    Name = GetString(reader, 2),
+                    TitleContentId = GetString(reader, 3),
+                    DescriptionContentId = GetString(reader, 4),
+                    PricePerPerson = GetDouble(reader, 5) ?? 0,
+                    MinPersons = GetInt(reader, 6) ?? 0,
+                    MaxPersons = GetInt(reader, 7) ?? 0,
+                    AdditionalRequirementsContentId = GetString(reader, 8),
+                    DurationDays = GetDouble(reader, 9) ?? 0,
+                    DurationHours = GetDouble(reader, 10) ?? 0,
+                    WebContentId = GetString(reader, 11),
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading ActivitySku", ex);
+            }
+        }
+        private Models.ActivitySkuLoc ReadActivitySkuLoc(SqlDataReader reader)
         {
             try
             {
@@ -299,11 +385,32 @@ namespace SaasFeeGuides.Data
             }
             catch (Exception ex)
             {
-                throw new Exception("Error reading ActivitySku", ex);
+                throw new Exception("Error reading ActivitySkuLoc", ex);
             }
         }
-
-        private Models.ActivityLoc ReadActivity(SqlDataReader reader)
+        private Models.Activity ReadActivity(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.Activity
+                {
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
+                    CategoryName = GetString(reader,1),
+                    Name = GetString(reader, 2),
+                    TitleContentId = GetString(reader, 3),
+                    DescriptionContentId = GetString(reader, 4),
+                    MenuImageContentId = GetString(reader, 5),
+                    VideoContentId = GetString(reader, 6),
+                    ImageContentId = GetString(reader, 7),
+                    IsActive = GetBool(reader,8) ?? false
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading Activity", ex);
+            }
+        }
+        private Models.ActivityLoc ReadActivityLoc(SqlDataReader reader)
         {
             try
             {
@@ -320,10 +427,9 @@ namespace SaasFeeGuides.Data
             }
             catch (Exception ex)
             {
-                throw new Exception("Error reading Activity", ex);
+                throw new Exception("Error reading ActivityLoc", ex);
             }
         }
 
-        
     }
 }

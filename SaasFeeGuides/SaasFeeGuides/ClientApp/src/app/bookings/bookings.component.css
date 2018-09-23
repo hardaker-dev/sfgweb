@@ -1,0 +1,31 @@
+
+
+ul{
+  max-width:400px;
+  padding-left:0px;
+}
+
+li {
+  border-bottom: solid;
+  padding-bottom: 10px;
+  padding-top:10px;
+  list-style: none;
+  border-color: lightsteelblue;
+  
+}
+
+li .label{
+  font-weight:bold;
+  color:black;
+  font-size:14px;
+}
+
+.leftColumn {
+  border-right: dotted;
+  border-color: lightsteelblue;
+  border-width:1px;
+}
+
+td {
+  padding-left:10px;
+}

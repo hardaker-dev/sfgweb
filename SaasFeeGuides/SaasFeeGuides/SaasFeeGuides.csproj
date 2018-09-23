@@ -55,11 +55,15 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
     <None Remove="ClientApp\src\app\models\account.ts" />
+    <None Remove="ClientApp\src\app\models\activity.ts" />
+    <None Remove="ClientApp\src\app\models\content.ts" />
     <None Remove="ClientApp\src\app\models\customer.ts" />
+    <None Remove="ClientApp\src\app\models\customerBooking.ts" />
     <None Remove="ClientApp\src\app\models\historicCustomerBooking.ts" />
     <None Remove="ClientApp\src\app\models\user.ts" />
     <None Remove="ClientApp\src\app\register\register.component.ts" />
     <None Remove="ClientApp\src\app\services\account.service.ts" />
+    <None Remove="ClientApp\src\app\services\activity.service.ts" />
     <None Remove="ClientApp\src\app\services\authentication.service.ts" />
     <None Remove="ClientApp\src\app\services\customer.service.ts" />
     <None Remove="ClientApp\src\app\winter\DashboardIndex.ts" />
@@ -95,12 +99,16 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\content.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\activity.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\customerBooking.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\customer.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\account.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\historicCustomerBooking.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\login.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\register\register.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\activity.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\customer.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\authentication.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\account.service.ts" />
@@ -109,9 +117,6 @@
   <ItemGroup>
     <None Update="ClientApp\src\app\models\user.js">
       <DependentUpon>user.ts</DependentUpon>
-    </None>
-    <None Update="ClientApp\src\app\models\customer.js">
-      <DependentUpon>customer.ts</DependentUpon>
     </None>
   </ItemGroup>
 

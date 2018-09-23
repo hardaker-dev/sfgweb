@@ -1,0 +1,31 @@
+
+
+ul{
+  padding-left:0px;
+}
+
+li {
+  border-top: solid;
+  padding-bottom: 10px;
+  padding-top:10px;
+  list-style: none;
+  border-color: lightsteelblue;
+  
+}
+
+li .label{
+  font-weight:bold;
+  color:black;
+  font-size:14px;
+}
+
+.leftColumn {
+  border-right: dotted;
+  border-color: lightsteelblue;
+  border-width:1px;
+}
+
+td {
+  padding-left:10px;
+  vertical-align:top;
+}

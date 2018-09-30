@@ -3,6 +3,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "outDir": "../out-tsc/app",
+    "sourceMap": true,
     "baseUrl": "./",
     "module": "es2015",
     "types": []

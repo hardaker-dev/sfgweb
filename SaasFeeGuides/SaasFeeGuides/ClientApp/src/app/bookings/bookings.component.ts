@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import { User } from '../models/User';
 import { Customer } from '../models/Customer';
 import { CustomerService } from '../services/customer.service';
+import { CalendarComponent } from '../calendar/calendar.component';
 
 @Component({ templateUrl: 'bookings.component.html' })
 export class BookingsComponent implements OnInit {

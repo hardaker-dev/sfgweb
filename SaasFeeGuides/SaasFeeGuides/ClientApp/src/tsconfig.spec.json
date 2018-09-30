@@ -4,6 +4,7 @@
     "experimentalDecorators": true,
     "outDir": "../out-tsc/spec",
     "baseUrl": "./",
+    "sourceMap": true,
     "module": "commonjs",
     "types": [
       "jasmine",

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
@@ -23,9 +24,12 @@ import { BookingsComponent } from './bookings/bookings.component';
 import { AuthenticateComponent } from './authenticate/authenticate.component';
 import { RegisterComponent } from './register/register.component';
 import { ActivityService } from './services/activity.service';
+import { SfgCalendarModule } from './calendar/calendar.module';
 
 @NgModule({
   imports: [
+    SfgCalendarModule,
+    CommonModule,
     BrowserAnimationsModule,
     CalendarModule.forRoot({
       provide: DateAdapter,

@@ -46,6 +46,7 @@
               ]
             },
             "development": {
+              "experimentalDecorators": true,
               "optimization": false,
               "sourceMap": true,
               "extractCss": true,

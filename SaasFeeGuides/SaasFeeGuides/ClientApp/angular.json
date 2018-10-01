@@ -30,11 +30,8 @@
           "configurations": {
             "production": {
               "optimization": true,
-              "outputHashing": "all",
-              "sourceMapPathOverrides": {
-                "webpack:///C:*": "C:/*"
-              },
-              "sourceMap": true,
+              "outputHashing": "all",             
+              "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,

@@ -1,10 +1,8 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "experimentalDecorators": true,
     "outDir": "../out-tsc/spec",
     "baseUrl": "./",
-    "sourceMap": true,
     "module": "commonjs",
     "types": [
       "jasmine",
@@ -12,7 +10,8 @@
     ]
   },
   "files": [
-    "test.ts"
+    "test.ts",
+    "polyfills.ts"
   ],
   "include": [
     "**/*.spec.ts",

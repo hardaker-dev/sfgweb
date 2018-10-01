@@ -68,17 +68,9 @@
     <None Remove="ClientApp\src\app\services\customer.service.ts" />
     <None Remove="ClientApp\src\app\winter\DashboardIndex.ts" />
     <None Remove="ClientApp\src\assets\Images\logo.png" />
-    <None Remove="ClientApp\src\tsconfig.app.json" />
-    <None Remove="ClientApp\src\tsconfig.spec.json" />
-    <None Remove="ClientApp\tsconfig.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientApp\src\assets\Images\logo.png" />
-    <Content Include="ClientApp\src\tsconfig.app.json" />
-    <Content Include="ClientApp\src\tsconfig.spec.json" />
-    <Content Include="ClientApp\tsconfig.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SaasFeeGuides.Database.Deploy\SaasFeeGuides.Database.Deploy.csproj" />
@@ -115,8 +107,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\winter\DashboardIndex.ts" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="ClientApp\src\app\models\user.js">
-      <DependentUpon>user.ts</DependentUpon>
+    <None Update="ClientApp\tsconfig.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
@@ -146,5 +138,20 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
+  </PropertyGroup>
 
 </Project>

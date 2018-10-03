@@ -72,7 +72,7 @@ namespace SaasFeeGuides.IntegrationTests
       
 
         [Fact]
-        public async Task GetActivitySkuDates()
+        public async Task GetActivityDates()
         {
             var authClient = await AuthClient();
 
@@ -80,15 +80,15 @@ namespace SaasFeeGuides.IntegrationTests
             await AddDates(authClient);
             var activitiesGerman = await _client.GetActivitiesLoc("de");
             var activity = await _client.GetActivityLoc(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id,"de");
-            var dates = await _client.GetActivitySkuDates(activity.Skus[0].Id,null,null);
-            Assert.All(dates,(d=> _dates.Contains(d)));
-            Assert.Equal(3, dates.Count);
+            var activityDates = await _client.GetActivityDates(activity.Id,null,null);
+            Assert.All(activityDates.Select(x=>x.DateTime).Distinct(), (d=> _dates.Contains(d)));
+            Assert.Equal(3, activityDates.Count);
 
-            var datesLimited = await _client.GetActivitySkuDates(activity.Skus[0].Id, _dates[0].AddDays(1), null);
+            var datesLimited = await _client.GetActivityDates(activity.Skus[0].Id, _dates[0].AddDays(1), null);
 
             var remainingDatesExpected = _dates.Skip(1).ToList();
             Assert.Equal(2, datesLimited.Count);
-            Assert.All(dates, (d => remainingDatesExpected.Contains(d)));
+            Assert.All(datesLimited.Select(x => x.DateTime).Distinct(), (d => remainingDatesExpected.Contains(d)));
         }
 
         [Fact]

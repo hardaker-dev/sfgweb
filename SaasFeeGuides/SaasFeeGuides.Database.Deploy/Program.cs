@@ -26,17 +26,12 @@ namespace SaasFeeGuides.Database.Deploy
             DropDatabase.For.SqlDatabase(connectionString);
         }
 
-        public static int DeployDatabase(string connectionString,bool azure=true)
+        public static int DeployDatabase(string connectionString)
         {
-            if (azure)
-            {
-                EnsureDatabase.For.SqlDatabase(connectionString, 300);
-            }
-            else
-            {
+            
 
                 EnsureDatabase.For.SqlDatabase(connectionString, 300);
-            }
+            
             var upgrader =
                 DeployChanges.To
                     .SqlDatabase(connectionString)

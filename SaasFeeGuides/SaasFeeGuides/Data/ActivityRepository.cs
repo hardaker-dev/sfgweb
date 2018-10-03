@@ -20,7 +20,7 @@ namespace SaasFeeGuides.Data
         Task<Models.Activity> SelectActivity(int activityId);
 
         Task<Models.ActivitySkuLoc> SelectActivitySku(int activitySkuId, string locale);
-        Task<IEnumerable<DateTime>> SelectActivitySkuDates(int activitySkuId, DateTime? dateFrom, DateTime? dateTo);
+        Task<IEnumerable<Models.ActivityDate>> SelectActivityDates(IEnumerable<int> activityIds, DateTime? dateFrom, DateTime? dateTo);
 
         Task<int> UpsertActivity(Models.Activity activity);       
         Task<int> UpsertActivitySku(Models.ActivitySku activitySku);
@@ -80,26 +80,36 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        public async Task<IEnumerable<DateTime>> SelectActivitySkuDates(int activitySkuId, DateTime? dateFrom, DateTime? dateTo)
+        public async Task<IEnumerable<Models.ActivityDate>> SelectActivityDates(IEnumerable<int> activityIds, DateTime? dateFrom, DateTime? dateTo)
         {
+            IList< Models.ActivityDate> results = new List<Models.ActivityDate>();
             using (var cn = await GetNewConnectionAsync())
             {
                 using (var command = cn.CreateCommand())
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.CommandText = "[Activities].[SelectActivitySkuDates]";
-                    command.Parameters.AddWithValue("@ActivitySkuId", activitySkuId);
+                    command.CommandText = "[Activities].[SelectActivityDates]";
+                    command.Parameters.AddWithValue("@activityIds", string.Join(',', activityIds));
                     command.Parameters.AddWithValue("@DateFrom",(object) dateFrom ?? DBNull.Value);
                     command.Parameters.AddWithValue("@DateTo", (object)dateTo ?? DBNull.Value);
 
-                    return await ReadListAsync(command, ReadDateTime);
+                    return await ReadListAsync(command, ReadActivityDate);
+
                 }
             }
         }
 
-        private DateTime ReadDateTime(SqlDataReader reader)
+        private Models.ActivityDate ReadActivityDate(SqlDataReader reader)
         {
-            return GetDateTime(reader, 0).Value;
+            return new Models.ActivityDate()
+            {
+                ActivitySkuDateId = GetInt(reader, 0).Value,
+                ActivitySkuId = GetInt(reader, 1).Value,
+                ActivityId = GetInt(reader, 2).Value,
+                ActivityName = GetString(reader, 3),
+                ActivitySkuName = GetString(reader, 4),
+                DateTime = GetDateTime(reader, 5).Value
+            };
         }
 
         public async Task<int> FindActivityByName(string name)
@@ -369,7 +379,7 @@ namespace SaasFeeGuides.Data
             {
                 return new Models.ActivitySkuLoc
                 {
-                    Id = (GetInt(reader, 0)).GetValueOrDefault(),                    
+                    Id = (GetInt(reader, 0)).GetValueOrDefault(),
                     ActivityName = GetString(reader, 1),
                     Name = GetString(reader, 2),
                     Title = GetString(reader, 3),
@@ -380,7 +390,7 @@ namespace SaasFeeGuides.Data
                     AdditionalRequirements = GetString(reader, 8),
                     DurationDays = GetDouble(reader, 9) ?? 0,
                     DurationHours = GetDouble(reader, 10) ?? 0,
-                    WebContent = GetString(reader, 11),
+                    WebContent = GetString(reader, 11)
                 };
             }
             catch (Exception ex)

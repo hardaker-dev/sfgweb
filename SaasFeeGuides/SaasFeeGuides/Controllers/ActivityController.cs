@@ -30,12 +30,22 @@ namespace SaasFeeGuides.Controllers
             _contentRepository = contentRepository;
         }
 
-        [HttpGet("sku/{activitySkuId:int}/date")]
-        public async Task<IActionResult> GetActivitySkuDates(int activitySkuId,DateTime? dateFrom, DateTime? dateTo)
+        [HttpGet("{activityId:int}/dates")]
+        public async Task<IActionResult> GetActivityDates(int activityId,DateTime? dateFrom, DateTime? dateTo)
         {
-            var dates = await _activityRepository.SelectActivitySkuDates(activitySkuId, dateFrom, dateTo);
+            var dates = await _activityRepository.SelectActivityDates(new[] { activityId }, dateFrom, dateTo);
 
             return new OkObjectResult(dates);
+        }
+
+        [Authorize("Admin")]
+        [HttpGet("dates")]
+        public async Task<IActionResult> GetAllActivityDates(DateTime? dateFrom, DateTime? dateTo)
+        {
+
+            var id = await _activityRepository.SelectActivityDates(new int[0],dateFrom,dateTo);
+
+            return new OkObjectResult(id);
         }
 
         [HttpGet("sku/{activitySkuId:int}")]
@@ -66,6 +76,8 @@ namespace SaasFeeGuides.Controllers
 
             return new OkObjectResult(id);
         }
+
+       
 
         [Authorize("Admin")]
         [HttpPost]

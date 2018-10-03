@@ -28,10 +28,11 @@ namespace SaasFeeGuides.RestClient
         {
             AutomaticDecompression = DecompressionMethods.GZip
         });
-        public async Task<IList<DateTime>> GetActivitySkuDates(int activitySkuId, DateTime? dateFrom,DateTime? dateTo)
+
+        public async Task<IList<ActivityDate>> GetAllActivityDates( DateTime? dateFrom, DateTime? dateTo)
         {
             var request = _serviceUri.AsRestRequest()
-                .WithPathSegments("api", "activity","sku", activitySkuId,"date")
+                .WithPathSegments("api", "activity",  "dates")
                   .WithQueryParameters(new Dictionary<string, object>()
                 {
                     {"dateFrom",dateFrom?.ToString(ApiConstants.DateStringFormat) },
@@ -42,7 +43,23 @@ namespace SaasFeeGuides.RestClient
             var get = request.GetAsync(DefaultClient);
             var response = await get;
 
-            return await get.ReceiveJsonAsync<IList<DateTime>>();
+            return await get.ReceiveJsonAsync<IList<ActivityDate>>();
+        }
+        public async Task<IList<ActivityDate>> GetActivityDates(int activityId, DateTime? dateFrom,DateTime? dateTo)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", activityId,"dates")
+                  .WithQueryParameters(new Dictionary<string, object>()
+                {
+                    {"dateFrom",dateFrom?.ToString(ApiConstants.DateStringFormat) },
+                    {"dateTo",dateTo?.ToString(ApiConstants.DateStringFormat) }
+                })
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<IList<ActivityDate>>();
         }
         public async Task<ActivitySkuLoc> GetActivitySku(int activitySkuId, string locale)
         {

@@ -38,7 +38,7 @@
     <None Remove="Scripts\27_CreateProc_SelectActivities.sql" />
     <None Remove="Scripts\28_CreateProc_SelectActivityLoc.sql" />
     <None Remove="Scripts\29_CreateProc_InsertActivitySkuDate.sql" />
-    <None Remove="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
+    <None Remove="Scripts\30_CreateProc_SelectActivityDates.sql" />
     <None Remove="Scripts\31_CreateProc_SelectActivitySku.sql" />
     <None Remove="Scripts\32_CreateProc_UpsertEquiptment.sql" />
     <None Remove="Scripts\33_CreateProc_UpsertActivityEquiptment.sql" />
@@ -79,7 +79,7 @@
     <EmbeddedResource Include="Scripts\33_CreateProc_UpsertActivityEquiptment.sql" />
     <EmbeddedResource Include="Scripts\32_CreateProc_UpsertEquiptment.sql" />
     <EmbeddedResource Include="Scripts\31_CreateProc_SelectActivitySku.sql" />
-    <EmbeddedResource Include="Scripts\30_CreateProc_SelectActivitySkuDates.sql" />
+    <EmbeddedResource Include="Scripts\30_CreateProc_SelectActivityDates.sql" />
     <EmbeddedResource Include="Scripts\29_CreateProc_InsertActivitySkuDate.sql" />
     <EmbeddedResource Include="Scripts\28_CreateProc_SelectActivityLoc.sql" />
     <EmbeddedResource Include="Scripts\37_CreateProc_SelectActivitiesLoc.sql" />

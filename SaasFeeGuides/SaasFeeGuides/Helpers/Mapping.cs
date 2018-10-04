@@ -8,6 +8,22 @@ namespace SaasFeeGuides.Helpers
 {
     public static class Mapping
     {
+        public static ViewModels.ActivityDate Map(this Models.ActivityDate date)
+        {
+            return new ViewModels.ActivityDate()
+            {
+                ActivityId = date.ActivityId,
+                ActivityName = date.ActivityName,
+                ActivitySkuDateId = date.ActivitySkuDateId,
+                ActivitySkuId = date.ActivitySkuId,
+                ActivitySkuName = date.ActivitySkuName,
+                DateTime = date.DateTime,
+                AmountPaid = date.AmountPaid,
+                NumPersons = date.NumPersons,
+                TotalPrice = date.TotalPrice
+            };
+        }
+
         public static Models.CustomerBooking Map(this ViewModels.CustomerBooking booking)
         {
             return new Models.CustomerBooking()

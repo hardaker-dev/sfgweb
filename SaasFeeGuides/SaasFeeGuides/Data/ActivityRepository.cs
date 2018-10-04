@@ -108,7 +108,10 @@ namespace SaasFeeGuides.Data
                 ActivityId = GetInt(reader, 2).Value,
                 ActivityName = GetString(reader, 3),
                 ActivitySkuName = GetString(reader, 4),
-                DateTime = GetDateTime(reader, 5).Value
+                DateTime = GetDateTime(reader, 5).Value,
+                NumPersons = GetInt(reader,6) ?? 0,
+                AmountPaid = GetDouble(reader, 7) ?? 0,
+                TotalPrice = GetDouble(reader, 8) ?? 0
             };
         }
 

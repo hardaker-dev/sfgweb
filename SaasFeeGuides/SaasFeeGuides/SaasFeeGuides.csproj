@@ -56,6 +56,7 @@
     <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
     <None Remove="ClientApp\src\app\models\account.ts" />
     <None Remove="ClientApp\src\app\models\activity.ts" />
+    <None Remove="ClientApp\src\app\models\activityDate.ts" />
     <None Remove="ClientApp\src\app\models\content.ts" />
     <None Remove="ClientApp\src\app\models\customer.ts" />
     <None Remove="ClientApp\src\app\models\customerBooking.ts" />
@@ -99,6 +100,7 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\activityDate.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\content.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\activity.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\customerBooking.ts" />

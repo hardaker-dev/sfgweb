@@ -35,7 +35,7 @@ namespace SaasFeeGuides.Controllers
         {
             var dates = await _activityRepository.SelectActivityDates(new[] { activityId }, dateFrom, dateTo);
 
-            return new OkObjectResult(dates);
+            return new OkObjectResult(dates.Select(Mapping.Map));
         }
 
         [Authorize("Admin")]
@@ -43,9 +43,9 @@ namespace SaasFeeGuides.Controllers
         public async Task<IActionResult> GetAllActivityDates(DateTime? dateFrom, DateTime? dateTo)
         {
 
-            var id = await _activityRepository.SelectActivityDates(new int[0],dateFrom,dateTo);
+            var activityDates = await _activityRepository.SelectActivityDates(new int[0],dateFrom,dateTo);
 
-            return new OkObjectResult(id);
+            return new OkObjectResult(activityDates.Select(Mapping.Map));
         }
 
         [HttpGet("sku/{activitySkuId:int}")]

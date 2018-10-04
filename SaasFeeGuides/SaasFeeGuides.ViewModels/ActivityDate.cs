@@ -13,5 +13,8 @@ namespace SaasFeeGuides.ViewModels
         public string ActivityName { get; set; }
         public string ActivitySkuName { get; set; }
         public DateTime DateTime { get; set; }
+        public int NumPersons { get; set; }
+        public double AmountPaid { get; set; }
+        public double TotalPrice { get; set; }
     }
 }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
-import { User } from '../models/User';
-import { Activity } from '../models/Activity';
+import { User } from '../viewModels/User';
+import { Activity } from '../viewModels/Activity';
 import { ActivityService } from '../services/activity.service';
 
 @Component({
@@ -21,8 +21,16 @@ export class ActivitiesComponent implements OnInit {
   }
 
   private loadAllActivities() {
-    this.activityService.getMany().pipe(first()).subscribe(activities => {
-      this.activities = activities;
+
+   
+
+    this.activityService.getMany().pipe(first())
+      .subscribe(
+      activities => {
+        this.activities = activities;
+      },
+      error => {       
+      
     });
   }
 }

@@ -69,7 +69,7 @@ namespace SaasFeeGuides.Controllers
         {
             var customerModel = customerBooking.Map();
 
-            var customerBookingId = await _customerRepository.UpsertCustomerBooking(customerModel);
+            var customerBookingId = await _customerRepository.InsertCustomerBooking(customerModel);
 
 
             return new OkObjectResult(customerBookingId);
@@ -85,7 +85,7 @@ namespace SaasFeeGuides.Controllers
             var activitySku = await this._activityRepository.SelectActivitySku(activitySkuId, "en");
             customerModel.PriceAgreed = activitySku.PricePerPerson * customerBooking.NumPersons;
 
-            var customerBookingId = await _customerRepository.UpsertCustomerBooking(customerModel);
+            var customerBookingId = await _customerRepository.InsertCustomerBooking(customerModel);
 
 
             return new OkObjectResult(customerBookingId);
@@ -96,7 +96,7 @@ namespace SaasFeeGuides.Controllers
         public async Task<IActionResult> GetCustomerBookings(int customerId)
         {
             var customerBookings = await _customerRepository.SelectCustomerBookings(customerId);
-            return new OkObjectResult(customerBookings);
+            return new OkObjectResult(customerBookings.Select(Mapping.Map));
         }
     }
 }

@@ -8,6 +8,9 @@ namespace SaasFeeGuides.ViewModels
         public DateTime Date { get; set; }
         public string CustomerEmail { get; set; }
      
-        public int NumPersons { get; set; }        
+        public int NumPersons { get; set; }       
+        
+        public bool HasPaid { get; set; }
+        public bool HasConfirmed { get; set; }
     }
 }

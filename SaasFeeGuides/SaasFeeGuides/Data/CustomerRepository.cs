@@ -13,19 +13,19 @@ namespace SaasFeeGuides.Data
     public interface ICustomerRepository
     {
         Task<int> UpsertCustomer(Customer customer);
-        Task<int> UpsertCustomerBooking(CustomerBooking booking);
+        Task<int> InsertCustomerBooking(CustomerBooking booking);
         Task<Customer> SelectCustomerByUserId(string userId);
         Task DeleteAccount(string userId);
         Task<IEnumerable<Customer>> SelectCustomers();
         Task<Customer> SelectCustomer(int id);
-        Task<CustomerBooking> SelectCustomerBookings(int customerId);
+        Task<IEnumerable<CustomerBooking>> SelectCustomerBookings(int customerId);
     }
     public class CustomerRepository : DataAccessBase, ICustomerRepository
     {
         public CustomerRepository(string connectionString) : base(connectionString)
         {
         }
-        public async Task<int> UpsertCustomerBooking(CustomerBooking booking)
+        public async Task<int> InsertCustomerBooking(CustomerBooking booking)
         {
             using (var cn = await GetNewConnectionAsync())
             {
@@ -36,6 +36,8 @@ namespace SaasFeeGuides.Data
                     command.Parameters.AddWithValue("@Email", booking.CustomerEmail);
                     command.Parameters.AddWithValue("@Date", booking.Date);
                     command.Parameters.AddWithValue("@NumPersons", booking.NumPersons);
+                    command.Parameters.AddWithValue("@HasPaid", booking.HasPaid);
+                    command.Parameters.AddWithValue("@HasConfirmed", booking.HasConfirmed);
                     command.CommandType = CommandType.StoredProcedure;
                    
                     command.CommandText = "[Activities].[InsertCustomerBooking]";
@@ -157,7 +159,7 @@ namespace SaasFeeGuides.Data
                 switch ((DataError)e.Number)
                 {
                     case DataError.UniqueIndexViolation:
-                        throw new BadRequestException($"Customer already exists with Email '{customer.Email}'", e);
+                        throw new BadRequestException($"Customer already exists with Email '{customer.Email}'",System.Net.HttpStatusCode.BadRequest, e);
                     default: throw e;
                 }
             }
@@ -186,7 +188,7 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        public Task<CustomerBooking> SelectCustomerBookings(int customerId)
+        public Task<IEnumerable<CustomerBooking>> SelectCustomerBookings(int customerId)
         {
             throw new NotImplementedException();
         }

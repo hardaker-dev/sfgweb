@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
-import { User } from '../models/User';
-import { Customer } from '../models/Customer';
+import { User } from '../viewModels/User';
+import { Customer } from '../viewModels/Customer';
 import { CustomerService } from '../services/customer.service';
 
 @Component({
@@ -21,7 +21,9 @@ export class CustomersComponent implements OnInit {
   } 
 
   private loadAllCustomers() {
-    this.customerService.getMany().pipe(first()).subscribe(customers => {
+    this.customerService.getMany()
+      .pipe(first())
+      .subscribe(customers => {
       this.customers = customers;
     });
   }

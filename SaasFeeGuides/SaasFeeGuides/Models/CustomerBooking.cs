@@ -10,6 +10,9 @@ namespace SaasFeeGuides.Models
      
         public int NumPersons { get; set; }
         public double PriceAgreed { get; set; }
+
+        public bool HasPaid { get; set; }
+        public bool HasConfirmed { get; set; }
         
     }
 }

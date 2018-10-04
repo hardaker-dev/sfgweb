@@ -23,6 +23,7 @@ BEGIN TRAN
 	ADD CONSTRAINT PK_CustomerBooking PRIMARY KEY CLUSTERED ([Id]);   
 
 	CREATE NONCLUSTERED INDEX CIX_CustomerId ON [Activities].[CustomerBooking] (CustomerId);
+	CREATE NONCLUSTERED INDEX CIX_ActivitySkuDateId ON [Activities].[CustomerBooking] (ActivitySkuDateId);
 
 	ALTER TABLE [Activities].[CustomerBooking]
 	ADD CONSTRAINT FK_CustomerBooking_CustomerId FOREIGN KEY ([CustomerId])     

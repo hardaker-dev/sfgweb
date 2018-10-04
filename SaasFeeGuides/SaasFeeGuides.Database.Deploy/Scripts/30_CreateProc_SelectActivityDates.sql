@@ -23,7 +23,7 @@ BEGIN
 		FROM Activities.ActivitySkuDate asd
 	inner join Activities.ActivitySku aSku on aSku.Id = asd.ActivitySkuId
 	inner join Activities.Activity a on a.Id = aSku.ActivityId
-	left join Activities.CustomerBooking cb on cb.[ActivitySkuDateId] = aSku.Id
+	left join Activities.CustomerBooking cb on cb.[ActivitySkuDateId] = asd.Id
 	left JOIN STRING_SPLIT(@ActivityIds, ',') actId on actId.value = a.Id	
 	where 
 		(actId.value  is not null or LEN(@ActivityIds) = 0) AND

@@ -58,6 +58,36 @@ namespace SaasFeeGuides.IntegrationTests
             });
             return loginResponse;
         }
+
+        protected static async Task<IList<int>> AddCustomersIfNeeded(AuthenticatedClient authClient)
+        {
+            var customers = await authClient.GetCustomers();
+            var ids = customers.Select(c => c.Id.Value).ToList();
+            if (customers.Count <= 1)
+            {
+                ids.Add(await authClient.AddCustomer(new Customer()
+                {
+                    Address = "London",
+                    DateOfBirth = new DateTime(1984, 10, 31),
+                    Email = "dude@gmail.com",
+                    FirstName = "John",
+                    LastName = "Smith",
+                    PhoneNumber = "+447567123456"
+                }));
+
+                ids.Add(await authClient.AddCustomer(new Customer()
+                {
+                    Address = "Bristol",
+                    DateOfBirth = new DateTime(1984, 10, 31),
+                    Email = "gal@gmail.com",
+                    FirstName = "Louise",
+                    LastName = "Smith",
+                    PhoneNumber = "+447567123456"
+                }));
+            }
+            return ids;
+        }
+
         protected async Task AddActivitiesAndSkusIfNeeded(AuthenticatedClient authClient)
         {
             var activitiesEnglish = await _client.GetActivitiesLoc("en");
@@ -69,6 +99,26 @@ namespace SaasFeeGuides.IntegrationTests
             else if (activitiesEnglish[0].Skus == null || !activitiesEnglish[0].Skus.Any())
             {
                 await AddOrUpdatectivitySkus(authClient);
+            }
+        }
+
+        protected static async Task AddCustomerBookingsIfNeeded(AuthenticatedClient authClient)
+        {
+            await AddCustomersIfNeeded(authClient);
+
+            var bookings = new List<CustomerBooking>()
+            {
+                new CustomerBooking()
+                {
+                    ActivitySkuName = "AllalinSku",
+                    CustomerEmail = "dude@gmail.com",
+                    Date = new DateTime(2018,12,31),
+                    NumPersons = 3
+                }
+            };
+            foreach (var booking in bookings)
+            {
+                await authClient.AddCustomerBooking(booking);
             }
         }
         protected static async Task AddActivityAndSkus(AuthenticatedClient authClient)

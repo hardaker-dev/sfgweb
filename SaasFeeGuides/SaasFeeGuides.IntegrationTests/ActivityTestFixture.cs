@@ -80,15 +80,24 @@ namespace SaasFeeGuides.IntegrationTests
             await AddDates(authClient);
             var activitiesGerman = await _client.GetActivitiesLoc("de");
             var activity = await _client.GetActivityLoc(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id,"de");
+
+            await AddCustomerBookingsIfNeeded(authClient);
+
             var activityDates = await _client.GetActivityDates(activity.Id,null,null);
             Assert.All(activityDates.Select(x=>x.DateTime).Distinct(), (d=> _dates.Contains(d)));
-            Assert.Equal(3, activityDates.Count);
+            Assert.Equal(4, activityDates.Count);
+
+
 
             var datesLimited = await _client.GetActivityDates(activity.Skus[0].Id, _dates[0].AddDays(1), null);
 
             var remainingDatesExpected = _dates.Skip(1).ToList();
-            Assert.Equal(2, datesLimited.Count);
+            Assert.Equal(3, datesLimited.Count);
+
             Assert.All(datesLimited.Select(x => x.DateTime).Distinct(), (d => remainingDatesExpected.Contains(d)));
+            Assert.Equal(3,datesLimited[2].NumPersons);
+            Assert.Equal(630, datesLimited[2].TotalPrice);
+            Assert.Equal(0, datesLimited[2].AmountPaid);
         }
 
         [Fact]

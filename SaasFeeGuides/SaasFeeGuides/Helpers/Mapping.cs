@@ -23,7 +23,16 @@ namespace SaasFeeGuides.Helpers
                 TotalPrice = date.TotalPrice
             };
         }
-
+        public static ViewModels.CustomerBooking Map(this Models.CustomerBooking booking)
+        {
+            return new ViewModels.CustomerBooking()
+            {
+                ActivitySkuName = booking.ActivitySkuName,
+                CustomerEmail = booking.CustomerEmail,
+                Date = booking.Date,
+                NumPersons = booking.NumPersons
+            };
+        }
         public static Models.CustomerBooking Map(this ViewModels.CustomerBooking booking)
         {
             return new Models.CustomerBooking()
@@ -43,7 +52,9 @@ namespace SaasFeeGuides.Helpers
                 PriceAgreed = booking.AmountPaid,
                 CustomerEmail = booking.CustomerEmail,
                 Date = booking.Date,
-                NumPersons = booking.NumPersons
+                NumPersons = booking.NumPersons,
+                HasConfirmed = true,
+                HasPaid = true
             };
         }
 

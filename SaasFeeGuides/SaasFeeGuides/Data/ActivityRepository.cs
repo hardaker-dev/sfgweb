@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SaasFeeGuides.Data
@@ -110,8 +111,8 @@ namespace SaasFeeGuides.Data
                 ActivitySkuName = GetString(reader, 4),
                 DateTime = GetDateTime(reader, 5).Value,
                 NumPersons = GetInt(reader,6) ?? 0,
-                AmountPaid = GetDouble(reader, 7) ?? 0,
-                TotalPrice = GetDouble(reader, 8) ?? 0
+                TotalPrice = GetDouble(reader, 7) ?? 0,
+                AmountPaid = GetDouble(reader, 8) ?? 0,
             };
         }
 
@@ -142,6 +143,8 @@ namespace SaasFeeGuides.Data
                     command.Parameters.AddWithValue("@Name", name);
 
                     var result = await command.ExecuteScalarAsync();
+                    if (result == null)
+                        throw new BadRequestException($"Activity Sku:{name} not found", HttpStatusCode.NotFound);
                     return (int)result;
                 }
             }
@@ -270,10 +273,10 @@ namespace SaasFeeGuides.Data
                 switch((DataError)e.Number)
                 {
                     case DataError.UniqueIndexViolation:
-                        throw new BadRequestException($"Activity already exists with Name '{activity.Name}'", e);
+                        throw new BadRequestException($"Activity already exists with Name '{activity.Name}'",HttpStatusCode.BadRequest, e);
                     case DataError.CannotFindRecord:
                         var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
-                        throw new BadRequestException(error.Message, e);
+                        throw new BadRequestException(error.Message,HttpStatusCode.NotFound, e);
                     default: throw e;
                 }
             }
@@ -314,7 +317,7 @@ namespace SaasFeeGuides.Data
                 {
                     case DataError.CannotFindRecord:
                         var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
-                        throw new BadRequestException(error.Message, e);
+                        throw new BadRequestException(error.Message,HttpStatusCode.NotFound, e);
                     default: throw e;
                 }
             }
@@ -346,7 +349,7 @@ namespace SaasFeeGuides.Data
                 {
                     case DataError.CannotFindRecord:
                         var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
-                        throw new BadRequestException(error.Message, e);
+                        throw new BadRequestException(error.Message,HttpStatusCode.NotFound, e);
                     default: throw e;
                 }
             }

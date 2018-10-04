@@ -54,14 +54,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
-    <None Remove="ClientApp\src\app\models\account.ts" />
-    <None Remove="ClientApp\src\app\models\activity.ts" />
-    <None Remove="ClientApp\src\app\models\activityDate.ts" />
-    <None Remove="ClientApp\src\app\models\content.ts" />
-    <None Remove="ClientApp\src\app\models\customer.ts" />
-    <None Remove="ClientApp\src\app\models\customerBooking.ts" />
-    <None Remove="ClientApp\src\app\models\historicCustomerBooking.ts" />
-    <None Remove="ClientApp\src\app\models\user.ts" />
+    <None Remove="ClientApp\src\app\viewModels\account.ts" />
+    <None Remove="ClientApp\src\app\viewModels\activity.ts" />
+    <None Remove="ClientApp\src\app\viewModels\activityDate.ts" />
+    <None Remove="ClientApp\src\app\viewModels\content.ts" />
+    <None Remove="ClientApp\src\app\viewModels\customer.ts" />
+    <None Remove="ClientApp\src\app\viewModels\customerBooking.ts" />
+    <None Remove="ClientApp\src\app\viewModels\historicCustomerBooking.ts" />
+    <None Remove="ClientApp\src\app\viewModels\user.ts" />
     <None Remove="ClientApp\src\app\register\register.component.ts" />
     <None Remove="ClientApp\src\app\services\account.service.ts" />
     <None Remove="ClientApp\src\app\services\activity.service.ts" />
@@ -100,15 +100,15 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\models\activityDate.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\content.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\activity.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\customerBooking.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\user.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\customer.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\account.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\historicCustomerBooking.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\login.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\activityDate.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\content.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\activity.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\customerBooking.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\user.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\customer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\account.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\historicCustomerBooking.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\login.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\register\register.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\activity.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\customer.service.ts" />

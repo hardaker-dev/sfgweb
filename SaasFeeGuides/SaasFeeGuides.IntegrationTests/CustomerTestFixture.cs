@@ -42,39 +42,19 @@ namespace SaasFeeGuides.IntegrationTests
             Assert.Equal(3,customerIds.Count);
         }
 
-        private static async Task<IList<int>> AddCustomersIfNeeded(AuthenticatedClient authClient)
+        [Fact]
+        public async Task AddCustomerBooking()
         {
+            var authClient = await AuthClient();
+
+            await AddActivitiesAndSkusIfNeeded(authClient);
             var customers = await authClient.GetCustomers();
-            var ids = customers.Select(c => c.Id.Value).ToList();
-            if (customers.Count <= 1)
-            {
+            await AddCustomerBookingsIfNeeded(authClient);
 
-               
-                ids.Add(await authClient.AddCustomer(new Customer()
-                {
-                    Address = "London",
-                    DateOfBirth = new DateTime(1984, 10, 31),
-                    Email = "dude@gmail.com",
-                    FirstName = "John",
-                    LastName = "Smith",
-                    PhoneNumber = "+447567123456"
-                }));
-
-                ids.Add(await authClient.AddCustomer(new Customer()
-                {
-                    Address = "Bristol",
-                    DateOfBirth = new DateTime(1984, 10, 31),
-                    Email = "gal@gmail.com",
-                    FirstName = "Louise",
-                    LastName = "Smith",
-                    PhoneNumber = "+447567123456"
-                }));
-            }
-            return ids;
         }
 
         [Fact]
-        public async Task AddCustomerBooking()
+        public async Task AddHistoricCustomerBooking()
         {
             var authClient = await AuthClient();
 

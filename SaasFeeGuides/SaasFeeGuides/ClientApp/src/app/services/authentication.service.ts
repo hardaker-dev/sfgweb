@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Login } from '../models/login';
-import { User } from '../models/user';
+import { Login } from '../viewModels/login';
+import { User } from '../viewModels/user';
 import * as moment from 'moment';
 
 @Injectable()

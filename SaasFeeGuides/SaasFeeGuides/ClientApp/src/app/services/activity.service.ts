@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Activity } from '../models/activity';
-import { ActivityDate } from '../models/activityDate';
+import { Activity } from '../viewModels/activity';
+import { ActivityDate, ActivityDateModel } from '../viewModels/activityDate';
 
 @Injectable()
 export class ActivityService {
@@ -15,9 +15,7 @@ export class ActivityService {
     return this.http.get<Activity>('api/Activity/' + id + '/edit');
   }
 
-  getAllActivityDates(dateFrom: Date,dateTo:Date) {
-    return this.http.get<ActivityDate[]>('api/Activity/dates');
-  }
+
   getActivityDates(activityId: number, dateFrom: Date, dateTo: Date) {
 
     let params =
@@ -25,7 +23,18 @@ export class ActivityService {
         .append('dateFrom', dateFrom.toDateString())
         .append('dateTo', dateTo.toDateString());
 
-    return this.http.get<ActivityDate[]>('api/Activity/' + activityId + '/dates', { params: params });
+    return this.http.get<ActivityDateModel[]>('api/activity/' + activityId + '/dates', { params: params });
   }
+  getAllActivityDates( dateFrom: Date, dateTo: Date) {
 
+    let params = new HttpParams();
+    if (dateFrom) {
+      params = params.append('dateFrom', dateFrom.toDateString() )
+    }
+    if (dateTo) {
+      params = params.append('dateTo', dateTo.toDateString() )
+    }
+
+    return this.http.get<ActivityDateModel[]>('api/activity/dates', { params: params });
+  }
 }

@@ -23,9 +23,12 @@ namespace SaasFeeGuides
         {
             var id = principal.Claims.FirstOrDefault(x => x.Type == "id");
             var user = await _userManager.FindByIdAsync(id.Value);
-            var claims = await _userManager.GetClaimsAsync(user);
-            var claimsIdentity = (ClaimsIdentity)principal.Identity;
-            claimsIdentity.AddClaims(claims);
+            if (user != null)
+            {
+                var claims = await _userManager.GetClaimsAsync(user);
+                var claimsIdentity = (ClaimsIdentity)principal.Identity;
+                claimsIdentity.AddClaims(claims);
+            }
             return principal;
         }
     }

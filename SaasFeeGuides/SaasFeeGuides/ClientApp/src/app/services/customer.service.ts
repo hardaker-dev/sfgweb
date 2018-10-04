@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Customer } from '../models/customer';
-import { HistoricCustomerBooking } from '../models/historicCustomerBooking';
-import { CustomerBooking } from '../models/customerBooking';
+import { Customer } from '../viewModels/customer';
+import { HistoricCustomerBooking } from '../viewModels/historicCustomerBooking';
+import { CustomerBooking } from '../viewModels/customerBooking';
 
 @Injectable()
 export class CustomerService {

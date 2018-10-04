@@ -1,10 +1,9 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy,Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
   CalendarEvent,
   CalendarEventTimesChangedEvent
 } from 'angular-calendar';
-import { colors } from '../utils/colors';
 
 @Component({
   selector: 'mwl-demo-component',
@@ -16,19 +15,7 @@ export class CalendarComponent {
 
   viewDate: Date = new Date();
 
-  events: CalendarEvent[] = [
-    {
-      title: 'Draggable event',
-      color: colors.yellow,
-      start: new Date(),
-      draggable: true
-    },
-    {
-      title: 'A non draggable event',
-      color: colors.blue,
-      start: new Date()
-    }
-  ];
+  @Input() public events: CalendarEvent[];
 
   refresh: Subject<any> = new Subject();
 

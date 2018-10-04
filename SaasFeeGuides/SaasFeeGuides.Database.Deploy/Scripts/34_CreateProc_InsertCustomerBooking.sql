@@ -3,7 +3,9 @@
 	@PriceAgreed float,
 	@Email nvarchar(400),
     @Date datetime2,
-	@NumPersons int
+	@NumPersons int,
+	@HasPaid bit,
+	@HasConfirmed bit
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -48,7 +50,7 @@ BEGIN
 		[PriceAgreed] ,
 		[Created],
 		[Modified]	)
-	VALUES (@customerId,@activitySkuDateId,1,1,0,@NumPersons,@PriceAgreed,GETUTCDATE(),GETUTCDATE())
+	VALUES (@customerId,@activitySkuDateId,@HasConfirmed,@HasPaid,0,@NumPersons,@PriceAgreed,GETUTCDATE(),GETUTCDATE())
 
 	SELECT CAST(SCOPE_IDENTITY() as INT)
 

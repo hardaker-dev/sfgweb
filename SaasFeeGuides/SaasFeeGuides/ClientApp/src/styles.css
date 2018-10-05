@@ -1,2 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+.popup {
+  background-color: white;
+  float: left;  
+  position: absolute;
+  border-color: black;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.invalid-feedback {
+  color: red;
+}

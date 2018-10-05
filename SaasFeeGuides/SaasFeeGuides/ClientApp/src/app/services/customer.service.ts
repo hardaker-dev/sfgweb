@@ -17,7 +17,7 @@ export class CustomerService {
   }
 
   add(customer: Customer) {
-    return this.http.post('api/customer', customer);
+    return this.http.post<number>('api/customer', customer);
   }
 
   addHistoricCustomerBooking(booking: HistoricCustomerBooking) {

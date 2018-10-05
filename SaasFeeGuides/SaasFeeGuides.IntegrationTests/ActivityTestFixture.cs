@@ -64,7 +64,7 @@ namespace SaasFeeGuides.IntegrationTests
                 var activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
                 {
                     ActivityName = "Allalin",
-                    DateTime = new DateTime(2018, 9, 20)
+                    DateTime = new DateTime(2018, 9, 20,9,0,0)
                 });
             }
         }
@@ -84,17 +84,17 @@ namespace SaasFeeGuides.IntegrationTests
             await AddCustomerBookingsIfNeeded(authClient);
 
             var activityDates = await _client.GetActivityDates(activity.Id,null,null);
-            Assert.All(activityDates.Select(x=>x.DateTime).Distinct(), (d=> _dates.Contains(d)));
+            Assert.All(activityDates.Select(x=>x.StartDateTime).Distinct(), (d=> _dates.Contains(d)));
             Assert.Equal(4, activityDates.Count);
 
-
+            Assert.Equal(new DateTime(2018, 9, 20,13,0,0), activityDates[0].EndDateTime);
 
             var datesLimited = await _client.GetActivityDates(activity.Skus[0].Id, _dates[0].AddDays(1), null);
 
             var remainingDatesExpected = _dates.Skip(1).ToList();
             Assert.Equal(3, datesLimited.Count);
 
-            Assert.All(datesLimited.Select(x => x.DateTime).Distinct(), (d => remainingDatesExpected.Contains(d)));
+            Assert.All(datesLimited.Select(x => x.StartDateTime).Distinct(), (d => remainingDatesExpected.Contains(d)));
             Assert.Equal(3,datesLimited[2].NumPersons);
             Assert.Equal(630, datesLimited[2].TotalPrice);
             Assert.Equal(0, datesLimited[2].AmountPaid);
@@ -218,9 +218,9 @@ namespace SaasFeeGuides.IntegrationTests
 
         private static List<DateTime>  _dates = new List<DateTime>()
             {
-                new DateTime(2018,9,20),
-                new DateTime(2018,10,15),
-                new DateTime(2018,11,15),
+                new DateTime(2018,9,20,9,0,0),
+                new DateTime(2018,10,15,9,0,0),
+                new DateTime(2018,11,15,9,0,0),
             };
         private static async Task AddDates(AuthenticatedClient authClient)
         {

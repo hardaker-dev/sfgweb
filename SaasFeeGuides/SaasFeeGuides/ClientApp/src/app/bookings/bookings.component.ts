@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy  } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { User } from '../viewModels/User';
@@ -10,12 +10,21 @@ import { ActivityDate, ActivityDateModel } from '../viewModels/activityDate';
 import { CalendarEvent } from 'calendar-utils';
 
 
-@Component({ templateUrl: 'bookings.component.html' })
+@Component({
+  templateUrl: 'bookings.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush, })
 export class BookingsComponent implements OnInit {
   currentAccount: User;
-  activityDates: ActivityDate[];
 
-  constructor(private activityService: ActivityService) {
+  activityDates: ActivityDate[];
+  public getActiveActivityDates() {
+    if (this.activityDates) {
+      return this.activityDates.filter(function (d) { return !d.model.deleted; });
+    }
+    return null;
+  }
+
+  constructor(private activityService: ActivityService,private cd: ChangeDetectorRef) {
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
   }
 
@@ -27,7 +36,15 @@ export class BookingsComponent implements OnInit {
     this.activityService.getAllActivityDates(null, null)
       .pipe(first())
       .subscribe((dates) => {
-        this.activityDates = dates.map(function (m) { return new ActivityDate(m) });
+        this.activityDates = dates.map((m) =>
+        {
+          var activityDate = new ActivityDate(m);
+          activityDate.onDeleted.subscribe(() =>
+          {
+            this.cd.detectChanges();
+          });
+          return activityDate;
+        });
        
     });
   }

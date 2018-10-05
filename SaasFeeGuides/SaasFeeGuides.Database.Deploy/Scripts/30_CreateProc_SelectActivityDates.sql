@@ -12,7 +12,8 @@ BEGIN
 		asku.ActivityId,
 		a.[Name],
 		aSku.[Name],
-		asd.[DateTime],
+		asd.[DateTime] as StartDateTime,
+		DATEADD(hour,COALESCE(aSku.DurationHours,0),DATEADD(day,COALESCE(aSku.DurationDays,0),asd.[DateTime])) as EndDateTime,
 		SUM(cb.[NumPersons]) as [NumPersons],
 		SUM(cb.[PriceAgreed]) as [PriceAgreed],
 		Sum(CASE 
@@ -34,6 +35,8 @@ BEGIN
 			asku.ActivityId,
 			a.[Name],
 			aSku.[Name],
-			asd.[DateTime]
+			asd.[DateTime],
+			aSku.DurationDays,
+			aSku.DurationHours
 
 END

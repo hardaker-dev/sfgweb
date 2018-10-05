@@ -34,7 +34,7 @@ namespace SaasFeeGuides.Data
                     command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
                     command.Parameters.AddWithValue("@PriceAgreed", booking.PriceAgreed);
                     command.Parameters.AddWithValue("@Email", booking.CustomerEmail);
-                    command.Parameters.AddWithValue("@Date", booking.Date);
+                    command.Parameters.AddWithValue("@Date", booking.DateTime);
                     command.Parameters.AddWithValue("@NumPersons", booking.NumPersons);
                     command.Parameters.AddWithValue("@HasPaid", booking.HasPaid);
                     command.Parameters.AddWithValue("@HasConfirmed", booking.HasConfirmed);

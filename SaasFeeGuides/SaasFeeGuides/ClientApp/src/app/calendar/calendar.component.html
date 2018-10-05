@@ -8,18 +8,25 @@
                            [events]="events"
                            [activeDayIsOpen]="true"
                            [refresh]="refresh"
+                           (dayClicked)="viewDate = $event.day.date"
                            (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-month-view>
   <mwl-calendar-week-view *ngSwitchCase="'week'"
                           [viewDate]="viewDate"
                           [events]="events"
                           [refresh]="refresh"
-                          (eventTimesChanged)="eventTimesChanged($event)">
+                          (eventTimesChanged)="eventTimesChanged($event)"
+                        [dayStartHour]="7"
+                        [dayEndHour]="22"
+                      (dayHeaderClicked)="viewDate = $event.day.date">>
   </mwl-calendar-week-view>
   <mwl-calendar-day-view *ngSwitchCase="'day'"
                          [viewDate]="viewDate"
                          [events]="events"
                          [refresh]="refresh"
+                         
+                        [dayStartHour]="7"
+                        [dayEndHour]="22"
                          (eventTimesChanged)="eventTimesChanged($event)">
   </mwl-calendar-day-view>
 </div>

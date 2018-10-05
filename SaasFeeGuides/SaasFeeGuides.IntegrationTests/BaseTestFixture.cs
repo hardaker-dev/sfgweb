@@ -112,7 +112,7 @@ namespace SaasFeeGuides.IntegrationTests
                 {
                     ActivitySkuName = "AllalinSku",
                     CustomerEmail = "dude@gmail.com",
-                    Date = new DateTime(2018,12,31),
+                    DateTime = new DateTime(2018,12,31,9,0,0),
                     NumPersons = 3
                 }
             };

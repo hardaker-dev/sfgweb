@@ -1,1 +1,44 @@
-<mwl-demo-component [events]="getActiveActivityDates()"></mwl-demo-component>
+<div>
+  <div *ngIf="addingBooking" class="popup">
+    <form [formGroup]="addBookingForm" (ngSubmit)="onSubmit()">
+      <div class="form-group" [formGroup]="addBookingForm">
+        <label class="input-label" for="activityInput">Activity</label>
+
+        <select class="form-control form-input"
+                formControlName="activityInput"
+                name="activityInput"
+                id="activityInput"
+                [ngClass]="{ 'is-invalid': submitted && f.activity.errors }"
+                ng-model="selectedActivity"
+                ng-options="x.name for x in activities">
+   
+          <!--<option ng-repeat="activity in getActivities()" value="{{activity.id}}">{{activity.name}}</option>-->
+        </select>
+        <div *ngIf="submitted && f.activityInput.errors" class="invalid-feedback">
+          <div *ngIf="f.activityInput.errors.required">First name is required</div>
+        </div>
+      </div>
+      <div class="form-group" [formGroup]="addBookingForm">
+        <label class="input-label" for="customer">People</label>
+        <input class="form-control form-input" formControlName="numPersons" type="text" [ngClass]="{ 'is-invalid': submitted && f.customer.errors }" />
+        <div *ngIf="submitted && f.customer.errors" class="invalid-feedback">
+          <div *ngIf="f.customer.errors.required">First name is required</div>
+        </div>
+      </div>
+      <div class="form-group" [formGroup]="addBookingForm">
+        <label class="input-label" for="numPersons">People</label>
+        <input class="form-control form-input" formControlName="numPersons" type="text" [ngClass]="{ 'is-invalid': submitted && f.numPersons.errors }" />
+        <div *ngIf="submitted && f.numPersons.errors" class="invalid-feedback">
+          <div *ngIf="f.numPersons.errors.required">First name is required</div>
+        </div>
+      </div>
+
+      <div [formGroup]="addBookingForm">
+        <button class="btn btn-primary" (click)="cancelClick()">Cancel</button>
+        <button [disabled]="loading" class="btn btn-primary right">Add</button>
+        <img *ngIf="loading" class="right" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+      </div>
+    </form>
+  </div>
+  <mwl-demo-component [events]="activityDates" [addEvent]="addActivityDate"></mwl-demo-component>
+</div>

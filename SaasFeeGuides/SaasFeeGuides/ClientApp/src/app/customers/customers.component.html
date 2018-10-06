@@ -4,42 +4,42 @@
   <div *ngIf="addingCustomer" class="popup">
     <form [formGroup]="addCustomerForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [formGroup]="addCustomerForm">
-        <label class="label" for="firstName">First name</label>
+        <label class="input-label" for="firstName">First name</label>
         <input class="form-control form-input" formControlName="firstName" type="text" [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" />
         <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
           <div *ngIf="f.firstName.errors.required">First name is required</div>
         </div>
       </div>
       <div class="form-group" [formGroup]="addCustomerForm">
-        <label class="label" for="lastName">Last name</label>
+        <label class="input-label" for="lastName">Last name</label>
         <input class="form-control form-input" formControlName="lastName" type="text" [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" />
         <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
           <div *ngIf="f.lastName.errors.required">First name is required</div>
         </div>
       </div>
       <div class="form-group" [formGroup]="addCustomerForm">
-        <label class="label" for="email">Email</label>
+        <label class="input-label" for="email">Email</label>
         <input class="form-control form-input" formControlName="email" type="text" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
         <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
           <div *ngIf="f.email.errors.required">Email is required</div>
         </div>
       </div>
       <div class="form-group" [formGroup]="addCustomerForm">
-        <label class="label" for="dob">Date of birth</label>
+        <label class="input-label" for="dob">Date of birth</label>
         <input class="form-control form-input" formControlName="dob" type="date" [ngClass]="{ 'is-invalid': submitted && f.dob.errors }" />
         <div *ngIf="submitted && f.dob.errors" class="invalid-feedback">
           <div *ngIf="f.dob.errors.required">Date of birth is required</div>
         </div>
       </div>
       <div class="form-group" [formGroup]="addCustomerForm">
-        <label class="label" for="phoneNumber">Phone Number</label>
+        <label class="input-label" for="phoneNumber">Phone Number</label>
         <input class="form-control form-input" formControlName="phoneNumber" type="tel" [ngClass]="{ 'is-invalid': submitted && f.phoneNumber.errors }" />
         <div *ngIf="submitted && f.phoneNumber.errors" class="invalid-feedback">
           <div *ngIf="f.phoneNumber.errors.required">Phone number is required</div>
         </div>
       </div>
       <div class="form-group" [formGroup]="addCustomerForm">
-        <label class="label" for="address">Address</label>
+        <label class="input-label" for="address">Address</label>
         <textarea class="form-control form-input" formControlName="address" [ngClass]="{ 'is-invalid': submitted && f.address.errors }"></textarea>
         <div *ngIf="submitted && f.address.errors" class="invalid-feedback">
           <div *ngIf="f.address.errors.required">Address is required</div>

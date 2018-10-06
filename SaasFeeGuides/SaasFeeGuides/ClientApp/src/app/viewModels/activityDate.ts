@@ -14,7 +14,7 @@ export interface ActivityDateModel  {
   numPersons: number;
   amountPaid: number;
   totalPrice: number;
-  deleted: boolean;
+  deleted?: boolean;
 }
 export class ActivityDate implements CalendarEvent {
     id?: string | number;

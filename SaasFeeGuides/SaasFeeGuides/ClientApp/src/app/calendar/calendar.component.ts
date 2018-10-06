@@ -15,6 +15,7 @@ export class CalendarComponent {
 
   viewDate: Date = new Date(2018,12,31);
 
+  @Input() public addEvent: void;
   @Input() public events: CalendarEvent[];
 
   refresh: Subject<any> = new Subject();

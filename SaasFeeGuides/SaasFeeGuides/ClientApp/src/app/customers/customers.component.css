@@ -14,23 +14,12 @@ li {
   
 }
 
- .label{
-  font-weight:bold;
-  color:black;
-  font-size:14px;
-  min-width:120px;
-  display:inline-block;
-  text-align:left;
-  vertical-align:top;
-  padding-top:10px;
-}
+
 
 .margin-small {
   margin:5px;
 }
-.right {
-  float:right;
-}
+
 
 .leftColumn {
   border-right: dotted;
@@ -48,8 +37,3 @@ td {
 }
 
 
-.form-input {
-  display: inline-block;
-  width: 200px;
-  margin-left: 10px;
-}

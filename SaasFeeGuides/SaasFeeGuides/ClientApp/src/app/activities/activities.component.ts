@@ -28,9 +28,6 @@ export class ActivitiesComponent implements OnInit {
       .subscribe(
       activities => {
         this.activities = activities;
-      },
-      error => {       
-      
-    });
+      });
   }
 }

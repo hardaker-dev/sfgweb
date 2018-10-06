@@ -65,7 +65,7 @@ namespace SaasFeeGuides.Controllers
         }
 
         [HttpDelete]
-        [Authorize("User")]
+        [Authorize("Customer")]
         public async Task<IActionResult> DeleteCustomerAccount()
         {
             if (!ModelState.IsValid)

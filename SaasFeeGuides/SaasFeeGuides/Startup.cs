@@ -115,16 +115,21 @@ namespace SaasFeeGuides
             // api user claim policy
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("User", policy =>
-             {
-                 policy.AddAuthenticationSchemes("Bearer");
-                 policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Role, Constants.Strings.JwtClaims.ApiAccess);
-             });
-                options.AddPolicy("Admin", policy =>
+                foreach(var policy in AuthorizationPolicies.Policies)
                 {
-                    policy.AddAuthenticationSchemes("Bearer");
-                    policy.RequireClaim(Constants.Strings.JwtClaimIdentifiers.Role, Constants.Strings.JwtClaims.ApiAdminAccess);
-                });
+                    options.AddPolicy(policy.Key, p =>
+                    {
+                        if (policy.Any(x => x.values.Any()))
+                        {
+                            p.AddAuthenticationSchemes("Bearer");
+                        }
+                        foreach (var (role, values) in policy)
+                        {
+                            p.RequireClaim(role,values);
+                        }
+                    });
+                }
+
                 options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                    .RequireAuthenticatedUser()
                    .AddAuthenticationSchemes("Bearer")

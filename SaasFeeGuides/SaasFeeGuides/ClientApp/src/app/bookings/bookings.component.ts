@@ -41,7 +41,13 @@ export class BookingsComponent implements OnInit {
           var activityDate = new ActivityDate(m);
           activityDate.onDeleted.subscribe(() =>
           {
-            this.cd.detectChanges();
+            this.activityService
+              .deleteDate(m.activitySkuDateId)
+              .pipe(first())
+              .subscribe(() => {
+                m.deleted = true;
+                this.cd.detectChanges();
+              });           
           });
           return activityDate;
         });

@@ -69,7 +69,36 @@ namespace SaasFeeGuides.IntegrationTests
             }
         }
 
-      
+        [Fact]
+        public async Task DeleteActivityDate()
+        {
+            var authClient = await AuthClient();
+
+            await AddActivitiesAndSkusIfNeeded(authClient);
+            await AddDates(authClient);
+            var activitiesGerman = await _client.GetActivitiesLoc("de");
+            var activity = await _client.GetActivityLoc(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id, "de");
+
+
+            var activityDates = await _client.GetActivityDates(activity.Id, null, null);
+
+            await authClient.DeleteActivitySkuDate(activityDates[0].ActivitySkuDateId);
+            //put it back
+            var activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
+            {
+                ActivityName = activityDates[0].ActivityName,
+                DateTime = activityDates[0].StartDateTime
+            });
+            try
+            {
+                await authClient.DeleteActivitySkuDate(100);
+                Assert.True(false, "code should not reach here");
+            }
+            catch(Exception e)
+            {
+                Assert.Contains("Cannot find ActivitySkuDate with id '100'", e.Message);
+            }
+        }
 
         [Fact]
         public async Task GetActivityDates()
@@ -84,12 +113,13 @@ namespace SaasFeeGuides.IntegrationTests
             await AddCustomerBookingsIfNeeded(authClient);
 
             var activityDates = await _client.GetActivityDates(activity.Id,null,null);
+
             Assert.All(activityDates.Select(x=>x.StartDateTime).Distinct(), (d=> _dates.Contains(d)));
             Assert.Equal(4, activityDates.Count);
 
-            Assert.Equal(new DateTime(2018, 9, 20,13,0,0), activityDates[0].EndDateTime);
+            Assert.Equal(new DateTime(2018, 9, 20,13,0,0), activityDates.FirstOrDefault(x=>x.StartDateTime.Date ==  new DateTime(2018,09,20)).EndDateTime);
 
-            var datesLimited = await _client.GetActivityDates(activity.Skus[0].Id, _dates[0].AddDays(1), null);
+            var datesLimited = await authClient.GetActivityDates(activity.Skus[0].Id, _dates[0].AddDays(1), null);
 
             var remainingDatesExpected = _dates.Skip(1).ToList();
             Assert.Equal(3, datesLimited.Count);

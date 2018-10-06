@@ -30,14 +30,21 @@ namespace SaasFeeGuides.Controllers
             _contentRepository = contentRepository;
         }
 
+      
+        [Authorize("Admin")]
+        [AllowAnonymous]
         [HttpGet("{activityId:int}/dates")]
-        public async Task<IActionResult> GetActivityDates(int activityId,DateTime? dateFrom, DateTime? dateTo)
+        public async Task<IActionResult> GetActivityDates(int activityId, DateTime? dateFrom, DateTime? dateTo)
         {
             var dates = await _activityRepository.SelectActivityDates(new[] { activityId }, dateFrom, dateTo);
 
+            if(User.HasPolicy("Admin"))
+            {
+                return new OkObjectResult(dates.Select(Mapping.MapAdmin));
+            }
+
             return new OkObjectResult(dates.Select(Mapping.Map));
         }
-
         [Authorize("Admin")]
         [HttpGet("dates")]
         public async Task<IActionResult> GetAllActivityDates(DateTime? dateFrom, DateTime? dateTo)
@@ -140,6 +147,16 @@ namespace SaasFeeGuides.Controllers
 
             var mapped =  await Task.WhenAll( activities.Select(a => a.Map(_contentRepository)));
             return new OkObjectResult(mapped);
+        }
+
+        [Authorize("Admin")]
+        [HttpDelete("sku/date/{activitySkuDateId:int}")]
+        public async Task<IActionResult> DeleteActivitySkuDate(int activitySkuDateId)
+        {
+            await _activityRepository.DeleteActivitySkuDate(activitySkuDateId);
+
+
+            return new OkResult();
         }
 
         [HttpGet]

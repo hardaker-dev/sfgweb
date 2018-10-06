@@ -235,6 +235,39 @@ namespace SaasFeeGuides.RestClient
             return await get.ReceiveJsonAsync<DashboardIndex>();
 
         }
+        public new async Task<IList<ActivityDateAdmin>> GetActivityDates(int activityId, DateTime? dateFrom, DateTime? dateTo)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", activityId, "dates")
+                  .WithBearerToken(_bearerToken)
+                  .WithQueryParameters(new Dictionary<string, object>()
+                {
+                    {"dateFrom",dateFrom?.ToString(ApiConstants.DateStringFormat) },
+                    {"dateTo",dateTo?.ToString(ApiConstants.DateStringFormat) }
+                })
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<IList<ActivityDateAdmin>>();
+        }
+        public async Task DeleteActivitySkuDate(int activitySkuDateId)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity","sku","date",activitySkuDateId)
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.DeleteAsync(DefaultClient);
+            var response = await post;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new RestResponseException(response.StatusCode, response.RequestMessage, string.Empty, await response.Content.ReadAsStringAsync());
+            }
+        }
+
         public async Task DeleteAccount()
         {
             var request = _serviceUri.AsRestRequest()

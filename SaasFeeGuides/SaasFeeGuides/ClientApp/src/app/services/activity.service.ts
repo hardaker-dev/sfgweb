@@ -15,6 +15,10 @@ export class ActivityService {
     return this.http.get<Activity>('api/Activity/' + id + '/edit');
   }
 
+  deleteDate(activitySkuDateId: number) {
+    return this.http.delete('api/Activity/Sku/date/' + activitySkuDateId);
+  }
+
 
   getActivityDates(activityId: number, dateFrom: Date, dateTo: Date) {
 

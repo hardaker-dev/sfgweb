@@ -30,6 +30,7 @@ namespace SaasFeeGuides.Data
         Task<int> FindActivitySkuByName(string name);
 
         Task<int> InsertActivitySkuDate(ActivitySkuDate activitySkuDate);
+        Task DeleteActivitySkuDate(int activitySkuDateId);
     }
     public class ActivityRepository : DataAccessBase, IActivityRepository
     {
@@ -323,7 +324,22 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
+        public async Task DeleteActivitySkuDate(int activitySkuDateId)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.Parameters.AddWithValue("@activitySkuDateId", activitySkuDateId);
 
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "[Activities].[DeleteActivitySkuDate]";
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
         public async Task<int> InsertActivitySkuDate(ActivitySkuDate activitySkuDate)
         {
             try
@@ -448,5 +464,6 @@ namespace SaasFeeGuides.Data
             }
         }
 
+       
     }
 }

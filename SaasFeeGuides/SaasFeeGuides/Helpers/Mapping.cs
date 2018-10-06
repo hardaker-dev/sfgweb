@@ -19,6 +19,20 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuName = date.ActivitySkuName,
                 StartDateTime = date.StartDateTime,
                 EndDateTime = date.EndDateTime,
+                NumPersons = date.NumPersons
+            };
+        }
+        public static ViewModels.ActivityDateAdmin MapAdmin(this Models.ActivityDate date)
+        {
+            return new ViewModels.ActivityDateAdmin()
+            {
+                ActivityId = date.ActivityId,
+                ActivityName = date.ActivityName,
+                ActivitySkuDateId = date.ActivitySkuDateId,
+                ActivitySkuId = date.ActivitySkuId,
+                ActivitySkuName = date.ActivitySkuName,
+                StartDateTime = date.StartDateTime,
+                EndDateTime = date.EndDateTime,
                 AmountPaid = date.AmountPaid,
                 NumPersons = date.NumPersons,
                 TotalPrice = date.TotalPrice

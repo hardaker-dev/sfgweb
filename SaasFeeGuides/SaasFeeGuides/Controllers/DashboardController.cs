@@ -9,7 +9,7 @@ using SaasFeeGuides.ViewModels;
 
 namespace SaasFeeGuides.Controllers
 {
-    [Authorize("User")]
+    [Authorize("Customer")]
     [Route("api/[controller]")]
     [ApiController]
     public class DashboardController : ControllerBase

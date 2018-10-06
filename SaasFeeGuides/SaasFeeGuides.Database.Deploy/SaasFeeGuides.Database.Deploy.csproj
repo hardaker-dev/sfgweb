@@ -48,6 +48,7 @@
     <None Remove="Scripts\37_CreateProc_SelectActivitiesLoc.sql" />
     <None Remove="Scripts\38_CreateProc_SelectContent.sql" />
     <None Remove="Scripts\39_CreateProc_SelectActivity.sql" />
+    <None Remove="Scripts\40_CreateProc_DeleteActivitySkuDate.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -70,6 +71,7 @@
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\02b_CreateTable_Content.sql" />
     <EmbeddedResource Include="Scripts\27_CreateProc_SelectActivities.sql" />
+    <EmbeddedResource Include="Scripts\40_CreateProc_DeleteActivitySkuDate.sql" />
     <EmbeddedResource Include="Scripts\39_CreateProc_SelectActivity.sql" />
     <EmbeddedResource Include="Scripts\38_CreateProc_SelectContent.sql" />
     <EmbeddedResource Include="Scripts\36_CreateProc_SelectCustomer.sql" />

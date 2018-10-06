@@ -47,8 +47,7 @@ export class ActivityDate implements CalendarEvent {
       this.actions.push(
         {
           label: '<i class="fa fa-fw fa-times"></i>',
-          onClick: ({ event }: { event: CalendarEvent }): void => {
-            this.model.deleted = true;
+          onClick: ({ event }: { event: CalendarEvent }): void => {           
             this._onDeleted.dispatch(this, null);
           }
         });

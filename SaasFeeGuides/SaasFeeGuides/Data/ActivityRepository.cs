@@ -326,17 +326,37 @@ namespace SaasFeeGuides.Data
         }
         public async Task DeleteActivitySkuDate(int activitySkuDateId)
         {
-            using (var cn = await GetNewConnectionAsync())
+            try
             {
-                using (var command = cn.CreateCommand())
+                using (var cn = await GetNewConnectionAsync())
                 {
-                    command.Parameters.AddWithValue("@activitySkuDateId", activitySkuDateId);
+                    using (var command = cn.CreateCommand())
+                    {
+                        command.Parameters.AddWithValue("@activitySkuDateId", activitySkuDateId);
 
-                    command.CommandType = CommandType.StoredProcedure;
+                        command.CommandType = CommandType.StoredProcedure;
 
-                    command.CommandText = "[Activities].[DeleteActivitySkuDate]";
+                        command.CommandText = "[Activities].[DeleteActivitySkuDate]";
 
-                    await command.ExecuteNonQueryAsync();
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch(SqlException e)
+            {
+                switch ((DataError)e.Number)
+                {
+                    case DataError.CannotFindRecord:
+                        {
+                            var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
+                            throw new BadRequestException(error.Message, HttpStatusCode.NotFound, e);
+                        }
+                    case DataError.ResourceConflict:
+                        {
+                            var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.ResourceConflict);
+                            throw new BadRequestException(error.Message, HttpStatusCode.Conflict, e);
+                        }
+                    default: throw e;
                 }
             }
         }

@@ -47,9 +47,7 @@ export class CustomersComponent implements OnInit {
           this.submitted = false;
       },
       error => {
-        this.alertService.error(error);
-        this.loading = false;
-        
+        this.loading = false;        
       });
 
 
@@ -64,7 +62,9 @@ export class CustomersComponent implements OnInit {
       dob: ['', Validators.required],
       address: ['', Validators.required]
     });
-
+    this.addingCustomer = false;
+    this.loading = false;
+    this.submitted = false;
     this.loadAllCustomers();
   }
   cancelClick() {

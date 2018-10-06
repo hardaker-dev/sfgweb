@@ -78,7 +78,7 @@ namespace SaasFeeGuides.IntegrationTests
             await AddDates(authClient);
             var activitiesGerman = await _client.GetActivitiesLoc("de");
             var activity = await _client.GetActivityLoc(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id, "de");
-
+            await AddCustomerBookingsIfNeeded(authClient);
 
             var activityDates = await _client.GetActivityDates(activity.Id, null, null);
 
@@ -97,6 +97,16 @@ namespace SaasFeeGuides.IntegrationTests
             catch(Exception e)
             {
                 Assert.Contains("Cannot find ActivitySkuDate with id '100'", e.Message);
+            }
+
+            try
+            {
+                await authClient.DeleteActivitySkuDate(activityDates.FirstOrDefault(x=>x.NumPersons>0).ActivitySkuDateId);
+                Assert.True(false, "code should not reach here");
+            }
+            catch (Exception e)
+            {
+                Assert.Contains("Cannot delete ActivitySkuDate with potential customers and id '7'", e.Message);
             }
         }
 

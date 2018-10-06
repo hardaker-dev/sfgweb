@@ -62,7 +62,7 @@ namespace SaasFeeGuides.IntegrationTests
         protected static async Task<IList<int>> AddCustomersIfNeeded(AuthenticatedClient authClient)
         {
             var customers = await authClient.GetCustomers();
-            var ids = customers.Select(c => c.Id.Value).ToList();
+            var ids = new List<int>();
             if (customers.Count <= 1)
             {
                 ids.Add(await authClient.AddCustomer(new Customer()
@@ -104,9 +104,10 @@ namespace SaasFeeGuides.IntegrationTests
 
         protected static async Task AddCustomerBookingsIfNeeded(AuthenticatedClient authClient)
         {
-            await AddCustomersIfNeeded(authClient);
-
-            var bookings = new List<CustomerBooking>()
+            var newIds = await AddCustomersIfNeeded(authClient);
+            if (newIds.Any())
+            {
+                var bookings = new List<CustomerBooking>()
             {
                 new CustomerBooking()
                 {
@@ -116,9 +117,10 @@ namespace SaasFeeGuides.IntegrationTests
                     NumPersons = 3
                 }
             };
-            foreach (var booking in bookings)
-            {
-                await authClient.AddCustomerBooking(booking);
+                foreach (var booking in bookings)
+                {
+                    await authClient.AddCustomerBooking(booking);
+                }
             }
         }
         protected static async Task AddActivityAndSkus(AuthenticatedClient authClient)

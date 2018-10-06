@@ -38,8 +38,8 @@ namespace SaasFeeGuides.IntegrationTests
         {
             var authClient = await AuthClient();
             var customerIds = await AddCustomersIfNeeded(authClient);
-
-            Assert.Equal(3,customerIds.Count);
+            var customers = await authClient.GetCustomers();
+            Assert.Equal(3, customers.Count);
         }
 
         [Fact]

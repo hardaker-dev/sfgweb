@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy  } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy, Input  } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { User } from '../viewModels/User';
@@ -18,11 +18,11 @@ import { Activity } from '../viewModels/activity';
 export class BookingsComponent implements OnInit {
   currentAccount: User;
   activityDates: ActivityDate[] = [];
-  activities: Activity[] = [];
+  @Input() activities: Activity[] = [];
   addActivityDate: (date: Date) => void;
   addingBooking: boolean;
   addBookingForm: FormGroup;
-  selectedActivity: string;
+  @Input() selectedActivity: string;
   getActivities() {
     return this.activities;
   }
@@ -59,7 +59,7 @@ export class BookingsComponent implements OnInit {
   }
   ngOnInit() {
     this.addBookingForm = this.formBuilder.group({
-      activityInput: ['sadads', Validators.required],
+      activity: ['sadads', Validators.required],
       customer: ['asda', Validators.required],
       numPersons: ['asdasd', Validators.required]     
     });

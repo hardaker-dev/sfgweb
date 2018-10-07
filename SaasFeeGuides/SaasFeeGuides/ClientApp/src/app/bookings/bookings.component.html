@@ -5,13 +5,14 @@
         <label class="input-label" for="activityInput">Activity</label>
 
         <select class="form-control form-input"
-                formControlName="activityInput"
-                name="activityInput"
-                id="activityInput"
+                formControlName="activity"
                 [ngClass]="{ 'is-invalid': submitted && f.activity.errors }"
-                ng-model="selectedActivity"
-                ng-options="x.name for x in activities">
-   
+               >
+          <option *ngFor="let activity of activities"
+                  [ngValue]="activity.id" style="color:black;">
+            <!--[(ngOptions)]="x.name for x in activities"-->
+            {{activity.name}}
+          </option>
           <!--<option ng-repeat="activity in getActivities()" value="{{activity.id}}">{{activity.name}}</option>-->
         </select>
         <div *ngIf="submitted && f.activityInput.errors" class="invalid-feedback">

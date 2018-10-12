@@ -32,7 +32,17 @@ namespace SaasFeeGuides.IntegrationTests
             Assert.Equal(customer.FirstName, customers[0].FirstName);
             Assert.Equal(3, customers.Count);
         }
+        [Fact]
+        public async Task GetCustomers_Search()
+        {
+            var authClient = await AuthClient();
+            await AddCustomersIfNeeded(authClient);
+            var customers = await authClient.GetCustomers("james");
+            var customer = await authClient.GetCustomer(customers[0].Id.Value);
 
+            Assert.Equal(customer.FirstName, customers[0].FirstName);
+            Assert.Equal(1, customers.Count);
+        }
         [Fact]
         public async Task AddCustomer()
         {

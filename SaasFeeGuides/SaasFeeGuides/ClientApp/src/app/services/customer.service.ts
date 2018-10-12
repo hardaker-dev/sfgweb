@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Customer } from '../viewModels/customer';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { CustomerModel,Customer } from '../viewModels/customer';
 import { HistoricCustomerBooking } from '../viewModels/historicCustomerBooking';
 import { CustomerBooking } from '../viewModels/customerBooking';
 
@@ -8,16 +8,20 @@ import { CustomerBooking } from '../viewModels/customerBooking';
 export class CustomerService {
   constructor(private http: HttpClient) { }
 
-  getMany() {
-    return this.http.get<Customer[]>('api/customer');
+  getMany(searchText: string) {
+    let params = new HttpParams();
+    if (searchText) {
+      params = params.append('searchText', searchText);
+    }
+    return this.http.get<CustomerModel[]>('api/customer', { params: params });
   }
 
   get(id: number) {
-    return this.http.get<Customer>('api/customer/' + id);
+    return this.http.get<CustomerModel>('api/customer/' + id);
   }
 
   add(customer: Customer) {
-    return this.http.post<number>('api/customer', customer);
+    return this.http.post<number>('api/customer', customer.model);
   }
 
   addHistoricCustomerBooking(booking: HistoricCustomerBooking) {
@@ -29,4 +33,6 @@ export class CustomerService {
   getCustomerBookings(customerId: number) {
     return this.http.get('api/customer/' + customerId +'booking/');
   }
+
+  
 }

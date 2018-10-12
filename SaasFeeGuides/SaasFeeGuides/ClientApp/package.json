@@ -25,6 +25,7 @@
     "@angular/platform-browser-dynamic": "^6.1.9",
     "@angular/platform-server": "^6.1.9",
     "@angular/router": "^6.1.9",
+    "@ng-bootstrap/ng-bootstrap": "^3.3.0",
     "@nguniversal/module-map-ngfactory-loader": "^6.1.0",
     "angular-animations": "0.0.0",
     "angular-calendar": "^0.26.1",

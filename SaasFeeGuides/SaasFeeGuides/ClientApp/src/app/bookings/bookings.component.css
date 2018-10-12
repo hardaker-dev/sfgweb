@@ -3,6 +3,9 @@
 
 .form-input {
   display: inline-block;
-  width: 200px;
+  width: 300px;
   margin-left: 10px;
+  margin-right:10px;
+  height:35px;
 }
+

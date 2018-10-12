@@ -17,4 +17,17 @@ namespace SaasFeeGuides.Models
         public string Address { get; set; }
 
     }
+
+    public class CustomerComparer : IEqualityComparer<Customer>
+    {
+        public bool Equals(Customer x, Customer y)
+        {
+            return x.Email.Equals(y.Email, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public int GetHashCode(Customer obj)
+        {
+            return obj.Email.GetHashCode();
+        }
+    }
 }

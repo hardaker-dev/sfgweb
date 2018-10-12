@@ -16,7 +16,7 @@ namespace SaasFeeGuides.Data
         Task<int> InsertCustomerBooking(CustomerBooking booking);
         Task<Customer> SelectCustomerByUserId(string userId);
         Task DeleteAccount(string userId);
-        Task<IEnumerable<Customer>> SelectCustomers();
+        Task<IEnumerable<Customer>> SelectCustomers(string emailSearch, string firstNameSearch, string lastNameSearch);
         Task<Customer> SelectCustomer(int id);
         Task<IEnumerable<CustomerBooking>> SelectCustomerBookings(int customerId);
     }
@@ -84,15 +84,18 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        public async Task<IEnumerable<Customer>> SelectCustomers()
+        public async Task<IEnumerable<Customer>> SelectCustomers(string emailSearch,string firstNameSearch,string lastNameSearch)
         {
             using (var cn = await GetNewConnectionAsync())
             {
                 using (var command = cn.CreateCommand())
                 {
-
+                    
                     command.CommandType = CommandType.StoredProcedure;
 
+                    command.Parameters.AddWithValue("@emailSearch", (object)emailSearch ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@firstNameSearch", (object)firstNameSearch ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@lastNameSearch", (object)lastNameSearch ?? DBNull.Value);
                     command.CommandText = "[Activities].[SelectCustomers]";
 
                     return await ReadListAsync(command, ReadCustomer);

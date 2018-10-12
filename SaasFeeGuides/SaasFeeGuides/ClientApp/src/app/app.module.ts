@@ -25,9 +25,11 @@ import { AuthenticateComponent } from './authenticate/authenticate.component';
 import { RegisterComponent } from './register/register.component';
 import { ActivityService } from './services/activity.service';
 import { SfgCalendarModule } from './calendar/calendar.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   imports: [
+    NgbModule,
     SfgCalendarModule,
     CommonModule,
     BrowserAnimationsModule,

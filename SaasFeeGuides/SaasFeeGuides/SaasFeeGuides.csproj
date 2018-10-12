@@ -67,7 +67,6 @@
     <None Remove="ClientApp\src\app\services\activity.service.ts" />
     <None Remove="ClientApp\src\app\services\authentication.service.ts" />
     <None Remove="ClientApp\src\app\services\customer.service.ts" />
-    <None Remove="ClientApp\src\app\winter\DashboardIndex.ts" />
     <None Remove="ClientApp\src\assets\Images\logo.png" />
     <None Remove="ClientApp\src\tsconfig.app.json" />
     <None Remove="ClientApp\src\tsconfig.spec.json" />
@@ -114,7 +113,6 @@
     <TypeScriptCompile Include="ClientApp\src\app\services\customer.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\authentication.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\account.service.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\winter\DashboardIndex.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

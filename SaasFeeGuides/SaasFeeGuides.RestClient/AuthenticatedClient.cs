@@ -174,10 +174,16 @@ namespace SaasFeeGuides.RestClient
             return await get.ReceiveJsonAsync<Customer>();
 
         }
-        public async Task<IList<Customer>> GetCustomers()
+        public async Task<IList<Customer>> GetCustomers(string searchText=null)
         {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            if (searchText != null)
+            {
+                parameters.Add("searchText", searchText);
+            }
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "customer")
+                .WithQueryParameters(parameters)
                 .WithBearerToken(_bearerToken)
                 .AcceptGzipCompression();
 

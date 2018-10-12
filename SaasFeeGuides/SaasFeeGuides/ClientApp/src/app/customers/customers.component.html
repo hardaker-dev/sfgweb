@@ -60,7 +60,7 @@
             <span >First name</span>
           </td>
           <td>
-            {{customer.firstName}}
+            {{customer.model.firstName}}
           </td>
         </tr>
         <tr>
@@ -68,7 +68,7 @@
             <span >Last name</span>
           </td>
           <td>
-            {{customer.lastName}}
+            {{customer.model.lastName}}
           </td>
         </tr>
         <tr>
@@ -76,7 +76,7 @@
             <span >Email</span>
           </td>
           <td>
-            {{customer.email}}
+            {{customer.model.email}}
           </td>
         </tr>
         <tr>
@@ -84,7 +84,7 @@
             <span >Address</span>
           </td>
           <td>
-            {{customer.address}}
+            {{customer.model.address}}
           </td>
         </tr>
         <tr>
@@ -92,7 +92,7 @@
             <span >Phone number</span>
           </td>
           <td>
-            {{customer.phoneNumber}}
+            {{customer.model.phoneNumber}}
           </td>
         </tr>
         <tr>
@@ -100,7 +100,7 @@
             <span >Date of birth</span>
           </td>
           <td>
-            {{customer.dateOfBirth | date:'yyyy-MM-dd'}}
+            {{customer.model.dateOfBirth | date:'yyyy-MM-dd'}}
           </td>
         </tr>
       </table>

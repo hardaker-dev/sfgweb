@@ -1,29 +1,57 @@
+<ng-template #rt let-r="result" let-t="term">
+  <ngb-highlight [result]="r.formattedNameEmail()"  [term]="t"></ngb-highlight>
+</ng-template>
+
 <div>
   <div *ngIf="addingBooking" class="popup">
     <form [formGroup]="addBookingForm" (ngSubmit)="onSubmit()">
+      <div class="form-group" [formGroup]="addBookingForm">
+        <label class="input-label" for="datetime">Date Time</label>
+        <input class="form-control form-input" formControlName="datetime" type="text" [ngClass]="{ 'is-invalid': submitted && f.datetime.errors }" />
+        <div *ngIf="submitted && f.datetime.errors" class="invalid-feedback">
+          <div *ngIf="f.datetime.errors.required">First name is required</div>
+        </div>
+      </div>
+
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="activityInput">Activity</label>
 
         <select class="form-control form-input"
                 formControlName="activity"
-                [ngClass]="{ 'is-invalid': submitted && f.activity.errors }"
-               >
+                [ngClass]="{ 'is-invalid': submitted && f.activity.errors }" size="1" >
           <option *ngFor="let activity of activities"
-                  [ngValue]="activity.id" style="color:black;">
-            <!--[(ngOptions)]="x.name for x in activities"-->
+                  [ngValue]="activity" >
             {{activity.name}}
           </option>
-          <!--<option ng-repeat="activity in getActivities()" value="{{activity.id}}">{{activity.name}}</option>-->
         </select>
         <div *ngIf="submitted && f.activityInput.errors" class="invalid-feedback">
           <div *ngIf="f.activityInput.errors.required">First name is required</div>
         </div>
       </div>
+
       <div class="form-group" [formGroup]="addBookingForm">
-        <label class="input-label" for="customer">People</label>
-        <input class="form-control form-input" formControlName="numPersons" type="text" [ngClass]="{ 'is-invalid': submitted && f.customer.errors }" />
+        <label class="input-label" for="customer">Customer</label>
+
+        <!--[resultFormatter]="searchFormatter"-->
+        <input id="customer"
+               type="text"
+               class="form-control form-input"
+               [(ngModel)]="searchModel"
+               [resultTemplate]="rt"
+             
+        [resultFormatter]="formatter"
+        [inputFormatter]="inputFormatter" 
+               [ngbTypeahead]="search"
+               (focus)="focus$.next($event.target.value)"
+               (click)="click$.next($event.target.value)"
+               #instance="ngbTypeahead"
+               formControlName="customer"
+               [ngClass]="{ 'is-invalid': submitted && f.customer.errors }" />
+
+        <button (click)="searchCustomer()" class="btn btn-primary"><i class="fa fa-search right"></i></button>
+
         <div *ngIf="submitted && f.customer.errors" class="invalid-feedback">
-          <div *ngIf="f.customer.errors.required">First name is required</div>
+          <div *ngIf="f.customer.errors.required">Customer is required</div>
         </div>
       </div>
       <div class="form-group" [formGroup]="addBookingForm">
@@ -41,5 +69,6 @@
       </div>
     </form>
   </div>
+
   <mwl-demo-component [events]="activityDates" [addEvent]="addActivityDate"></mwl-demo-component>
 </div>

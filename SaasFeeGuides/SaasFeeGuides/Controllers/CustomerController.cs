@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -35,23 +36,44 @@ namespace SaasFeeGuides.Controllers
         public async Task<IActionResult> AddCustomer(ViewModels.Customer customer)
         {
             var customerModel = customer.Map();
-
-            var customerId = await _customerRepository.UpsertCustomer(customerModel);
-          
+            var customerId = await _customerRepository.UpsertCustomer(customerModel);         
 
             return new OkObjectResult(customerId);
         }
 
         [Authorize("Admin")]
         [HttpGet]
-        public async Task<IActionResult> GetCustomers()
+        public async Task<IActionResult> GetCustomers(string searchText)
         {
+            searchText = searchText?.Trim();
+            IEnumerable<Models.Customer> customers = null;
+            if(string.IsNullOrEmpty(searchText))
+            {
+                customers = await _customerRepository.SelectCustomers(null, null, null);
+            }
+            else if (searchText.Contains("@"))
+            {
+                customers = await _customerRepository.SelectCustomers(searchText, null, null);
+            }
+            else if (searchText.Contains(" "))
+            {
+                var split = searchText.Split(' ');
 
-            var customers = await _customerRepository.SelectCustomers();
-
+                var firstName = split[0];
+                var lastName = split[1];
+                customers = await _customerRepository.SelectCustomers(null, firstName, lastName);
+            }
+            else
+            {
+                var emailMatches = _customerRepository.SelectCustomers(searchText, null, null);
+                var firstNameMatches = _customerRepository.SelectCustomers(null, searchText, null);
+                var lastNameMatches = _customerRepository.SelectCustomers(null, null, searchText);
+                customers = (await firstNameMatches).Concat(await lastNameMatches).Concat(await emailMatches).Distinct(new Models.CustomerComparer());
+            }
 
             return new OkObjectResult(customers.Select(Mapping.Map));
         }
+
         [Authorize("Admin")]
         [HttpGet("{customerId:int}")]
         public async Task<IActionResult> GetCustomer(int customerId)

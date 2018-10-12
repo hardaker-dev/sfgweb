@@ -32,13 +32,21 @@ export class CustomersComponent implements OnInit {
       return;
     }
     this.loading = true;
-    var customer = new Customer(null, this.f.email.value, this.f.firstName.value, this.f.lastName.value, this.f.address.value, this.f.dob.value, this.f.phoneNumber.value);
+    var customer = new Customer({
+      id: null,
+      email: this.f.email.value,
+      firstName: this.f.firstName.value,
+      lastName: this.f.lastName.value,
+      address: this.f.address.value,
+      dateOfBirth: this.f.dob.value,
+      phoneNumber: this.f.phoneNumber.value
+    });
     this.customerService
       .add(customer)
       .pipe(first())
       .subscribe(
-        id => {
-          customer.id = id;
+      id => {
+        customer.model.id = id;
           this.customers.push(customer);
           this.loading = false;
           this.addingCustomer = false;
@@ -76,10 +84,10 @@ export class CustomersComponent implements OnInit {
   }
 
   private loadAllCustomers() {
-    this.customerService.getMany()
+    this.customerService.getMany(null)
       .pipe(first())
       .subscribe(customers => {
-      this.customers = customers;
+        this.customers = customers.map((m) => new Customer(m));;
     });
   }
 

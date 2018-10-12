@@ -11,13 +11,15 @@ import {
   templateUrl: 'calendar.component.html'
 })
 export class CalendarComponent {
-  view: string = 'month';
+  view: string = 'week';
 
   viewDate: Date = new Date(2018,12,31);
-
+  
+  vm = this;
   @Input() public addEvent: void;
   @Input() public events: CalendarEvent[];
 
+ 
   refresh: Subject<any> = new Subject();
 
   eventTimesChanged({

@@ -46,12 +46,16 @@ namespace SaasFeeGuides.Controllers
             return new OkObjectResult(dates.Select(Mapping.Map));
         }
         [Authorize("Admin")]
+        [AllowAnonymous]
         [HttpGet("dates")]
         public async Task<IActionResult> GetAllActivityDates(DateTime? dateFrom, DateTime? dateTo)
         {
 
             var activityDates = await _activityRepository.SelectActivityDates(new int[0],dateFrom,dateTo);
-
+            if (User.HasPolicy("Admin"))
+            {
+                return new OkObjectResult(activityDates.Select(Mapping.MapAdmin));
+            }
             return new OkObjectResult(activityDates.Select(Mapping.Map));
         }
 

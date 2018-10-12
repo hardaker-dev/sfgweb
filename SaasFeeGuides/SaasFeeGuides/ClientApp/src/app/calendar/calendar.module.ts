@@ -6,6 +6,8 @@ import { ContextMenuModule } from 'ngx-contextmenu';
 import { CalendarComponent } from './calendar.component';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
+import { CalendarHeaderComponent } from './calendar-header.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -18,7 +20,7 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     }),
     UtilsModule
   ],
-  declarations: [CalendarComponent],
-  exports: [CalendarComponent]
+  declarations: [CalendarComponent, CalendarHeaderComponent],
+  exports: [CalendarComponent, CalendarHeaderComponent]
 })
 export class SfgCalendarModule {}

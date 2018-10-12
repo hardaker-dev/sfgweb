@@ -37,6 +37,9 @@ export class BookingsComponent implements OnInit {
     var thisObj = this;
     this.addActivityDate = (date) => {
       thisObj.addingBooking = true;
+      var hour = date.getHours();
+      if (hour == 0) { date.setHours(7); }
+      thisObj.addBookingForm.get('datetime').setValue(date.toISOString().slice(0, -1));
     };
   }
 

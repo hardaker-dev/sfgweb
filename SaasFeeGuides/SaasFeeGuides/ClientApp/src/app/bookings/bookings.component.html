@@ -7,7 +7,7 @@
     <form [formGroup]="addBookingForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="datetime">Date Time</label>
-        <input class="form-control form-input" formControlName="datetime" type="text" [ngClass]="{ 'is-invalid': submitted && f.datetime.errors }" />
+        <input class="form-control form-input" formControlName="datetime"  type="datetime-local" [ngClass]="{ 'is-invalid': submitted && f.datetime.errors }" />
         <div *ngIf="submitted && f.datetime.errors" class="invalid-feedback">
           <div *ngIf="f.datetime.errors.required">First name is required</div>
         </div>

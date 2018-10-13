@@ -19,6 +19,7 @@ BEGIN
 
 	select actS.[Id],
 		a.[Name] as ActivityName,
+		acts.[ActivityId],
 		acts.[Name],
 		acts.TitleContentId,
 		acts.DescriptionContentId,

@@ -16,5 +16,6 @@ namespace SaasFeeGuides.Models
         public double DurationDays { get; internal set; }
         public double DurationHours { get; internal set; }
         public string WebContentId { get; internal set; }
+        public int ActivityId { get; internal set; }
     }
 }

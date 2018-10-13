@@ -160,8 +160,28 @@ namespace SaasFeeGuides.Data
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = "[Activities].[SelectActivities]";
 
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        var activities = new HashSet<Models.Activity>( await ReadListAsync(reader, ReadActivity));
 
-                    return await ReadListAsync(command, ReadActivity);
+                        await reader.NextResultAsync();                       
+                        var skus = await ReadListAsync(reader, ReadActivitySku);
+                        foreach(var skuGroup in skus.GroupBy(x=>x.ActivityId))
+                        {
+                            activities.TryGetValue(new Models.Activity() { Id = skuGroup.Key }, out Models.Activity activity);
+                            activity.Skus = skuGroup.ToList();
+                        }
+                        await reader.NextResultAsync();
+                        var equitpment = await ReadListAsync(reader, ReadActivityEquiptment);
+                        foreach (var equiptmentGroup in equitpment.GroupBy(x => x.ActivityId))
+                        {
+                            activities.TryGetValue(new Models.Activity() { Id = equiptmentGroup.Key }, out Models.Activity activity);
+                            activity.Equiptment = equiptmentGroup.ToList();
+                        }
+
+                        return activities;
+                    }
+
 
                 }
             }
@@ -399,16 +419,17 @@ namespace SaasFeeGuides.Data
                 {
                     Id = (GetInt(reader, 0)).GetValueOrDefault(),
                     ActivityName = GetString(reader, 1),
-                    Name = GetString(reader, 2),
-                    TitleContentId = GetString(reader, 3),
-                    DescriptionContentId = GetString(reader, 4),
-                    PricePerPerson = GetDouble(reader, 5) ?? 0,
-                    MinPersons = GetInt(reader, 6) ?? 0,
-                    MaxPersons = GetInt(reader, 7) ?? 0,
-                    AdditionalRequirementsContentId = GetString(reader, 8),
-                    DurationDays = GetDouble(reader, 9) ?? 0,
-                    DurationHours = GetDouble(reader, 10) ?? 0,
-                    WebContentId = GetString(reader, 11),
+                    ActivityId = GetInt(reader, 2).Value,
+                    Name = GetString(reader, 3),
+                    TitleContentId = GetString(reader, 4),
+                    DescriptionContentId = GetString(reader, 5),
+                    PricePerPerson = GetDouble(reader, 6) ?? 0,
+                    MinPersons = GetInt(reader, 7) ?? 0,
+                    MaxPersons = GetInt(reader, 8) ?? 0,
+                    AdditionalRequirementsContentId = GetString(reader, 9),
+                    DurationDays = GetDouble(reader, 10) ?? 0,
+                    DurationHours = GetDouble(reader, 11) ?? 0,
+                    WebContentId = GetString(reader, 12),
                 };
             }
             catch (Exception ex)

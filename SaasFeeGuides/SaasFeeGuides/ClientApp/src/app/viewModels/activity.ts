@@ -12,7 +12,9 @@ export class Activity {
     public videoContent: Content[],
     public imageContent: Content[],
     public isActive: boolean,
-    public categoryName: string
+    public categoryName: string,
+    public skus: any[],
+    public equiptment:any[]
     
   ) {
   }

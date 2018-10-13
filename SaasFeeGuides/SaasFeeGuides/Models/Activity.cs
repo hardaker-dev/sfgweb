@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace SaasFeeGuides.Models
 {
-    public class Activity
+    public class Activity : IEquatable<Activity>
     {
         public int? Id { get; set; }
         public string Name { get; set; }
@@ -20,5 +20,21 @@ namespace SaasFeeGuides.Models
 
         public IList<ActivitySku> Skus { get; set; }
         public IList<ActivityEquiptment> Equiptment { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Activity);
+        }
+
+        public bool Equals(Activity other)
+        {
+            return other != null &&
+                   EqualityComparer<int?>.Default.Equals(Id, other.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
     }
 }

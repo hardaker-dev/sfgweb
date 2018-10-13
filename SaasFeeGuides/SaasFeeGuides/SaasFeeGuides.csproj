@@ -61,6 +61,7 @@
     <None Remove="ClientApp\src\app\viewModels\customer.ts" />
     <None Remove="ClientApp\src\app\viewModels\customerBooking.ts" />
     <None Remove="ClientApp\src\app\viewModels\historicCustomerBooking.ts" />
+    <None Remove="ClientApp\src\app\viewModels\newActivitySkuDate.ts" />
     <None Remove="ClientApp\src\app\viewModels\user.ts" />
     <None Remove="ClientApp\src\app\register\register.component.ts" />
     <None Remove="ClientApp\src\app\services\account.service.ts" />
@@ -100,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activityDate.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\activitySkuDate.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\content.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activity.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\customerBooking.ts" />

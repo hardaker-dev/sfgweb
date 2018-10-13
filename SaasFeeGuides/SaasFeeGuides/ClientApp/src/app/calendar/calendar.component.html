@@ -4,14 +4,12 @@
                  [(viewDate)]="viewDate">
 </calendar-header>
 
-<context-menu #basicMenu>
-  <ng-template contextMenuItem (execute)="addEvent($event.item)">
-    Add booking
+<context-menu #menu>
+  <ng-template contextMenuItem (execute)="addBooking($event.item)">  
+      Add booking
   </ng-template>
-</context-menu>
-<context-menu #hourlyMenu>
-  <ng-template contextMenuItem (execute)="addEvent($event.item)">
-    Add booking
+  <ng-template contextMenuItem (execute)="addDate($event.item)">  
+      Add date
   </ng-template>
 </context-menu>
 
@@ -24,7 +22,7 @@
          [class.cal-future]="day.isFuture"
          [class.cal-weekend]="day.isWeekend"
          (click)="dayHeaderClicked.emit({day: day})"
-         [contextMenu]="basicMenu"
+         [contextMenu]="menu"
          [contextMenuSubject]="day.date">
       <b>{{ day.date | calendarDate:'weekViewColumnHeader':locale }}</b><br>
       <span>{{ day.date | calendarDate:'weekViewColumnSubHeader':locale }}</span>
@@ -41,7 +39,7 @@
        [style.height.px]="segmentHeight"
        [class.cal-hour-start]="segment.isStart"
        [class.cal-after-hour-start]="!segment.isStart"
-        [contextMenu]="hourlyMenu"
+        [contextMenu]="menu"
         [contextMenuSubject]="segment.date"
       >
     <div class="cal-time" *ngIf="isTimeLabel">

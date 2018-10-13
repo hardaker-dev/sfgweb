@@ -1,5 +1,6 @@
 
 import { Content } from './content';
+import { ActivitySku } from './activitySku';
 
 export class Activity {
 
@@ -13,7 +14,7 @@ export class Activity {
     public imageContent: Content[],
     public isActive: boolean,
     public categoryName: string,
-    public skus: any[],
+    public skus: ActivitySku[],
     public equiptment:any[]
     
   ) {

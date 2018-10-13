@@ -143,7 +143,8 @@ namespace SaasFeeGuides.Helpers
                 MaxPersons = sku.MaxPersons,
                 MinPersons = sku.MinPersons,
                 PricePerPerson = sku.PricePerPerson,
-                WebContent = await webContent
+                WebContent = await webContent,
+                ActivityId = sku.ActivityId
             };
         }
         private static ViewModels.ActivitySkuLoc Map(this Models.ActivitySkuLoc s)
@@ -208,7 +209,8 @@ namespace SaasFeeGuides.Helpers
                 CategoryName = activity.CategoryName,
                 Skus = activity.Skus != null ? await Task.WhenAll( activity.Skus.Select(s => s.Map(contentRepository))) : null,
                 Equiptment = activity.Equiptment != null ? activity.Equiptment.Select(e=> new ViewModels.ActivityEquiptment()
-                { EquiptmentId = e.EquiptmentId}).ToList() : null
+                { EquiptmentId = e.EquiptmentId}).ToList() : null,
+                
             };
         }
         public static async Task<Models.Activity> Map(this ViewModels.Activity activity, int? activityId, IContentRepository contentRepository )

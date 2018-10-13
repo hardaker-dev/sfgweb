@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Activity } from '../viewModels/activity';
 import { Observable, merge, Subject } from 'rxjs';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { ActivitySku } from '../viewModels/activitySku';
 
 
 @Component({
@@ -22,11 +23,34 @@ export class BookingsComponent implements OnInit {
   currentAccount: User;
   activityDates: ActivityDate[] = [];
   activities: Activity[] = [];
+  activitySkus: ActivitySku[] = [];
   customers: Customer[] = [];
-  addActivityDate: (date: Date) => void;
+  thisObj = this;
+  addBooking: (date: Date) => void;
+  addDate: (date: Date) => void;
   addingBooking: boolean;
+  addingDate: boolean;
   addBookingForm: FormGroup;
   selectedActivity: string;
+  @ViewChild('instance') instance: NgbTypeahead;
+  focus$ = new Subject<string>();
+  click$ = new Subject<string>();
+
+  private _searchModel: any;
+  get searchModel(): any {
+    return this._searchModel;
+  }
+
+  set searchModel(search: any) {
+    this._searchModel = search;
+
+    if (this._searchModel && this._searchModel.model) {
+      this.formattedSelection = this._searchModel.formattedNameEmail();
+    }
+    else {
+      this.formattedSelection = this._searchModel;
+    }
+  }
 
   constructor(
     private customerService: CustomerService,
@@ -35,8 +59,14 @@ export class BookingsComponent implements OnInit {
 
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
     var thisObj = this;
-    this.addActivityDate = (date) => {
+    this.addBooking = (date) => {
       thisObj.addingBooking = true;
+      var hour = date.getHours();
+      if (hour == 0) { date.setHours(7); }
+      thisObj.addBookingForm.get('datetime').setValue(date.toISOString().slice(0, -1));
+    };
+    this.addDate = (date) => {
+      thisObj.addingDate = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
       thisObj.addBookingForm.get('datetime').setValue(date.toISOString().slice(0, -1));
@@ -66,6 +96,7 @@ export class BookingsComponent implements OnInit {
   }
   cancelClick() {
     this.addingBooking = false;
+    this.addingDate = false;
   }
   ngOnInit() {
     this.addBookingForm = this.formBuilder.group({
@@ -77,9 +108,7 @@ export class BookingsComponent implements OnInit {
     this.loadSchedule();
     this.loadActivities();
   }
-  @ViewChild('instance') instance: NgbTypeahead;
-  focus$ = new Subject<string>();
-  click$ = new Subject<string>();
+ 
   inputFormatter = (x: any) => {
     if (x.formattedNameEmail) {
       return x.formattedNameEmail();
@@ -88,23 +117,7 @@ export class BookingsComponent implements OnInit {
   }
   formatter = (x: any) => {
     return x.formattedNameEmail();
-  }
-
-  private _searchModel: any;
-  get searchModel(): any {
-    return this._searchModel;
-  }
-
-  set searchModel(search: any) {
-    this._searchModel = search;
-
-    if (this._searchModel && this._searchModel.model) {
-      this.formattedSelection = this._searchModel.formattedNameEmail();
-    }
-    else {
-      this.formattedSelection = this._searchModel;    
-    }
-  }
+  } 
 
   formattedSelection: string;
   search = (text$: Observable<string>) => {
@@ -126,6 +139,7 @@ export class BookingsComponent implements OnInit {
       .subscribe(
         activities => {
           thisObj.activities = activities;
+          thisObj.activitySkus = activities.reduce((pn, u) => [...pn, ...u.skus], []);
         });
   }
 
@@ -149,7 +163,6 @@ export class BookingsComponent implements OnInit {
         this.refreshActivities();
       }
     });
-
   }
 
   private loadSchedule() {
@@ -161,8 +174,7 @@ export class BookingsComponent implements OnInit {
             var activityDate = new ActivityDate(m);
             this.hookEvents(activityDate);
             return activityDate;
-          }));
-       
+          }));       
     });
   }
 

@@ -16,7 +16,8 @@ export class CalendarComponent {
   viewDate: Date = new Date(2018,12,31);
   
   vm = this;
-  @Input() public addEvent: void;
+  @Input() public addDate: void;
+  @Input() public addBooking: void;
   @Input() public events: CalendarEvent[];
 
  

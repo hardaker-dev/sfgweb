@@ -4,34 +4,34 @@
 
 <div>
   <div *ngIf="addingDate" class="popup">
-    <form [formGroup]="addBookingForm" (ngSubmit)="onSubmit()">
-      <div class="form-group" [formGroup]="addBookingForm">
+    <form [formGroup]="addDateForm" (ngSubmit)="onSubmit()">
+      <div class="form-group" [formGroup]="addDateForm">
         <label class="input-label" for="datetime">Date Time</label>
-        <input class="form-control form-input" formControlName="datetime" type="datetime-local" [ngClass]="{ 'is-invalid': submitted && f.datetime.errors }" />
-        <div *ngIf="submitted && f.datetime.errors" class="invalid-feedback">
-          <div *ngIf="f.datetime.errors.required">First name is required</div>
+        <input class="form-control form-input" formControlName="datetime" type="datetime-local" [ngClass]="{ 'is-invalid': submitted && addDateForm.controls.datetime.errors }" />
+        <div *ngIf="submitted && addDateForm.controls.datetime.errors" class="invalid-feedback">
+          <div *ngIf="addDateForm.controls.datetime.errors.required">Date Time is required</div>
         </div>
       </div>
 
-      <div class="form-group" [formGroup]="addBookingForm">
+      <div class="form-group" [formGroup]="addDateForm">
         <label class="input-label" for="activityInput">Activity</label>
 
         <select class="form-control form-input"
                 formControlName="activity"
-                [ngClass]="{ 'is-invalid': submitted && f.activity.errors }" size="1">
-          <option *ngFor="let activity of activities"
+                [ngClass]="{ 'is-invalid': submitted && addDateForm.controls.activity.errors }" size="1">
+          <option *ngFor="let activity of activitySkus"
                   [ngValue]="activity">
             {{activity.name}}
           </option>
         </select>
-        <div *ngIf="submitted && f.activityInput.errors" class="invalid-feedback">
-          <div *ngIf="f.activityInput.errors.required">First name is required</div>
+        <div *ngIf="submitted && addDateForm.controls.activity.errors" class="invalid-feedback">
+          <div *ngIf="addDateForm.controls.activity.errors.required">Activity is required</div>
         </div>
       </div>    
 
-      <div [formGroup]="addBookingForm">
-        <button class="btn btn-primary" (click)="cancelClick()">Cancel</button>
-        <button [disabled]="loading" class="btn btn-primary right">Add</button>
+      <div [formGroup]="addDateForm">
+        <button class="btn btn-primary" type="button" (click)="cancelClick()">Cancel</button>
+        <button [disabled]="loading"  type="submit" class="btn btn-primary right">Add</button>
         <img *ngIf="loading" class="right" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
       </div>
     </form>
@@ -41,9 +41,9 @@
     <form [formGroup]="addBookingForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="datetime">Date Time</label>
-        <input class="form-control form-input" formControlName="datetime" type="datetime-local" [ngClass]="{ 'is-invalid': submitted && f.datetime.errors }" />
-        <div *ngIf="submitted && f.datetime.errors" class="invalid-feedback">
-          <div *ngIf="f.datetime.errors.required">First name is required</div>
+        <input class="form-control form-input" formControlName="datetime" type="datetime-local" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.datetime.errors }" />
+        <div *ngIf="submitted && addBookingForm.controls.datetime.errors" class="invalid-feedback">
+          <div *ngIf="addBookingForm.controls.datetime.errors.required">Date Time is required</div>
         </div>
       </div>
 
@@ -52,14 +52,14 @@
 
         <select class="form-control form-input"
                 formControlName="activity"
-                [ngClass]="{ 'is-invalid': submitted && f.activity.errors }" size="1">
-          <option *ngFor="let activity of activities"
+                [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.activity.errors }" size="1">
+          <option *ngFor="let activity of activitySkus"
                   [ngValue]="activity">
             {{activity.name}}
           </option>
         </select>
-        <div *ngIf="submitted && f.activityInput.errors" class="invalid-feedback">
-          <div *ngIf="f.activityInput.errors.required">First name is required</div>
+        <div *ngIf="submitted && addBookingForm.controls.activity.errors" class="invalid-feedback">
+          <div *ngIf="addBookingForm.controls.activity.errors.required">Activity is required</div>
         </div>
       </div>
 
@@ -79,25 +79,26 @@
                (click)="click$.next($event.target.value)"
                #instance="ngbTypeahead"
                formControlName="customer"
-               [ngClass]="{ 'is-invalid': submitted && f.customer.errors }" />
+               [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.customer.errors }"
+               (keypress)="searchCustomer($event)"/>
 
-        <button (click)="searchCustomer()" class="btn btn-primary"><i class="fa fa-search right"></i></button>
+        <button (click)="searchCustomer()" type="button"  class="btn btn-primary"><i class="fa fa-search right"></i></button>
 
-        <div *ngIf="submitted && f.customer.errors" class="invalid-feedback">
-          <div *ngIf="f.customer.errors.required">Customer is required</div>
+        <div *ngIf="submitted && addBookingForm.controls.customer.errors" class="invalid-feedback">
+          <div *ngIf="addBookingForm.controls.customer.errors.required">Customer is required</div>
         </div>
       </div>
       <div class="form-group" [formGroup]="addBookingForm">
-        <label class="input-label" for="numPersons">People</label>
-        <input class="form-control form-input" formControlName="numPersons" type="text" [ngClass]="{ 'is-invalid': submitted && f.numPersons.errors }" />
-        <div *ngIf="submitted && f.numPersons.errors" class="invalid-feedback">
-          <div *ngIf="f.numPersons.errors.required">First name is required</div>
+        <label class="input-label" for="numPersons">Persons</label>
+        <input class="form-control form-input" formControlName="numPersons" type="text" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.numPersons.errors }" />
+        <div *ngIf="submitted && addBookingForm.controls.numPersons.errors" class="invalid-feedback">
+          <div *ngIf="addBookingForm.controls.numPersons.errors.required">Persons is required</div>
         </div>
       </div>
 
       <div [formGroup]="addBookingForm">
-        <button class="btn btn-primary" (click)="cancelClick()">Cancel</button>
-        <button [disabled]="loading" class="btn btn-primary right">Add</button>
+        <button class="btn btn-primary" type="button" (click)="cancelClick()">Cancel</button>
+        <button [disabled]="loading" type="submit" class="btn btn-primary right">Add</button>
         <img *ngIf="loading" class="right" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
       </div>
     </form>

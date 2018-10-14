@@ -28,7 +28,7 @@ export class CustomerService {
     return this.http.post('api/customer/booking/historic', booking);
   }
   addCustomerBooking(booking: CustomerBooking) {
-    return this.http.post('api/customer/booking', booking);
+    return this.http.post<number>('api/customer/booking', booking);
   }
   getCustomerBookings(customerId: number) {
     return this.http.get('api/customer/' + customerId +'booking/');

@@ -13,6 +13,8 @@ import { Activity } from '../viewModels/activity';
 import { Observable, merge, Subject } from 'rxjs';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { ActivitySku } from '../viewModels/activitySku';
+import { ActivitySkuDate } from '../models/activitySkuDate';
+import { CustomerBooking } from '../viewModels/customerBooking';
 
 
 @Component({
@@ -28,9 +30,11 @@ export class BookingsComponent implements OnInit {
   thisObj = this;
   addBooking: (date: Date) => void;
   addDate: (date: Date) => void;
+  submitted = false;
   addingBooking: boolean;
   addingDate: boolean;
   addBookingForm: FormGroup;
+  addDateForm: FormGroup;
   selectedActivity: string;
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -69,15 +73,89 @@ export class BookingsComponent implements OnInit {
       thisObj.addingDate = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
-      thisObj.addBookingForm.get('datetime').setValue(date.toISOString().slice(0, -1));
+      thisObj.addDateForm.get('datetime').setValue(date.toISOString().slice(0, -1));
     };
   }
 
   onSubmit() {
-    var activity = this.addBookingForm.get('activity').value;
-    var customer = this.addBookingForm.get('customer').value;
+    this.submitted = true;
+    if (this.addingBooking) {
+      
+      if (this.addBookingForm.invalid) {
+        return;
+      }
+      var activity = this.addBookingForm.get('activity').value as ActivitySku;
+      var customer = this.addBookingForm.get('customer').value as Customer;
+      var date = new Date(this.addBookingForm.get('datetime').value as string);
+      var numPersons = this.addBookingForm.get('numPersons').value as number;
+      this.customerService
+        .addCustomerBooking(new CustomerBooking(activity.name, date, customer.model.email, numPersons))
+        .pipe(first())
+        .subscribe(
+          id => {
+            var activityDate = new ActivityDate({
+              numPersons : numPersons,
+              startDateTime : date,
+              activityId : activity.activityId,
+              activitySkuId : activity.id,
+              activityName : activity.activityName,
+              activitySkuName : activity.name,
+              totalPrice : activity.pricePerPerson * numPersons,
+              endDateTime : new Date(date.getTime() + (1000 * 60 * 60 * 24) * activity.durationDays + (1000 * 60 * 60) * activity.durationHours),
+              amountPaid : 0,
+              deleted : false,
+              activitySkuDateId : 1
+            });
+            this.activityDates.push(activityDate);
+            this.refreshActivities();      
+            this.addingBooking = false;
+            this.addBookingForm.clearValidators();
+            this.addBookingForm.reset();
+            this.submitted = false;
+          },
+          error => {
+          });
+    }
+    else {
+      if (this.addDateForm.invalid) {
+        return;
+      }
+      var activity = this.addDateForm.get('activity').value as ActivitySku;
+      var date = new Date(this.addDateForm.get('datetime').value as string);
+      this.activityService.addDate(new ActivitySkuDate(activity.activityName, activity.name, date)).pipe(first())
+        .subscribe(
+          id => {
+            var activityDate = new ActivityDate({
+              numPersons: 0,
+              startDateTime: date,
+              activityId: activity.activityId,
+              activitySkuId: activity.id,
+              activityName: activity.activityName,
+              activitySkuName: activity.name,
+              totalPrice:0,
+              endDateTime: new Date(date.getTime() + (1000 * 60 * 60 * 24) * activity.durationDays + (1000 * 60 * 60) * activity.durationHours),
+              amountPaid: 0,
+              deleted: false,
+              activitySkuDateId: id
+            });
+            this.activityDates.push(activityDate);
+            this.refreshActivities();
+            this.addingDate = false;
+            this.addDateForm.clearValidators();
+            this.addDateForm.reset();
+            this.submitted = false;
+          },
+          error => {
+          });
+    }
   }
-  searchCustomer() {
+  searchCustomer(event) {
+
+    if (event) {
+      if (event.key != 'Enter')
+        return;
+      event.preventDefault();
+    }
     var search = this.addBookingForm.get('customer').value;
     if (search && search.model && search.model.firstName) {
       this.customerService.getMany(search.email).pipe(first()).subscribe(customers => {
@@ -97,6 +175,11 @@ export class BookingsComponent implements OnInit {
   cancelClick() {
     this.addingBooking = false;
     this.addingDate = false;
+    this.addBookingForm.clearValidators();
+    this.addBookingForm.reset();
+    this.addDateForm.clearValidators();
+    this.addDateForm.reset();
+    this.submitted = false;
   }
   ngOnInit() {
     this.addBookingForm = this.formBuilder.group({
@@ -105,10 +188,14 @@ export class BookingsComponent implements OnInit {
       numPersons: ['', Validators.required],
       datetime: ['', Validators.required]
     });
+    this.addDateForm = this.formBuilder.group({
+      activity: ['', Validators.required],     
+      datetime: ['', Validators.required]
+    });
     this.loadSchedule();
     this.loadActivities();
   }
- 
+
   inputFormatter = (x: any) => {
     if (x.formattedNameEmail) {
       return x.formattedNameEmail();

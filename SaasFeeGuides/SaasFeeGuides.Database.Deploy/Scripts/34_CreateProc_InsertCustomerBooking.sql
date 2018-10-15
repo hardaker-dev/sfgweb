@@ -52,6 +52,6 @@ BEGIN
 		[Modified]	)
 	VALUES (@customerId,@activitySkuDateId,@HasConfirmed,@HasPaid,0,@NumPersons,@PriceAgreed,GETUTCDATE(),GETUTCDATE())
 
-	SELECT CAST(SCOPE_IDENTITY() as INT)
+	SELECT CAST(SCOPE_IDENTITY() as INT),@activitySkuDateId
 
 END

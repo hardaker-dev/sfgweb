@@ -16,5 +16,6 @@ namespace SaasFeeGuides.ViewModels
         public double DurationHours { get; set; }
         public IList<Content> WebContent { get; set; }
         public int ActivityId { get; set; }
+        public int Id { get; set; }
     }
 }

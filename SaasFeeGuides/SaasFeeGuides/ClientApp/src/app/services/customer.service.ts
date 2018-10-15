@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { CustomerModel,Customer } from '../viewModels/customer';
 import { HistoricCustomerBooking } from '../viewModels/historicCustomerBooking';
 import { CustomerBooking } from '../viewModels/customerBooking';
+import { AddCustomerBookingResponse } from '../viewModels/addCustomerBookingResponse';
 
 @Injectable()
 export class CustomerService {
@@ -28,7 +29,7 @@ export class CustomerService {
     return this.http.post('api/customer/booking/historic', booking);
   }
   addCustomerBooking(booking: CustomerBooking) {
-    return this.http.post<number>('api/customer/booking', booking);
+    return this.http.post<AddCustomerBookingResponse>('api/customer/booking', booking);
   }
   getCustomerBookings(customerId: number) {
     return this.http.get('api/customer/' + customerId +'booking/');

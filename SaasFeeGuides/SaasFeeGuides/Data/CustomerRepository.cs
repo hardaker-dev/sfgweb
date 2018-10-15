@@ -13,7 +13,7 @@ namespace SaasFeeGuides.Data
     public interface ICustomerRepository
     {
         Task<int> UpsertCustomer(Customer customer);
-        Task<int> InsertCustomerBooking(CustomerBooking booking);
+        Task<(int customerBookingId, int activityDateId)> InsertCustomerBooking(CustomerBooking booking);
         Task<Customer> SelectCustomerByUserId(string userId);
         Task DeleteAccount(string userId);
         Task<IEnumerable<Customer>> SelectCustomers(string emailSearch, string firstNameSearch, string lastNameSearch);
@@ -25,7 +25,7 @@ namespace SaasFeeGuides.Data
         public CustomerRepository(string connectionString) : base(connectionString)
         {
         }
-        public async Task<int> InsertCustomerBooking(CustomerBooking booking)
+        public async Task<(int customerBookingId, int activityDateId)> InsertCustomerBooking(CustomerBooking booking)
         {
             using (var cn = await GetNewConnectionAsync())
             {
@@ -41,8 +41,14 @@ namespace SaasFeeGuides.Data
                     command.CommandType = CommandType.StoredProcedure;
                    
                     command.CommandText = "[Activities].[InsertCustomerBooking]";
-                    var result = await command.ExecuteScalarAsync();
-                    return (int)result;
+                    return await ReadSingleValueAsync(command, (reader) =>
+
+                     {
+                         var customerBookingId = GetInt(reader, 0).Value;
+                         var activityDateId = GetInt(reader, 1).Value;
+
+                         return (customerBookingId, activityDateId);
+                     });
                     
                 }
             }

@@ -40,7 +40,11 @@ namespace SaasFeeGuides.Data
             var result = await ReadListAsync(command, readerFunc);
             return result.Count > 0 ? result[0] : null;
         }
-
+        protected async Task<T> ReadSingleValueAsync<T>(SqlCommand command, Func<SqlDataReader, T> readerFunc)
+        {
+            var result = await ReadListAsync(command, readerFunc);
+            return result.Count > 0 ? result[0] : default(T);
+        }
         private async Task<IList<T>> ReadListInternalAsync<T>(SqlCommand command, Func<SqlDataReader, T> readerFunc)
         {
             using (var reader = await command.ExecuteReaderAsync())

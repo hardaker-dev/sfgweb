@@ -53,6 +53,10 @@ export class ActivityDate implements CalendarEvent {
         });
     }
   }
+
+  delete() {
+    this._onDeleted.dispatch(this, null);
+  }
   
 }
 

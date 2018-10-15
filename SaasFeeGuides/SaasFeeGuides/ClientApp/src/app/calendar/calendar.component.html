@@ -4,12 +4,25 @@
                  [(viewDate)]="viewDate">
 </calendar-header>
 
-<context-menu #menu>
-  <ng-template contextMenuItem (execute)="addBooking($event.item)">  
-      Add booking
+<context-menu #emptyMenu>
+  <ng-template contextMenuItem (execute)="addBooking($event.item)">
+    Add booking
   </ng-template>
-  <ng-template contextMenuItem (execute)="addDate($event.item)">  
-      Add date
+  <ng-template contextMenuItem (execute)="addDate($event.item)">
+    Add date
+  </ng-template>
+</context-menu>
+
+
+<context-menu #bookingMenu>
+  <ng-template contextMenuItem (execute)="viewEditBooking($event.item)">
+    View/Edit
+  </ng-template>
+  <ng-template contextMenuItem (execute)="appendBooking($event.item)">
+    Add booking
+  </ng-template>
+  <ng-template [enabled]="item" contextMenuItem (execute)="deleteBooking($event.item)">
+    Delete
   </ng-template>
 </context-menu>
 
@@ -22,7 +35,7 @@
          [class.cal-future]="day.isFuture"
          [class.cal-weekend]="day.isWeekend"
          (click)="dayHeaderClicked.emit({day: day})"
-         [contextMenu]="menu"
+         [contextMenu]="emptyMenu"
          [contextMenuSubject]="day.date">
       <b>{{ day.date | calendarDate:'weekViewColumnHeader':locale }}</b><br>
       <span>{{ day.date | calendarDate:'weekViewColumnSubHeader':locale }}</span>
@@ -39,9 +52,8 @@
        [style.height.px]="segmentHeight"
        [class.cal-hour-start]="segment.isStart"
        [class.cal-after-hour-start]="!segment.isStart"
-        [contextMenu]="menu"
-        [contextMenuSubject]="segment.date"
-      >
+       [contextMenu]="emptyMenu"
+       [contextMenuSubject]="segment.date">
     <div class="cal-time" *ngIf="isTimeLabel">
       {{ segment.date | calendarDate:'weekViewHour':locale }}
     </div>
@@ -57,6 +69,34 @@
       }">
 </ng-template>
 
+<ng-template #eventTemplate
+             let-weekEvent="weekEvent"
+             let-tooltipPlacement="tooltipPlacement"
+             let-eventClicked="eventClicked"
+             let-tooltipTemplate="tooltipTemplate"
+             let-tooltipAppendToBody="tooltipAppendToBody"
+             let-tooltipDisabled="tooltipDisabled">
+  <div class="cal-event"
+       [style.backgroundColor]="weekEvent.event.color?.secondary"
+       [style.borderColor]="weekEvent.event.color?.primary"
+       [mwlCalendarTooltip]="!tooltipDisabled ? (weekEvent.event.title | calendarEventTitle:'weekTooltip':weekEvent.event) : ''"
+       [tooltipPlacement]="tooltipPlacement"
+       [tooltipEvent]="weekEvent.event"
+       [tooltipTemplate]="tooltipTemplate"
+       [tooltipAppendToBody]="tooltipAppendToBody"
+       (mwlClick)="eventClicked.emit()"
+       [contextMenu]="bookingMenu"
+         [contextMenuSubject]="weekEvent.event">
+    &ngsp;
+    <div>
+      {{weekEvent.event.model.activitySkuName}}
+    </div>
+    <div>
+      Persons: {{weekEvent.event.model.numPersons}}
+    </div>
+  </div>
+</ng-template>
+
 <div [ngSwitch]="view">
   <mwl-calendar-week-view *ngSwitchCase="'week'"
                           [viewDate]="viewDate"
@@ -65,9 +105,10 @@
                           (eventTimesChanged)="eventTimesChanged($event)"
                           [dayStartHour]="7"
                           [dayEndHour]="22"
-                          (dayHeaderClicked)="viewDate = $event.day.date"
+                          (eventClicked)="eventClicked($event)"
                           [headerTemplate]="weekHeaderTemplate"
-                          [hourSegmentTemplate]="hourSegmentTemplate">
+                          [hourSegmentTemplate]="hourSegmentTemplate"
+                          [eventTemplate]="eventTemplate">
     >
   </mwl-calendar-week-view>
 </div>

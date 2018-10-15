@@ -58,6 +58,7 @@
     <None Remove="ClientApp\src\app\viewModels\activity.ts" />
     <None Remove="ClientApp\src\app\viewModels\activityDate.ts" />
     <None Remove="ClientApp\src\app\viewModels\activitySku.ts" />
+    <None Remove="ClientApp\src\app\viewModels\addCustomerBookingResponse.ts" />
     <None Remove="ClientApp\src\app\viewModels\content.ts" />
     <None Remove="ClientApp\src\app\viewModels\customer.ts" />
     <None Remove="ClientApp\src\app\viewModels\customerBooking.ts" />
@@ -106,6 +107,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\models\activitySkuDate.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\content.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activity.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\addCustomerBookingResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\customerBooking.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\customer.ts" />

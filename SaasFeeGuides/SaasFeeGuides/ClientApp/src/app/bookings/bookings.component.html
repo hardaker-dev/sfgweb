@@ -104,5 +104,11 @@
     </form>
   </div>
 
-  <mwl-demo-component [events]="activityDates" [addBooking]="addBooking" [addDate]="addDate"></mwl-demo-component>
+  <mwl-demo-component [events]="activityDates"
+                      [addBooking]="addBooking"
+                      [appendBooking]="appendBooking"
+                      [deleteBooking]="deleteBooking"
+                      [viewEditBooking] ="viewEditBooking"
+                      [addDate]="addDate"
+                      [eventClicked]="bookingClicked"></mwl-demo-component>
 </div>

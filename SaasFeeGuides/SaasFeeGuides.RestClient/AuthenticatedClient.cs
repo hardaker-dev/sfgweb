@@ -90,7 +90,7 @@ namespace SaasFeeGuides.RestClient
 
         }
 
-        public async Task<int> AddHistoricCustomerBooking(HistoricCustomerBooking booking)
+        public async Task<(int customerBookingId, int activitySkuDateId)> AddHistoricCustomerBooking(HistoricCustomerBooking booking)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "customer","booking","historic")
@@ -100,10 +100,9 @@ namespace SaasFeeGuides.RestClient
             var post = request.PostJsonAsync(booking, DefaultClient);
             var response = await post;
 
-
-            return await post.ReceiveJsonAsync<int>();
-
+            return await post.ReceiveJsonAsync<(int,int)>();
         }
+
         public async Task<IEnumerable<CustomerBooking>> GetCustomerBookings(int customerId)
         {
             var request = _serviceUri.AsRestRequest()
@@ -113,12 +112,10 @@ namespace SaasFeeGuides.RestClient
 
             var get = request.GetAsync( DefaultClient);
             var response = await get;
-
-
             return await get.ReceiveJsonAsync<IEnumerable<CustomerBooking>>();
-
         }
-        public async Task<int> AddCustomerBooking(CustomerBooking customer)
+
+        public async Task<(int customerBookingId,int activitySkuDateId)> AddCustomerBooking(CustomerBooking customer)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "customer","booking")
@@ -129,7 +126,7 @@ namespace SaasFeeGuides.RestClient
             var response = await post;
 
 
-            return await post.ReceiveJsonAsync<int>();
+            return await post.ReceiveJsonAsync<(int customerBookingId, int activitySkuDateId)>();
 
         }
         public async Task<int> AddCustomer(Customer customer)

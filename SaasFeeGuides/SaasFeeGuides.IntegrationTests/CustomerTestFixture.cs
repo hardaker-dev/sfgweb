@@ -89,7 +89,7 @@ namespace SaasFeeGuides.IntegrationTests
             });
 
             Assert.True(customerId > 0);
-            Assert.True(customerBookingId > 0);
+            Assert.True(customerBookingId.customerBookingId > 0);
         }
     }
 }

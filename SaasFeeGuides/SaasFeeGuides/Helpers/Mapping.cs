@@ -144,7 +144,8 @@ namespace SaasFeeGuides.Helpers
                 MinPersons = sku.MinPersons,
                 PricePerPerson = sku.PricePerPerson,
                 WebContent = await webContent,
-                ActivityId = sku.ActivityId
+                ActivityId = sku.ActivityId,
+                Id = sku.Id.Value
             };
         }
         private static ViewModels.ActivitySkuLoc Map(this Models.ActivitySkuLoc s)

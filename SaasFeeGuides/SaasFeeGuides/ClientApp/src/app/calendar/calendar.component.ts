@@ -16,12 +16,18 @@ export class CalendarComponent {
   viewDate: Date = new Date(2018,12,31);
   
   vm = this;
+  @Input() public eventClicked: void;
   @Input() public addDate: void;
   @Input() public addBooking: void;
+  @Input() public deleteBooking: void;
+  @Input() public viewEditBooking: void;
+  @Input() public appendBooking: void;
   @Input() public events: CalendarEvent[];
 
  
   refresh: Subject<any> = new Subject();
+
+  
 
   eventTimesChanged({
     event,

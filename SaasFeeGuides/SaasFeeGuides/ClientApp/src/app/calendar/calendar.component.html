@@ -14,17 +14,7 @@
 </context-menu>
 
 
-<context-menu #bookingMenu>
-  <ng-template contextMenuItem (execute)="viewEditBooking($event.item)">
-    View/Edit
-  </ng-template>
-  <ng-template contextMenuItem (execute)="appendBooking($event.item)">
-    Add booking
-  </ng-template>
-  <ng-template [enabled]="item" contextMenuItem (execute)="deleteBooking($event.item)">
-    Delete
-  </ng-template>
-</context-menu>
+
 
 <ng-template #weekHeaderTemplate let-days="days" let-locale="locale" let-dayHeaderClicked="dayHeaderClicked">
   <div class="cal-day-headers">
@@ -69,6 +59,9 @@
       }">
 </ng-template>
 
+
+
+
 <ng-template #eventTemplate
              let-weekEvent="weekEvent"
              let-tooltipPlacement="tooltipPlacement"
@@ -76,25 +69,38 @@
              let-tooltipTemplate="tooltipTemplate"
              let-tooltipAppendToBody="tooltipAppendToBody"
              let-tooltipDisabled="tooltipDisabled">
-  <div class="cal-event"
-       [style.backgroundColor]="weekEvent.event.color?.secondary"
-       [style.borderColor]="weekEvent.event.color?.primary"
-       [mwlCalendarTooltip]="!tooltipDisabled ? (weekEvent.event.title | calendarEventTitle:'weekTooltip':weekEvent.event) : ''"
-       [tooltipPlacement]="tooltipPlacement"
-       [tooltipEvent]="weekEvent.event"
-       [tooltipTemplate]="tooltipTemplate"
-       [tooltipAppendToBody]="tooltipAppendToBody"
-       (mwlClick)="eventClicked.emit()"
-       [contextMenu]="bookingMenu"
+  <ng-container>
+    <div class="cal-event"
+         [style.backgroundColor]="weekEvent.event.color?.secondary"
+         [style.borderColor]="weekEvent.event.color?.primary"
+         [mwlCalendarTooltip]="!tooltipDisabled ? (weekEvent.event.title | calendarEventTitle:'weekTooltip':weekEvent.event) : ''"
+         [tooltipPlacement]="tooltipPlacement"
+         [tooltipEvent]="weekEvent.event"
+         [tooltipTemplate]="tooltipTemplate"
+         [tooltipAppendToBody]="tooltipAppendToBody"
+         (mwlClick)="eventClicked.emit()"
+         [contextMenu]="bookingMenu"
          [contextMenuSubject]="weekEvent.event">
-    &ngsp;
-    <div>
-      {{weekEvent.event.model.activitySkuName}}
+      &ngsp;
+      <div>
+        {{weekEvent.event.model.activitySkuName}}
+      </div>
+      <div>
+        Persons: {{weekEvent.event.model.numPersons}}
+      </div>
     </div>
-    <div>
-      Persons: {{weekEvent.event.model.numPersons}}
-    </div>
-  </div>
+    <context-menu #bookingMenu>
+      <ng-template contextMenuItem (execute)="viewEditBooking($event.item)">
+        View/Edit
+      </ng-template>
+      <ng-template contextMenuItem (execute)="appendBooking($event.item)">
+        Add booking
+      </ng-template>
+      <ng-template [enabled]="weekEvent.event.model.numPersons==0" contextMenuItem (execute)="deleteBooking($event.item)">
+        Delete
+      </ng-template>
+    </context-menu>
+  </ng-container>
 </ng-template>
 
 <div [ngSwitch]="view">

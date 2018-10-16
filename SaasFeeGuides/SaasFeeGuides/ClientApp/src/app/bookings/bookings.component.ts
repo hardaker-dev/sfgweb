@@ -119,12 +119,14 @@ export class BookingsComponent implements OnInit {
                 activitySkuId: activitySku.id,
                 activityName: activitySku.activityName,
                 activitySkuName: activitySku.name,
-                totalPrice: activity.pricePerPerson * numPersons,
+                totalPrice: activitySku.pricePerPerson * numPersons,
                 endDateTime: new Date(date.getTime() + (1000 * 60 * 60 * 24) * activitySku.durationDays + (1000 * 60 * 60) * activitySku.durationHours),
                 amountPaid: 0,
                 deleted: false,
                 activitySkuDateId: response.activitySkuDateId
               });
+
+              this.hookEvents(activityDate);
               this.activityDates.push(activityDate);
             }
             else {
@@ -163,6 +165,7 @@ export class BookingsComponent implements OnInit {
               deleted: false,
               activitySkuDateId: id
             });
+            this.hookEvents(activityDate);
             this.activityDates.push(activityDate);
             this.refreshActivities();
             this.addingDate = false;

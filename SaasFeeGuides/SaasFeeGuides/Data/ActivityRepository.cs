@@ -110,7 +110,7 @@ namespace SaasFeeGuides.Data
                 ActivityId = GetInt(reader, 2).Value,
                 ActivityName = GetString(reader, 3),
                 ActivitySkuName = GetString(reader, 4),
-                StartDateTime = GetDateTime(reader, 5).Value,
+                StartDateTime = GetDateTime(reader, 5).Value.ToUniversalTime(),
                 EndDateTime = GetDateTime(reader, 6).Value,
                 NumPersons = GetInt(reader,7) ?? 0,
                 TotalPrice = GetDouble(reader, 8) ?? 0,
@@ -353,9 +353,7 @@ namespace SaasFeeGuides.Data
                     using (var command = cn.CreateCommand())
                     {
                         command.Parameters.AddWithValue("@activitySkuDateId", activitySkuDateId);
-
                         command.CommandType = CommandType.StoredProcedure;
-
                         command.CommandText = "[Activities].[DeleteActivitySkuDate]";
 
                         await command.ExecuteNonQueryAsync();

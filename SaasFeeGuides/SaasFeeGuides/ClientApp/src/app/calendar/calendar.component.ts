@@ -13,7 +13,7 @@ import {
 export class CalendarComponent {
   view: string = 'week';
 
-  viewDate: Date = new Date(2018,12,31);
+  viewDate: Date = new Date();
   
   vm = this;
   @Input() public eventClicked: void;

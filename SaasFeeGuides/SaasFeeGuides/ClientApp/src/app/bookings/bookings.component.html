@@ -7,7 +7,7 @@
     <form [formGroup]="addDateForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [formGroup]="addDateForm">
         <label class="input-label" for="datetime">Date Time</label>
-        <input class="form-control form-input" formControlName="datetime" type="datetime-local" [ngClass]="{ 'is-invalid': submitted && addDateForm.controls.datetime.errors }" />
+        <input class="form-control form-input" formControlName="datetime" type="datetime-local"  [ngClass]="{ 'is-invalid': submitted && addDateForm.controls.datetime.errors }"/>
         <div *ngIf="submitted && addDateForm.controls.datetime.errors" class="invalid-feedback">
           <div *ngIf="addDateForm.controls.datetime.errors.required">Date Time is required</div>
         </div>
@@ -41,7 +41,7 @@
     <form [formGroup]="addBookingForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="datetime">Date Time</label>
-        <input class="form-control form-input" formControlName="datetime" type="datetime-local" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.datetime.errors }" />
+        <input class="form-control form-input" formControlName="datetime"  type="datetime-local" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.datetime.errors }" />
         <div *ngIf="submitted && addBookingForm.controls.datetime.errors" class="invalid-feedback">
           <div *ngIf="addBookingForm.controls.datetime.errors.required">Date Time is required</div>
         </div>

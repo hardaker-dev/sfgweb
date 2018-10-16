@@ -77,18 +77,36 @@ export class BookingsComponent implements OnInit {
       dateTimeField.setValue(activityDate.model.startDateTime);
       dateTimeField.disable();
     };
+    
     this.addBooking = (date) => {
       thisObj.addingBooking = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
-      thisObj.addBookingForm.get('datetime').setValue(date.toISOString().slice(0, -1));
-    };
+      this.enableField('activity', thisObj.addBookingForm);
+      this.enableField('datetime', thisObj.addBookingForm);
+      
+      thisObj.addBookingForm.get('datetime').setValue(this.getLocalISOTime(date));
+     };
     this.addDate = (date) => {
       thisObj.addingDate = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
-      thisObj.addDateForm.get('datetime').setValue(date.toISOString().slice(0, -1));
+      this.enableField('activity', thisObj.addBookingForm);
+      this.enableField('datetime', thisObj.addBookingForm);
+      thisObj.addDateForm.get('datetime').setValue(this.getLocalISOTime(date));
     };
+  }
+  enableField(name, form: FormGroup) {
+    form.get(name).enable();
+  }
+
+  disableField(name, form: FormGroup) {
+    form.get(name).disable();
+  }
+  getLocalISOTime(date) {
+    var tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
+    var localISOTime = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, -1);
+    return localISOTime;
   }
   deleteBooking(date: ActivityDate) {
     date.delete();

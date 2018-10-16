@@ -12,6 +12,9 @@
   z-index:100;
 }
 
+.pointer {
+  cursor:pointer;
+}
 .invalid-feedback {
   color: red;
 }

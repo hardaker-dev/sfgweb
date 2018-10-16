@@ -9,3 +9,11 @@
   height:35px;
 }
 
+.form-input-checkbox {
+  display: inline-block;
+  width: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+  height: 30px;
+}
+

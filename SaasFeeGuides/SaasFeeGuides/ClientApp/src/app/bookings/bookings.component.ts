@@ -74,7 +74,7 @@ export class BookingsComponent implements OnInit {
 
       activitySkuField.setValue(thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId));
       activitySkuField.disable();
-      dateTimeField.setValue(activityDate.model.startDateTime);
+      dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
       dateTimeField.disable();
     };
     
@@ -119,13 +119,13 @@ export class BookingsComponent implements OnInit {
         return;
       }
       var activitySku = this.addBookingForm.get('activity').value as ActivitySku;
- 
-    
       var customer = this.addBookingForm.get('customer').value as Customer;
       var date = new Date(this.addBookingForm.get('datetime').value as string);
       var numPersons = +this.addBookingForm.get('numPersons').value as number;
+      var confirmed = this.addBookingForm.get('confirmed').value as boolean;
+      var paid = this.addBookingForm.get('paid').value as boolean;
       this.customerService
-        .addCustomerBooking(new CustomerBooking(activitySku.name, date, customer.model.email, numPersons))
+        .addCustomerBooking(new CustomerBooking(activitySku.name, date, customer.model.email, numPersons,paid,confirmed))
         .pipe(first())
         .subscribe(
           response => {
@@ -235,7 +235,9 @@ export class BookingsComponent implements OnInit {
       activity: ['', Validators.required],
       customer: ['', Validators.required],
       numPersons: ['', Validators.required],
-      datetime: ['', Validators.required]
+      datetime: ['', Validators.required],
+      confirmed: ['', Validators.required],
+      paid: ['', Validators.required]
     });
     this.addDateForm = this.formBuilder.group({
       activity: ['', Validators.required],     

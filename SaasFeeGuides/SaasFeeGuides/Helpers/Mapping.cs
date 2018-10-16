@@ -55,7 +55,9 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
                 DateTime = booking.DateTime,
-                NumPersons = booking.NumPersons
+                NumPersons = booking.NumPersons,
+                HasConfirmed = booking.HasConfirmed,
+                HasPaid = booking.HasPaid
             };
         }
 

@@ -4,6 +4,8 @@ export class CustomerBooking {
     public activitySkuName : string,
     public dateTime: Date,
     public customerEmail: string,     
-    public numPersons : number) { }
+    public numPersons: number,
+    public hasPaid: boolean,
+    public hasConfirmed: boolean) { }
 
 }

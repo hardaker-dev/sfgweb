@@ -41,7 +41,7 @@
     <form [formGroup]="addBookingForm" (ngSubmit)="onSubmit()">
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="datetime">Date Time</label>
-        <input class="form-control form-input" formControlName="datetime"  type="datetime-local" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.datetime.errors }" />
+        <input class="form-control form-input" formControlName="datetime" type="datetime-local" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.datetime.errors }" />
         <div *ngIf="submitted && addBookingForm.controls.datetime.errors" class="invalid-feedback">
           <div *ngIf="addBookingForm.controls.datetime.errors.required">Date Time is required</div>
         </div>
@@ -66,7 +66,6 @@
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="customer">Customer</label>
 
-        <!--[resultFormatter]="searchFormatter"-->
         <input id="customer"
                type="text"
                class="form-control form-input"
@@ -80,9 +79,9 @@
                #instance="ngbTypeahead"
                formControlName="customer"
                [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.customer.errors }"
-               (keypress)="searchCustomer($event)"/>
+               (keypress)="searchCustomer($event)" />
 
-        <button (click)="searchCustomer()" type="button"  class="btn btn-primary"><i class="fa fa-search right"></i></button>
+        <button (click)="searchCustomer()" type="button" class="btn btn-primary"><i class="fa fa-search right"></i></button>
 
         <div *ngIf="submitted && addBookingForm.controls.customer.errors" class="invalid-feedback">
           <div *ngIf="addBookingForm.controls.customer.errors.required">Customer is required</div>
@@ -96,6 +95,14 @@
         </div>
       </div>
 
+      <div class="form-group" [formGroup]="addBookingForm">
+        <label class="input-label" for="confirmed">Confirmed</label>
+        <input class="form-control form-input-checkbox " formControlName="confirmed" type="checkbox" />
+      </div>
+      <div class="form-group" [formGroup]="addBookingForm">
+        <label class="input-label" for="paid">Paid</label>
+        <input class="form-control form-input-checkbox" formControlName="paid" type="checkbox" />
+      </div>
       <div [formGroup]="addBookingForm">
         <button class="btn btn-primary" type="button" (click)="cancelClick()">Cancel</button>
         <button [disabled]="loading" type="submit" class="btn btn-primary right">Add</button>

@@ -162,7 +162,7 @@
                           (eventTimesChanged)="eventTimesChanged($event)"
                           [dayStartHour]="7"
                           [dayEndHour]="22"
-                          (eventClicked)="eventClicked($event)"
+                          (eventClicked)="eventClicked($event.event)"
                           [headerTemplate]="weekHeaderTemplate"
                           (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"
                           [hourSegmentTemplate]="hourSegmentTemplate"
@@ -175,6 +175,7 @@
                          [refresh]="refresh"
                          [dayStartHour]="7"
                          [dayEndHour]="22"
+                           (eventClicked)="eventClicked($event.event)"
                          (eventTimesChanged)="eventTimesChanged($event)"
                          [hourSegmentTemplate]="dayHourSegmentTemplate"
                          [eventTemplate]="dayEventTemplate">

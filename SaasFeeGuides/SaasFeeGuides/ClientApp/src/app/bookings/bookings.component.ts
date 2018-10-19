@@ -30,6 +30,7 @@ export class BookingsComponent implements OnInit {
   activitySkus: ActivitySku[] = [];
   customers: Customer[] = [];
   thisObj = this;
+  bookingClicked: (date: ActivityDate) => void;
   appendBooking: (date: ActivityDate) => void;
   refresh: Subject<any> = new Subject();
   addBooking: (date: Date) => void;
@@ -37,8 +38,10 @@ export class BookingsComponent implements OnInit {
   submitted = false;
   addingBooking: boolean;
   addingDate: boolean;
+  viewingEditDate: boolean;
   addBookingForm: FormGroup;
   addDateForm: FormGroup;
+  viewEditDateForm: FormGroup;
   selectedActivity: string;
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -67,6 +70,17 @@ export class BookingsComponent implements OnInit {
 
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
     var thisObj = this;
+    this.bookingClicked = (activityDate: ActivityDate) => {
+      thisObj.viewEditActivityDate = activityDate;
+      thisObj.viewingEditDate = true;
+      var dateTimeField = thisObj.viewEditDateForm.get('datetime');
+      var activitySkuField = thisObj.viewEditDateForm.get('activity');
+
+      activitySkuField.setValue(thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId));
+      activitySkuField.disable();
+      dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
+      dateTimeField.disable();
+    };
     this.appendBooking = (activityDate: ActivityDate) => {
       thisObj.viewEditActivityDate = activityDate;
       thisObj.addingBooking = true;
@@ -115,7 +129,7 @@ export class BookingsComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     if (this.addingBooking) {
-      
+
       if (this.addBookingForm.invalid) {
         return;
       }
@@ -126,7 +140,7 @@ export class BookingsComponent implements OnInit {
       var confirmed = this.addBookingForm.get('confirmed').value as boolean;
       var paid = this.addBookingForm.get('paid').value as boolean;
       this.customerService
-        .addCustomerBooking(new CustomerBooking(activitySku.name, date, customer.model.email, numPersons,paid,confirmed))
+        .addCustomerBooking(new CustomerBooking(activitySku.name, date, customer.model.email, numPersons, paid, confirmed))
         .pipe(first())
         .subscribe(
           response => {
@@ -162,6 +176,9 @@ export class BookingsComponent implements OnInit {
           },
           error => {
           });
+    }
+    else if (this.viewingEditDate) {
+      this.viewingEditDate = false;
     }
     else {
       if (this.addDateForm.invalid) {
@@ -221,12 +238,13 @@ export class BookingsComponent implements OnInit {
       });
     }
   }
-  bookingClicked(event) {
-
-  }
+ 
   cancelClick() {
+    this.viewingEditDate = false; 
     this.addingBooking = false;
     this.addingDate = false;
+    this.viewEditDateForm.clearValidators();
+    this.viewEditDateForm.reset();
     this.addBookingForm.clearValidators();
     this.addBookingForm.reset();
     this.addDateForm.clearValidators();
@@ -244,6 +262,10 @@ export class BookingsComponent implements OnInit {
     });
     this.addDateForm = this.formBuilder.group({
       activity: ['', Validators.required],     
+      datetime: ['', Validators.required]
+    });
+    this.viewEditDateForm = this.formBuilder.group({
+      activity: ['', Validators.required],
       datetime: ['', Validators.required]
     });
     this.loadSchedule();

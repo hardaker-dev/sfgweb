@@ -50,7 +50,6 @@ namespace SaasFeeGuides.Controllers
         [HttpGet("dates")]
         public async Task<IActionResult> GetAllActivityDates(DateTime? dateFrom, DateTime? dateTo)
         {
-
             var activityDates = await _activityRepository.SelectActivityDates(new int[0],dateFrom,dateTo);
             if (User.HasPolicy("Admin"))
             {
@@ -62,7 +61,6 @@ namespace SaasFeeGuides.Controllers
         [HttpGet("sku/{activitySkuId:int}")]
         public async Task<IActionResult> GetActivitySku(int activitySkuId,string locale)
         {
-
             var activitySku = await _activityRepository.SelectActivitySku(activitySkuId, locale ?? "en");
 
             return new OkObjectResult(activitySku);
@@ -70,7 +68,7 @@ namespace SaasFeeGuides.Controllers
 
         [Authorize("Admin")]
         [HttpPost("sku/date")]
-        public async Task<IActionResult> AddActivitySkuDate(ViewModels.ActivitySkuDate activitySkuDate)
+        public async Task<IActionResult> AddActivitySkuDate(ViewModels.NewActivitySkuDate activitySkuDate)
         {
             var id = await _activityRepository.InsertActivitySkuDate(activitySkuDate);
 
@@ -86,9 +84,7 @@ namespace SaasFeeGuides.Controllers
             var id = await _activityRepository.UpsertActivitySku(activitySkuModel);
 
             return new OkObjectResult(id);
-        }
-
-       
+        }       
 
         [Authorize("Admin")]
         [HttpPost]
@@ -134,6 +130,16 @@ namespace SaasFeeGuides.Controllers
             await UpsertSkus(activity.Skus);
 
             return new OkObjectResult(activityId);
+        }
+
+        [Authorize("Admin")]
+        [HttpPatch("sku/date")]
+        public async Task<IActionResult> UpdateActivitySkuDate(ViewModels.ActivitySkuDate activitySkuDate)
+        {
+            await _activityRepository.UpdateActivitySkuDate(activitySkuDate);
+           
+
+            return new OkResult();
         }
         [Authorize("Admin")]
         [HttpGet("{activityId:int}/edit")]

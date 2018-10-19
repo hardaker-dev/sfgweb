@@ -2,8 +2,21 @@ import { Component, ChangeDetectionStrategy,Input } from '@angular/core';
 import { Subject } from 'rxjs';
 import {
   CalendarEvent,
-  CalendarEventTimesChangedEvent
+  CalendarEventTimesChangedEvent,
+
+  CalendarEventTimesChangedEventType
 } from 'angular-calendar';
+import { CalendarEventExt } from './calendarEventExt';
+
+
+export interface CalendarEventTimesChangedEventExt<MetaType = any> {
+  type: CalendarEventTimesChangedEventType;
+  event: CalendarEventExt<MetaType>;
+  newStart: Date;
+  newEnd?: Date;
+  allDay?: boolean;
+}
+
 
 @Component({
   selector: 'mwl-demo-component',
@@ -22,10 +35,10 @@ export class CalendarComponent {
   @Input() public deleteBooking: void;
   @Input() public viewEditBooking: void;
   @Input() public appendBooking: void;
-  @Input() public events: CalendarEvent[];
+  @Input() public events: CalendarEventExt[];
 
  
-  refresh: Subject<any> = new Subject();
+  @Input()  public refresh: Subject<any> = new Subject();
 
   
 
@@ -33,9 +46,10 @@ export class CalendarComponent {
     event,
     newStart,
     newEnd
-  }: CalendarEventTimesChangedEvent): void {
+  }: CalendarEventTimesChangedEventExt): void {
     event.start = newStart;
     event.end = newEnd;
+    event.notifyTimeChanged();
     this.refresh.next();
   }
 }

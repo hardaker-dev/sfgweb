@@ -2,6 +2,7 @@ import { CalendarEvent, EventColor, EventAction } from 'calendar-utils';
 
 import { colors } from '../utils/colors';
 import { EventDispatcher } from "strongly-typed-events";
+import { CalendarEventExt } from '../calendar/calendarEventExt';
 
 export interface ActivityDateModel  {
   activitySkuDateId: number;
@@ -16,7 +17,7 @@ export interface ActivityDateModel  {
   totalPrice: number;
   deleted?: boolean;
 }
-export class ActivityDate implements CalendarEvent {
+export class ActivityDate implements CalendarEventExt {
     id?: string | number;
     start: Date;
     end?: Date;
@@ -33,7 +34,10 @@ export class ActivityDate implements CalendarEvent {
   get onDeleted() {
     return this._onDeleted.asEvent();
   }
-
+  private _onTimeChanged = new EventDispatcher<ActivityDate, void>();
+  get onTimeChanged() {
+    return this._onTimeChanged.asEvent();
+  }
   constructor(public model: ActivityDateModel) {
 
     this.color = colors.blue;
@@ -53,7 +57,11 @@ export class ActivityDate implements CalendarEvent {
         });
     }
   }
-
+  notifyTimeChanged() {
+    this.model.startDateTime = this.start;
+    this.model.endDateTime = this.end;
+    this._onTimeChanged.dispatch(this, null);
+  }
   delete() {
     this._onDeleted.dispatch(this, null);
   }

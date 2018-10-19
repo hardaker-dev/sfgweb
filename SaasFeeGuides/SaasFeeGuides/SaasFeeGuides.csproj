@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
+    <None Remove="ClientApp\src\app\models\activitySkuDate.ts" />
     <None Remove="ClientApp\src\app\viewModels\account.ts" />
     <None Remove="ClientApp\src\app\viewModels\activity.ts" />
     <None Remove="ClientApp\src\app\viewModels\activityDate.ts" />
@@ -102,9 +103,10 @@
     <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\models\activitySkuDate.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activitySku.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activityDate.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\models\activitySkuDate.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\newActivitySkuDate.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\content.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activity.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\addCustomerBookingResponse.ts" />

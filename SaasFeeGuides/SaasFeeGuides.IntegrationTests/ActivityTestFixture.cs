@@ -38,7 +38,7 @@ namespace SaasFeeGuides.IntegrationTests
 
             try
             {
-                var activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
+                var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "NotAllalin",
                     DateTime = new DateTime(2018, 9, 20)
@@ -61,14 +61,42 @@ namespace SaasFeeGuides.IntegrationTests
             await AddDates(authClient);
 
             {
-                var activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
+                var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "Allalin",
                     DateTime = new DateTime(2018, 9, 20,9,0,0)
                 });
             }
         }
+        [Fact]
+        public async Task UpdateActivitySkuDate()
+        {
+            var authClient = await AuthClient();
 
+            await AddActivitiesAndSkusIfNeeded(authClient);
+            await AddDates(authClient);
+            var activitiesGerman = await _client.GetActivitiesLoc("de");
+            var activity = await _client.GetActivityLoc(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id, "de");
+            await AddCustomerBookingsIfNeeded(authClient);
+
+            var activityDates = await _client.GetActivityDates(activity.Id, null, null);
+            var newDateTime = activityDates[0].StartDateTime.AddDays(1);
+            await authClient.UpdateActivitySkuDate(new ActivitySkuDate()
+            {
+                Id = activityDates[0].ActivitySkuDateId,
+                DateTime = newDateTime
+            });
+            //put it back
+
+            var activityDates2 = await _client.GetActivityDates(activity.Id, null, null);
+
+            Assert.Equal(activityDates2[0].StartDateTime, newDateTime);
+            await authClient.UpdateActivitySkuDate(new ActivitySkuDate()
+            {
+                Id = activityDates[0].ActivitySkuDateId,
+                DateTime = activityDates[0].StartDateTime
+            });
+        }
         [Fact]
         public async Task DeleteActivityDate()
         {
@@ -84,7 +112,7 @@ namespace SaasFeeGuides.IntegrationTests
 
             await authClient.DeleteActivitySkuDate(activityDates[0].ActivitySkuDateId);
             //put it back
-            var activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
+            var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
             {
                 ActivityName = activityDates[0].ActivityName,
                 DateTime = activityDates[0].StartDateTime
@@ -125,9 +153,9 @@ namespace SaasFeeGuides.IntegrationTests
             var activityDates = await _client.GetActivityDates(activity.Id,null,null);
 
             Assert.All(activityDates.Select(x=>x.StartDateTime).Distinct(), (d=> _dates.Contains(d)));
-            Assert.Equal(4, activityDates.Count);
+            Assert.Equal(5, activityDates.Count);
 
-            Assert.Equal(new DateTime(2018, 9, 20,13,0,0), activityDates.FirstOrDefault(x=>x.StartDateTime.Date ==  new DateTime(2018,09,20)).EndDateTime);
+            Assert.Equal(new DateTime(2018, 9, 20,11,0,0), activityDates.FirstOrDefault(x=>x.StartDateTime.Date ==  new DateTime(2018,09,20)).EndDateTime);
 
             var datesLimited = await authClient.GetActivityDates(activity.Skus[0].Id, _dates[0].AddDays(1), null);
 
@@ -267,13 +295,13 @@ namespace SaasFeeGuides.IntegrationTests
             
             foreach (var date in _dates)
             {
-                var activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
+                var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "Allalin",
                     DateTime = date
                 });
 
-                activitySkuDateId = await authClient.AddActivitySkuDate(new ActivitySkuDate()
+                activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "AllalinEast",
                     DateTime = date

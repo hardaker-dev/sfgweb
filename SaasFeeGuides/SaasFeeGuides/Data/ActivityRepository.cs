@@ -29,8 +29,9 @@ namespace SaasFeeGuides.Data
         Task<int> FindActivityByName(string name);
         Task<int> FindActivitySkuByName(string name);
 
-        Task<int> InsertActivitySkuDate(ActivitySkuDate activitySkuDate);
+        Task<int> InsertActivitySkuDate(NewActivitySkuDate activitySkuDate);
         Task DeleteActivitySkuDate(int activitySkuDateId);
+        Task UpdateActivitySkuDate(ActivitySkuDate activitySkuDate);
     }
     public class ActivityRepository : DataAccessBase, IActivityRepository
     {
@@ -92,8 +93,8 @@ namespace SaasFeeGuides.Data
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = "[Activities].[SelectActivityDates]";
                     command.Parameters.AddWithValue("@activityIds", string.Join(',', activityIds));
-                    command.Parameters.AddWithValue("@DateFrom",(object) dateFrom ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@DateTo", (object)dateTo ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DateFrom",(object) dateFrom?.ToUniversalTime() ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DateTo", (object)dateTo?.ToUniversalTime() ?? DBNull.Value);
 
                     return await ReadListAsync(command, ReadActivityDate);
 
@@ -110,7 +111,7 @@ namespace SaasFeeGuides.Data
                 ActivityId = GetInt(reader, 2).Value,
                 ActivityName = GetString(reader, 3),
                 ActivitySkuName = GetString(reader, 4),
-                StartDateTime = GetDateTime(reader, 5).Value.ToUniversalTime(),
+                StartDateTime = GetDateTime(reader, 5).Value,
                 EndDateTime = GetDateTime(reader, 6).Value,
                 NumPersons = GetInt(reader,7) ?? 0,
                 TotalPrice = GetDouble(reader, 8) ?? 0,
@@ -378,7 +379,26 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
-        public async Task<int> InsertActivitySkuDate(ActivitySkuDate activitySkuDate)
+
+        public async Task UpdateActivitySkuDate(ActivitySkuDate activitySkuDate)
+        {
+            using (var cn = await GetNewConnectionAsync())
+            {
+                using (var command = cn.CreateCommand())
+                {
+                    command.Parameters.AddWithValue("@ActivitySkuDateId", activitySkuDate.Id);
+                    command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime.ToUniversalTime());
+
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.CommandText = "[Activities].[UpdateActivitySkuDate]";
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+        public async Task<int> InsertActivitySkuDate(NewActivitySkuDate activitySkuDate)
         {
             try
             {
@@ -388,7 +408,7 @@ namespace SaasFeeGuides.Data
                     {
                         command.Parameters.AddWithValue("@ActivityName", activitySkuDate.ActivityName);
                         command.Parameters.AddWithValue("@ActivitySkuName", activitySkuDate.ActivitySkuName);
-                        command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime);
+                        command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime.ToUniversalTime());
 
                         command.CommandType = CommandType.StoredProcedure;
 

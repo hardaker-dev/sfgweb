@@ -17,8 +17,8 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuDateId = date.ActivitySkuDateId,
                 ActivitySkuId = date.ActivitySkuId,
                 ActivitySkuName = date.ActivitySkuName,
-                StartDateTime = date.StartDateTime,
-                EndDateTime = date.EndDateTime,
+                StartDateTime = date.StartDateTime.ToLocalTime(),
+                EndDateTime = date.EndDateTime.ToLocalTime(),
                 NumPersons = date.NumPersons
             };
         }
@@ -31,8 +31,8 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuDateId = date.ActivitySkuDateId,
                 ActivitySkuId = date.ActivitySkuId,
                 ActivitySkuName = date.ActivitySkuName,
-                StartDateTime = date.StartDateTime,
-                EndDateTime = date.EndDateTime,
+                StartDateTime = date.StartDateTime.ToLocalTime(),
+                EndDateTime = date.EndDateTime.ToLocalTime(),
                 AmountPaid = date.AmountPaid,
                 NumPersons = date.NumPersons,
                 TotalPrice = date.TotalPrice
@@ -44,7 +44,7 @@ namespace SaasFeeGuides.Helpers
             {
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
-                DateTime = booking.DateTime,
+                DateTime = booking.DateTime.ToLocalTime(),
                 NumPersons = booking.NumPersons
             };
         }

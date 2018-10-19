@@ -15,6 +15,7 @@ import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { ActivitySku } from '../viewModels/activitySku';
 import { ActivitySkuDate } from '../models/activitySkuDate';
 import { CustomerBooking } from '../viewModels/customerBooking';
+import { NewActivitySkuDate } from '../models/newActivitySkuDate';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class BookingsComponent implements OnInit {
   customers: Customer[] = [];
   thisObj = this;
   appendBooking: (date: ActivityDate) => void;
- 
+  refresh: Subject<any> = new Subject();
   addBooking: (date: Date) => void;
   addDate: (date: Date) => void;
   submitted = false;
@@ -152,7 +153,8 @@ export class BookingsComponent implements OnInit {
               this.viewEditActivityDate.model.totalPrice = activitySku.pricePerPerson * this.viewEditActivityDate.model.numPersons;
               this.viewEditActivityDate = null;
             }
-            this.refreshActivities();
+            this.refresh.next();
+            //this.refreshActivities();
             this.addingBooking = false;
             this.addBookingForm.clearValidators();
             this.addBookingForm.reset();
@@ -167,7 +169,7 @@ export class BookingsComponent implements OnInit {
       }
       var activity = this.addDateForm.get('activity').value as ActivitySku;
       var date = new Date(this.addDateForm.get('datetime').value as string);
-      this.activityService.addDate(new ActivitySkuDate(activity.activityName, activity.name, date)).pipe(first())
+      this.activityService.addDate(new NewActivitySkuDate(activity.activityName, activity.name, date)).pipe(first())
         .subscribe(
           id => {
             var activityDate = new ActivityDate({
@@ -185,7 +187,8 @@ export class BookingsComponent implements OnInit {
             });
             this.hookEvents(activityDate);
             this.activityDates.push(activityDate);
-            this.refreshActivities();
+            this.refresh.next();
+            //this();
             this.addingDate = false;
             this.addDateForm.clearValidators();
             this.addDateForm.reset();
@@ -236,8 +239,8 @@ export class BookingsComponent implements OnInit {
       customer: ['', Validators.required],
       numPersons: ['', Validators.required],
       datetime: ['', Validators.required],
-      confirmed: ['', Validators.required],
-      paid: ['', Validators.required]
+      confirmed: [false],
+      paid: [false]
     });
     this.addDateForm = this.formBuilder.group({
       activity: ['', Validators.required],     
@@ -295,11 +298,25 @@ export class BookingsComponent implements OnInit {
           .subscribe(() => {
             activityDate.model.deleted = true;
             this.refreshActivities();
+         //   this.refresh.next();
           });
       }
       else {
         activityDate.model.deleted = true;
+      //  this.refresh.next();
         this.refreshActivities();
+      }
+    });
+
+    activityDate.onTimeChanged.subscribe(() => {
+      if (activityDate.model.activitySkuDateId && activityDate.model.activitySkuDateId > 0) {
+        this.activityService
+          .updateDate(new ActivitySkuDate(activityDate.model.activitySkuDateId, activityDate.start))
+          .pipe(first())
+          .subscribe(() => {
+            //   this.refreshActivities();
+            this.refresh.next();
+          });
       }
     });
   }

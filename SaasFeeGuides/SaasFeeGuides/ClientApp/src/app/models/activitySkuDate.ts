@@ -1,10 +1,11 @@
 export class ActivitySkuDate {
 
   constructor(
-    public activityName: string,
-    public activitySkuName: string,
+    public id: number,
     public dateTime: Date
-  ) {
+  )
+  {
+
   }
 
 }

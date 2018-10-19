@@ -20,7 +20,7 @@ namespace SaasFeeGuides.RestClient
             _bearerToken = bearerToken;
         }
 
-        public async Task<int> AddActivitySkuDate(ActivitySkuDate activitySkuDate)
+        public async Task<int> AddActivitySkuDate(NewActivitySkuDate activitySkuDate)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "activity", "sku","date")
@@ -263,6 +263,22 @@ namespace SaasFeeGuides.RestClient
                 .AcceptGzipCompression();
 
             var post = request.DeleteAsync(DefaultClient);
+            var response = await post;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new RestResponseException(response.StatusCode, response.RequestMessage, string.Empty, await response.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async Task UpdateActivitySkuDate(ActivitySkuDate activitySkuDate)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", "sku", "date")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.PatchJsonAsync(activitySkuDate,DefaultClient);
             var response = await post;
 
             if (!response.IsSuccessStatusCode)

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Activity } from '../viewModels/activity';
 import { ActivityDate, ActivityDateModel } from '../viewModels/activityDate';
+import { NewActivitySkuDate } from '../models/newActivitySkuDate';
 import { ActivitySkuDate } from '../models/activitySkuDate';
 
 @Injectable()
 export class ActivityService {
   constructor(private http: HttpClient) { }
 
-  addDate(activitySkuDate: ActivitySkuDate) {
+  addDate(activitySkuDate: NewActivitySkuDate) {
     return this.http.post<number>('api/activity/sku/date', activitySkuDate);
   }
 
@@ -22,6 +23,10 @@ export class ActivityService {
 
   deleteDate(activitySkuDateId: number) {
     return this.http.delete('api/Activity/Sku/date/' + activitySkuDateId);
+  }
+
+  updateDate(activitySkuDate: ActivitySkuDate) {
+    return this.http.patch('api/Activity/Sku/date', activitySkuDate);
   }
 
 

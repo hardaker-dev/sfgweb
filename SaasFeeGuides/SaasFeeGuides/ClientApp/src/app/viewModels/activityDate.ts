@@ -3,6 +3,7 @@ import { CalendarEvent, EventColor, EventAction } from 'calendar-utils';
 import { colors } from '../utils/colors';
 import { EventDispatcher } from "strongly-typed-events";
 import { CalendarEventExt } from '../calendar/calendarEventExt';
+import { CustomerBooking } from './customerBooking';
 
 export interface ActivityDateModel  {
   activitySkuDateId: number;
@@ -16,6 +17,7 @@ export interface ActivityDateModel  {
   amountPaid: number;
   totalPrice: number;
   deleted?: boolean;
+  customerBookings: CustomerBooking[];
 }
 export class ActivityDate implements CalendarEventExt {
     id?: string | number;

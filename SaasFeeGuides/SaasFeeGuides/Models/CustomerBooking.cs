@@ -4,6 +4,7 @@ namespace SaasFeeGuides.Models
 {
     public class CustomerBooking
     {
+        public int ActivityDateSkuId { get; set; }
         public string ActivitySkuName { get; set; }
         public DateTime DateTime { get; set; }
         public string CustomerEmail { get; set; }

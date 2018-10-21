@@ -38,10 +38,8 @@ export class BookingsComponent implements OnInit {
   submitted = false;
   addingBooking: boolean;
   addingDate: boolean;
-  viewingEditDate: boolean;
   addBookingForm: FormGroup;
   addDateForm: FormGroup;
-  viewEditDateForm: FormGroup;
   selectedActivity: string;
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -72,9 +70,9 @@ export class BookingsComponent implements OnInit {
     var thisObj = this;
     this.bookingClicked = (activityDate: ActivityDate) => {
       thisObj.viewEditActivityDate = activityDate;
-      thisObj.viewingEditDate = true;
-      var dateTimeField = thisObj.viewEditDateForm.get('datetime');
-      var activitySkuField = thisObj.viewEditDateForm.get('activity');
+      thisObj.addingDate = true;
+      var dateTimeField = thisObj.addDateForm.get('datetime');
+      var activitySkuField = thisObj.addDateForm.get('activity');
 
       activitySkuField.setValue(thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId));
       activitySkuField.disable();
@@ -156,7 +154,8 @@ export class BookingsComponent implements OnInit {
                 endDateTime: new Date(date.getTime() + (1000 * 60 * 60 * 24) * activitySku.durationDays + (1000 * 60 * 60) * activitySku.durationHours),
                 amountPaid: 0,
                 deleted: false,
-                activitySkuDateId: response.activitySkuDateId
+                activitySkuDateId: response.activitySkuDateId,
+                customerBookings: [new CustomerBooking(activitySku.name, date, customer.model.email, numPersons,paid,confirmed)]
               });
 
               this.hookEvents(activityDate);
@@ -176,9 +175,6 @@ export class BookingsComponent implements OnInit {
           },
           error => {
           });
-    }
-    else if (this.viewingEditDate) {
-      this.viewingEditDate = false;
     }
     else {
       if (this.addDateForm.invalid) {
@@ -200,7 +196,8 @@ export class BookingsComponent implements OnInit {
               endDateTime: new Date(date.getTime() + (1000 * 60 * 60 * 24) * activity.durationDays + (1000 * 60 * 60) * activity.durationHours),
               amountPaid: 0,
               deleted: false,
-              activitySkuDateId: id
+              activitySkuDateId: id,
+              customerBookings:[]
             });
             this.hookEvents(activityDate);
             this.activityDates.push(activityDate);
@@ -240,11 +237,8 @@ export class BookingsComponent implements OnInit {
   }
  
   cancelClick() {
-    this.viewingEditDate = false; 
     this.addingBooking = false;
     this.addingDate = false;
-    this.viewEditDateForm.clearValidators();
-    this.viewEditDateForm.reset();
     this.addBookingForm.clearValidators();
     this.addBookingForm.reset();
     this.addDateForm.clearValidators();
@@ -262,11 +256,7 @@ export class BookingsComponent implements OnInit {
     });
     this.addDateForm = this.formBuilder.group({
       activity: ['', Validators.required],     
-      datetime: ['', Validators.required]
-    });
-    this.viewEditDateForm = this.formBuilder.group({
-      activity: ['', Validators.required],
-      datetime: ['', Validators.required]
+      datetime: ['', Validators.required],
     });
     this.loadSchedule();
     this.loadActivities();

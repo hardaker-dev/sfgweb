@@ -15,5 +15,7 @@ namespace SaasFeeGuides.ViewModels
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
         public int NumPersons { get; set; }
+
+        public IList<CustomerBooking> CustomerBookings { get; set; }
     }
 }

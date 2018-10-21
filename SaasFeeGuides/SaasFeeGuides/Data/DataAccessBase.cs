@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SaasFeeGuides.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -71,7 +72,6 @@ namespace SaasFeeGuides.Data
             return parameter ?? DBNull.Value;
         }
 
-
         protected static string ConvertToString(object readerResult)
         {
             return readerResult != DBNull.Value ? Convert.ToString(readerResult) : null;
@@ -79,66 +79,26 @@ namespace SaasFeeGuides.Data
 
         protected static int? GetInt(SqlDataReader reader, int fieldNum)
         {
-            if (fieldNum >= reader.FieldCount)
-            {
-                throw new Exception($"fieldNum of {fieldNum} is larger than the number of fields {reader.FieldCount}");
-            }
-            if (reader.IsDBNull(fieldNum))
-            {
-                return null;
-            }
-            return reader.GetFieldValue<int>(fieldNum);
+            return ModelReaderExtensions.GetInteger(reader, fieldNum);
         }
 
         protected static double? GetDouble(SqlDataReader reader, int fieldNum)
         {
-            if (fieldNum >= reader.FieldCount)
-            {
-                throw new Exception($"fieldNum of {fieldNum} is larger than the number of fields {reader.FieldCount}");
-            }
-            if (reader.IsDBNull(fieldNum))
-            {
-                return null;
-            }
-            return reader.GetFieldValue<double>(fieldNum);
+            return ModelReaderExtensions.GetDub(reader, fieldNum);
         }
 
         protected static bool? GetBool(SqlDataReader reader, int fieldNum)
         {
-            if (fieldNum >= reader.FieldCount)
-            {
-                throw new Exception($"fieldNum of {fieldNum} is larger than the number of fields {reader.FieldCount}");
-            }
-            if (reader.IsDBNull(fieldNum))
-            {
-                return null;
-            }
-            return reader.GetFieldValue<bool>(fieldNum);
+            return ModelReaderExtensions.GetBool(reader, fieldNum);
         }
 
         protected static string GetString(SqlDataReader reader, int fieldNum)
         {
-            if (fieldNum >= reader.FieldCount)
-            {
-                throw new Exception($"fieldNum of {fieldNum} is larger than the number of fields {reader.FieldCount}");
-            }
-            if (reader.IsDBNull(fieldNum))
-            {
-                return null;
-            }
-            return reader.GetFieldValue<string>(fieldNum);
+            return ModelReaderExtensions.GetStr(reader, fieldNum);
         }
         protected static DateTime? GetDateTime(SqlDataReader reader, int fieldNum)
         {
-            if (fieldNum >= reader.FieldCount)
-            {
-                throw new Exception($"fieldNum of {fieldNum} is larger than the number of fields {reader.FieldCount}");
-            }
-            if (reader.IsDBNull(fieldNum))
-            {
-                return null;
-            }
-            return reader.GetFieldValue<DateTime>(fieldNum);
+            return ModelReaderExtensions.GetDt(reader, fieldNum);
         }
         #endregion
     }

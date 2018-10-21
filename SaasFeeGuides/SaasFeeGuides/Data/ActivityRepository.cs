@@ -1,4 +1,5 @@
 ﻿using SaasFeeGuides.Exceptions;
+using SaasFeeGuides.Extensions;
 using SaasFeeGuides.Helpers;
 using SaasFeeGuides.Models;
 using SaasFeeGuides.ViewModels;
@@ -51,7 +52,6 @@ namespace SaasFeeGuides.Data
                     command.CommandText = "[Activities].[SelectActivity]";
                     command.Parameters.AddWithValue("@ActivityId", activityId);
 
-
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         await reader.ReadAsync();
@@ -62,7 +62,6 @@ namespace SaasFeeGuides.Data
                         activity.Equiptment = await ReadListAsync(reader, ReadActivityEquiptment);
                         return activity;
                     }
-
                 }
             }
         }
@@ -96,11 +95,24 @@ namespace SaasFeeGuides.Data
                     command.Parameters.AddWithValue("@DateFrom",(object) dateFrom?.ToUniversalTime() ?? DBNull.Value);
                     command.Parameters.AddWithValue("@DateTo", (object)dateTo?.ToUniversalTime() ?? DBNull.Value);
 
-                    return await ReadListAsync(command, ReadActivityDate);
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        var activityDates = new HashSet<Models.ActivityDate>(await ReadListAsync(reader, ReadActivityDate));                    
+                        await reader.NextResultAsync();
 
+                        var customers = await ReadListAsync(reader, ModelReaderExtensions.ReadCustomer);
+
+                        foreach (var customerGroup in customers.GroupBy(x => x.ActivityDateSkuId))
+                        {
+                            activityDates.TryGetValue(new Models.ActivityDate() { ActivitySkuDateId = customerGroup.Key }, out Models.ActivityDate activityDate);
+                            activityDate.CustomerBookings = customerGroup.ToList();
+                        }
+
+                        return activityDates;
+                    }
                 }
             }
-        }
+        }      
 
         private Models.ActivityDate ReadActivityDate(SqlDataReader reader)
         {

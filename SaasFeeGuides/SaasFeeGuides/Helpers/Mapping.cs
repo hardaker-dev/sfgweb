@@ -35,7 +35,8 @@ namespace SaasFeeGuides.Helpers
                 EndDateTime = date.EndDateTime.ToLocalTime(),
                 AmountPaid = date.AmountPaid,
                 NumPersons = date.NumPersons,
-                TotalPrice = date.TotalPrice
+                TotalPrice = date.TotalPrice,
+                CustomerBookings = date.CustomerBookings?.Select(Map).ToList()
             };
         }
         public static ViewModels.CustomerBooking Map(this Models.CustomerBooking booking)
@@ -45,7 +46,9 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
                 DateTime = booking.DateTime.ToLocalTime(),
-                NumPersons = booking.NumPersons
+                NumPersons = booking.NumPersons,
+                HasConfirmed = booking.HasConfirmed,
+                HasPaid = booking.HasPaid
             };
         }
         public static Models.CustomerBooking Map(this ViewModels.CustomerBooking booking)

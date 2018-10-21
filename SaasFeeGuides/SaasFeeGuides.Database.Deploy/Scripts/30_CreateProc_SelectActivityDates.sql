@@ -49,7 +49,8 @@ BEGIN
 	 	COALESCE(cb.Email,c.Email) as Email,
 		cb.NumPersons,
 		cb.PriceAgreed,
-		asd.DateTime
+		asd.DateTime,
+		c.FirstName + ' ' + c.LastName as [Name]
 		FROM Activities.ActivitySkuDate asd
 	inner join Activities.ActivitySku aSku on aSku.Id = asd.ActivitySkuId
 	left JOIN STRING_SPLIT(@ActivityIds, ',') actId on actId.value = aSku.ActivityId	

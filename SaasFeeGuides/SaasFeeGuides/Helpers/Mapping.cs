@@ -43,6 +43,7 @@ namespace SaasFeeGuides.Helpers
         {
             return new ViewModels.CustomerBooking()
             {
+                Name = booking.Name,
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
                 DateTime = booking.DateTime.ToLocalTime(),

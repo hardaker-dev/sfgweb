@@ -162,7 +162,7 @@
                           (eventTimesChanged)="eventTimesChanged($event)"
                           [dayStartHour]="7"
                           [dayEndHour]="22"
-                          (eventClicked)="eventClicked($event.event)"
+                          (eventClicked)="viewEditBooking($event.event)"
                           [headerTemplate]="weekHeaderTemplate"
                           (dayHeaderClicked)="viewDate = $event.day.date; view = 'day'"
                           [hourSegmentTemplate]="hourSegmentTemplate"

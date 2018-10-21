@@ -14,6 +14,6 @@ namespace SaasFeeGuides.Models
 
         public bool HasPaid { get; set; }
         public bool HasConfirmed { get; set; }
-        
+        public string Name { get; set; }
     }
 }

@@ -85,8 +85,8 @@ namespace SaasFeeGuides.Extensions
                     CustomerEmail = reader.GetStr(6),
                     NumPersons = reader.GetInteger(7).Value,
                     PriceAgreed = reader.GetDub(8) ?? 0,
-                    DateTime = reader.GetDt(9).Value                   
-                    
+                    DateTime = reader.GetDt(9).Value,
+                    Name = reader.GetStr(10)
                 };
             }
             catch (Exception ex)

@@ -20,6 +20,7 @@
 }
 .right {
   float: right;
+  margin-left:5px;
 }
 .input-label {
   font-weight: bold;

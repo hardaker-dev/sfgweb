@@ -38,6 +38,8 @@ export class BookingsComponent implements OnInit {
   addingDate: boolean;
   addBookingForm: FormGroup;
   addDateForm: FormGroup;
+  showClose= false;
+  showCancel= true;
   selectedActivity: string;
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
@@ -77,13 +79,22 @@ export class BookingsComponent implements OnInit {
 
       dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
       dateTimeField.disable();
+      thisObj.showClose = true;
+      thisObj.showCancel = false;
     };
 
     this.appendBooking = (activityDate: ActivityDate) => {
-      thisObj.viewEditActivityDate = activityDate;
-      thisObj.addingBooking = true;
+
       var dateTimeField = thisObj.addBookingForm.get('datetime');
       var activitySkuField = thisObj.addBookingForm.get('activity');
+      if (!activityDate)
+      {
+        var activitySku = this.addDateForm.get('activity').value as ActivitySku;
+        var date = new Date(this.addDateForm.get('datetime').value as string);
+        activityDate = this.createActivity(0, date, activitySku, -1, []);
+      }
+      thisObj.viewEditActivityDate = activityDate;
+      thisObj.addingBooking = true;
 
       activitySkuField.setValue(thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId));
       activitySkuField.disable();
@@ -98,8 +109,7 @@ export class BookingsComponent implements OnInit {
 
       this.enableField('activity', thisObj.addBookingForm);
       this.enableField('datetime', thisObj.addBookingForm);      
-      thisObj.addBookingForm.get('datetime').setValue(this.getLocalISOTime(date));
-      this.viewEditActivityDate = null;
+      thisObj.addBookingForm.get('datetime').setValue(this.getLocalISOTime(date));      
      };
     this.addDate = (date) => {
       thisObj.addingDate = true;
@@ -110,7 +120,16 @@ export class BookingsComponent implements OnInit {
       this.enableField('datetime', thisObj.addDateForm);
       thisObj.addDateForm.get('datetime').setValue(this.getLocalISOTime(date));
       this.viewEditActivityDate = null;
+
+      thisObj.showCancel = true;
+      thisObj.showClose = false;
     };
+  }
+  customerBookings() {
+    if (this.viewEditActivityDate) {
+      return this.viewEditActivityDate.model.customerBookings;
+    }
+    return [];
   }
   enableField(name, form: FormGroup) {
     form.get(name).enable();
@@ -159,51 +178,70 @@ export class BookingsComponent implements OnInit {
       var confirmed = this.addBookingForm.get('confirmed').value as boolean;
       var paid = this.addBookingForm.get('paid').value as boolean;
       var customerBooking = new CustomerBooking(customer.model.firstName + ' ' + customer.model.lastName, activitySku.name, date, customer.model.email, numPersons, paid, confirmed);
+      if (this.viewEditActivityDate.model.activitySkuDateId < 0) {
+        this.viewEditActivityDate.model.customerBookings.push(customerBooking);
+        this.addingBooking = false;
+        this.resetAddBookingForm();
+        this.submitted = false;
+      }
+      else {
+        this.customerService
+          .addCustomerBooking(customerBooking)
+          .pipe(first())
+          .subscribe(
+            response => {
+              if (!this.viewEditActivityDate) {
+                var activityDate = this.createActivity(numPersons, date, activitySku, response.activitySkuDateId, [customerBooking]);
+                this.hookEvents(activityDate);
+                this.activityDates.push(activityDate);
+              }
+              else {
+                this.viewEditActivityDate.model.numPersons += numPersons;
+                this.viewEditActivityDate.model.totalPrice = activitySku.pricePerPerson * this.viewEditActivityDate.model.numPersons;
+                this.viewEditActivityDate.model.customerBookings.push(customerBooking);
+                if (!this.addingDate) {
+                  this.viewEditActivityDate = null;
+                }
+              }
+              this.refresh.next();
 
-      this.customerService
-        .addCustomerBooking(customerBooking)
-        .pipe(first())
-        .subscribe(
-          response => {
-            if (!this.viewEditActivityDate) {
-              var activityDate = this.createActivity(numPersons, date, activitySku, response.activitySkuDateId, [customerBooking]);  
-              this.hookEvents(activityDate);
-              this.activityDates.push(activityDate);
-            }
-            else {
-              this.viewEditActivityDate.model.numPersons += numPersons;
-              this.viewEditActivityDate.model.totalPrice = activitySku.pricePerPerson * this.viewEditActivityDate.model.numPersons;
-              this.viewEditActivityDate.model.customerBookings.push(customerBooking);
-              this.viewEditActivityDate = null;
-            }
-            this.refresh.next();
-            this.addingBooking = false;
-            this.resetForms();
+              this.addingBooking = false;
 
-            this.submitted = false;
-          },
-          error => {
-          });
+              if (!this.addingDate) {
+                this.resetAddDateForm();
+              }
+              this.resetAddBookingForm();
+              this.submitted = false;
+            });
+      }
     }
     else {
       if (this.addDateForm.invalid) {
         return;
       }
-      var activitySku = this.addDateForm.get('activity').value as ActivitySku;
-      var date = new Date(this.addDateForm.get('datetime').value as string);
-      this.activityService.addDate(new NewActivitySkuDate(activitySku.activityName, activitySku.name, date)).pipe(first())
-        .subscribe(
-        id => {
-            var activityDate = this.createActivity(0, date, activitySku,id, []);
-            this.hookEvents(activityDate);
-            this.activityDates.push(activityDate);
-            this.refresh.next();
-            this.addingDate = false;
-            this.resetForms();
-            this.submitted = false;
-          },
-          error => {
-          });
+      if (!this.viewEditActivityDate || this.viewEditActivityDate.model.activitySkuDateId < 0) {
+
+        var activitySku = this.addDateForm.get('activity').value as ActivitySku;
+        var date = new Date(this.addDateForm.get('datetime').value as string);
+        var customers = this.viewEditActivityDate ? this.viewEditActivityDate.model.customerBookings : [];
+        this.activityService.addDate(new NewActivitySkuDate(activitySku.activityName, activitySku.name, date, customers)).pipe(first())
+          .subscribe(
+          id => {
+            var activityDate = this.createActivity(customers.map((c) => c.numPersons).reduce((sum, current) => sum + current), date, activitySku, id, customers);
+              this.hookEvents(activityDate);
+              this.activityDates.push(activityDate);
+              this.refresh.next();
+              this.addingDate = false;
+              this.resetForms();
+              this.submitted = false;
+            });
+      }
+      else {
+        this.addingDate = false;
+        this.resetForms();
+        this.submitted = false;
+        this.viewEditActivityDate = null;
+      }
     }
   }
   searchCustomer(event) {
@@ -230,17 +268,27 @@ export class BookingsComponent implements OnInit {
   }
  
   cancelClick() {
-    this.addingBooking = false;
-    this.addingDate = false;
-    this.resetForms();
-    this.submitted = false;
+    if (this.addingBooking && this.viewEditActivityDate) {
+      this.addingBooking = false;
+    }
+    else {
+      this.addingBooking = false;
+      this.addingDate = false;
+      this.resetForms();
+      this.submitted = false;
+    }
   }
-
   resetForms() {
-    this.addBookingForm.clearValidators();
-    this.addBookingForm.reset();
+    this.resetAddBookingForm();
+    this.resetAddDateForm();
+  }
+  resetAddDateForm() {
     this.addDateForm.clearValidators();
     this.addDateForm.reset();
+  }
+  resetAddBookingForm() {
+    this.addBookingForm.clearValidators();
+    this.addBookingForm.reset();
     this.addBookingForm.get('confirmed').setValue(false);
     this.addBookingForm.get('paid').setValue(false);
   }

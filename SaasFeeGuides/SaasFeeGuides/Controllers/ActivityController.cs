@@ -18,16 +18,19 @@ namespace SaasFeeGuides.Controllers
     {
         private readonly IEquiptmentRepository _equiptmentRepository;
         private readonly IActivityRepository _activityRepository;
+        private readonly ICustomerRepository _customerRepository;
         private readonly IContentRepository _contentRepository;
 
         public ActivityController(
             IEquiptmentRepository equiptmentRepository,
             IActivityRepository activityRepository,
-            IContentRepository contentRepository)
+            IContentRepository contentRepository,
+            ICustomerRepository customerRepository)
         {
             _equiptmentRepository = equiptmentRepository;
             _activityRepository = activityRepository;
             _contentRepository = contentRepository;
+            _customerRepository = customerRepository;
         }
 
       
@@ -71,7 +74,10 @@ namespace SaasFeeGuides.Controllers
         public async Task<IActionResult> AddActivitySkuDate(ViewModels.NewActivitySkuDate activitySkuDate)
         {
             var id = await _activityRepository.InsertActivitySkuDate(activitySkuDate);
-
+            foreach(var customerBooking in activitySkuDate.CustomerBookings ?? new ViewModels.CustomerBooking[0])
+            {
+                await _customerRepository.InsertCustomerBooking(customerBooking.Map());
+            }
             return new OkObjectResult(id);
         }
 

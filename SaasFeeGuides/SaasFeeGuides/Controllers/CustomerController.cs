@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -96,7 +97,14 @@ namespace SaasFeeGuides.Controllers
 
             return new OkObjectResult(customerBookingId);
         }
-
+        //[Authorize("Admin")]
+        //[HttpDelete("booking/{customerId:int}")]
+        //public async Task<IActionResult> DeleteCustomerBooking(int id)
+        //{
+        //    throw new NotImplementedException();
+        // //   var customerBookingId = await _customerRepository.DeleteCustomerBooking(id);
+        //   // return new OkObjectResult(customerBookingId);
+        //}
         [Authorize("Admin")]
         [HttpPost("booking")]
         public async Task<IActionResult> AddCustomerBooking(ViewModels.CustomerBooking customerBooking)
@@ -110,7 +118,7 @@ namespace SaasFeeGuides.Controllers
             var customerBookingId = await _customerRepository.InsertCustomerBooking(customerModel);
 
 
-            return new OkObjectResult(customerBookingId);
+            return new OkObjectResult($@"{{""customerBookingId"":{customerBookingId.customerBookingId},""activitySkuDateId"":{customerBookingId.activityDateId}}}");
         }
 
         [Authorize("Admin")]

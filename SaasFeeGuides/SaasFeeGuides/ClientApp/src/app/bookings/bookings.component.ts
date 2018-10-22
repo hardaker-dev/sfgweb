@@ -30,6 +30,7 @@ export class BookingsComponent implements OnInit {
   thisObj = this;
   viewEditBooking: (date: ActivityDate) => void;
   appendBooking: (date: ActivityDate) => void;
+  deleteBooking: (date: CustomerBooking) => void;
   refresh: Subject<any> = new Subject();
   addBooking: (date: Date) => void;
   addDate: (date: Date) => void;
@@ -41,6 +42,7 @@ export class BookingsComponent implements OnInit {
   showClose= false;
   showCancel= true;
   selectedActivity: string;
+  customerBookingExists = false;
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
@@ -101,7 +103,15 @@ export class BookingsComponent implements OnInit {
       dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
       dateTimeField.disable();
     };
-    
+    this.deleteBooking = (customerBooking) => {
+      this.activityService.deleteCustomerBooking(this.viewEditActivityDate.model.activitySkuDateId, customerBooking.customerEmail)
+        .pipe(first()).subscribe(response => {
+          var index = thisObj.viewEditActivityDate.model.customerBookings.findIndex((b) => b.customerEmail === customerBooking.customerEmail);
+          thisObj.viewEditActivityDate.model.customerBookings.splice(index,1);
+          this.viewEditActivityDate.model.numPersons -= customerBooking.numPersons;
+          this.refresh.next();
+        });
+    };
     this.addBooking = (date) => {
       thisObj.addingBooking = true;
       var hour = date.getHours();
@@ -125,6 +135,10 @@ export class BookingsComponent implements OnInit {
       thisObj.showClose = false;
     };
   }
+
+  deleteDate(date: ActivityDate) {
+    date.delete();
+  }
   customerBookings() {
     if (this.viewEditActivityDate) {
       return this.viewEditActivityDate.model.customerBookings;
@@ -143,9 +157,7 @@ export class BookingsComponent implements OnInit {
     var localISOTime = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, -1);
     return localISOTime;
   }
-  deleteBooking(date: ActivityDate) {
-    date.delete();
-  }
+
 
   createActivity(numPersons: number, date: Date, activitySku: ActivitySku, id: number, customerBookings: CustomerBooking[]) {
     return new ActivityDate({
@@ -177,14 +189,23 @@ export class BookingsComponent implements OnInit {
       var numPersons = +this.addBookingForm.get('numPersons').value as number;
       var confirmed = this.addBookingForm.get('confirmed').value as boolean;
       var paid = this.addBookingForm.get('paid').value as boolean;
+      
       var customerBooking = new CustomerBooking(customer.model.firstName + ' ' + customer.model.lastName, activitySku.name, date, customer.model.email, numPersons, paid, confirmed);
-      if (this.viewEditActivityDate.model.activitySkuDateId < 0) {
+      if (this.viewEditActivityDate && this.viewEditActivityDate.model.activitySkuDateId < 0) {
         this.viewEditActivityDate.model.customerBookings.push(customerBooking);
         this.addingBooking = false;
         this.resetAddBookingForm();
         this.submitted = false;
+        this.refresh.next();
       }
       else {
+        if (this.viewEditActivityDate) {
+          var existingCustomerBooking = this.viewEditActivityDate.model.customerBookings.find((x) => x.customerEmail === customer.model.email);
+          if (existingCustomerBooking) {
+            this.customerBookingExists = true;
+            return;
+          }
+        }
         this.customerService
           .addCustomerBooking(customerBooking)
           .pipe(first())
@@ -226,8 +247,8 @@ export class BookingsComponent implements OnInit {
         var customers = this.viewEditActivityDate ? this.viewEditActivityDate.model.customerBookings : [];
         this.activityService.addDate(new NewActivitySkuDate(activitySku.activityName, activitySku.name, date, customers)).pipe(first())
           .subscribe(
-          id => {
-            var activityDate = this.createActivity(customers.map((c) => c.numPersons).reduce((sum, current) => sum + current), date, activitySku, id, customers);
+            id => {
+              var activityDate = this.createActivity(customers.map((c) => c.numPersons).reduce((sum, current) => sum + current), date, activitySku, id, customers);
               this.hookEvents(activityDate);
               this.activityDates.push(activityDate);
               this.refresh.next();
@@ -244,6 +265,7 @@ export class BookingsComponent implements OnInit {
       }
     }
   }
+
   searchCustomer(event) {
     if (event) {
       if (event.key != 'Enter')

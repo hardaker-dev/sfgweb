@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SaasFeeGuides.Data
@@ -19,6 +20,7 @@ namespace SaasFeeGuides.Data
         Task<IEnumerable<Customer>> SelectCustomers(string emailSearch, string firstNameSearch, string lastNameSearch);
         Task<Customer> SelectCustomer(int id);
         Task<IEnumerable<CustomerBooking>> SelectCustomerBookings(int customerId);
+        Task DeleteCustomerBooking(int activitySkuDateId, string customerEmail);
     }
     public class CustomerRepository : DataAccessBase, ICustomerRepository
     {
@@ -128,6 +130,42 @@ namespace SaasFeeGuides.Data
             }
         }
 
+        public Task<IEnumerable<CustomerBooking>> SelectCustomerBookings(int customerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteCustomerBooking(int activitySkuDateId, string customerEmail)
+        {
+            try
+            {
+                using (var cn = await GetNewConnectionAsync())
+                {
+                    using (var command = cn.CreateCommand())
+                    {
+                        command.Parameters.AddWithValue("@ActivitySkuDateId", activitySkuDateId);
+                        command.Parameters.AddWithValue("@CustomerEmail", customerEmail);
+
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.CommandText = "[Activities].[DeleteCustomerBooking]";
+
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                switch ((DataError)e.Number)
+                {
+                    case DataError.CannotFindRecord:
+                        var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
+                        throw new BadRequestException(error.Message, HttpStatusCode.NotFound, e);
+                    default: throw e;
+                }
+            }
+        }
+
 
         public async Task<int> UpsertCustomer(Customer customer)
         {
@@ -197,9 +235,6 @@ namespace SaasFeeGuides.Data
             }
         }
 
-        public Task<IEnumerable<CustomerBooking>> SelectCustomerBookings(int customerId)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }

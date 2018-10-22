@@ -29,7 +29,10 @@ export class ActivityService {
     return this.http.patch('api/Activity/Sku/date', activitySkuDate);
   }
 
+  deleteCustomerBooking(activitySkuDateId: number, customerEmail: string) {
 
+    return this.http.delete('api/Activity/Sku/date/' + activitySkuDateId + '/customer/' + customerEmail);
+  }
   getActivityDates(activityId: number, dateFrom: Date, dateTo: Date) {
 
     let params =

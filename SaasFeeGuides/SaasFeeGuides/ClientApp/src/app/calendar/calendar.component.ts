@@ -33,6 +33,7 @@ export class CalendarComponent {
   @Input() public addDate: void;
   @Input() public addBooking: void;
   @Input() public deleteBooking: void;
+  @Input() public deleteDate: void;  
   @Input() public viewEditBooking: void;
   @Input() public appendBooking: void;
   @Input() public events: CalendarEventExt[];

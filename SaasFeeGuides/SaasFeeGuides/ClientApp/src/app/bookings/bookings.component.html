@@ -34,7 +34,7 @@
               <th>Email Name</th>
               <th>Persons</th>
               <th>Confirmed</th>
-              <th>Paid</th>
+              <th>Paid</th>              
             </tr>
           </thead>
           <tbody>
@@ -53,6 +53,9 @@
               </td>
               <td>
                 <input type="checkbox" [checked]="customerBooking.hasPaid"  />                
+              </td>
+              <td>
+                <i class="fa fa-remove pointer" (click)="deleteBooking(customerBooking)"></i>
               </td>
             </tr>
           </tbody>
@@ -119,6 +122,9 @@
         <div *ngIf="submitted && addBookingForm.controls.customer.errors" class="invalid-feedback">
           <div *ngIf="addBookingForm.controls.customer.errors.required">Customer is required</div>
         </div>
+        <div *ngIf="submitted && customerBookingExists" class="invalid-feedback">
+          <div >Customer booking already exists</div>
+        </div>
       </div>
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="numPersons">Persons</label>
@@ -149,7 +155,7 @@
   <mwl-demo-component [events]="activityDates"
                       [addBooking]="addBooking"
                       [appendBooking]="appendBooking"
-                      [deleteBooking]="deleteBooking"
+                      [deleteDate]="deleteDate"
                       [viewEditBooking]="viewEditBooking"
                       [addDate]="addDate"
                       [eventClicked]="bookingClicked"

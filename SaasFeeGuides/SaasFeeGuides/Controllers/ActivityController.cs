@@ -68,7 +68,14 @@ namespace SaasFeeGuides.Controllers
 
             return new OkObjectResult(activitySku);
         }
-
+        [Authorize("Admin")]
+        [HttpDelete("sku/date/{activitySkuDateId:int}/customer/{customerEmail}")]
+        public async Task<IActionResult> DleteActivitySkuDateCustomer(int activitySkuDateId,string customerEmail)
+        {
+            await _customerRepository.DeleteCustomerBooking(activitySkuDateId, customerEmail);
+           
+            return new OkResult();
+        }
         [Authorize("Admin")]
         [HttpPost("sku/date")]
         public async Task<IActionResult> AddActivitySkuDate(ViewModels.NewActivitySkuDate activitySkuDate)

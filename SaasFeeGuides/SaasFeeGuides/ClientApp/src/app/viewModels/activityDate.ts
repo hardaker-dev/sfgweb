@@ -46,8 +46,10 @@ export class ActivityDate implements CalendarEventExt {
     this.draggable = model.amountPaid == 0;
     this.start = new Date(model.startDateTime);
     this.end = new Date(model.endDateTime);
-    this.title = `${model.activityName}, Persons: ${model.numPersons}` ;
-
+    this.title = `${model.activityName}, Persons: ${model.numPersons}`;
+    if (!this.model.customerBookings) {
+      this.model.customerBookings = [];
+    }
     this.actions = [];
     if (model.numPersons == 0) {
       this.actions.push(

@@ -50,6 +50,7 @@
     <None Remove="Scripts\39_CreateProc_SelectActivity.sql" />
     <None Remove="Scripts\40_CreateProc_DeleteActivitySkuDate.sql" />
     <None Remove="Scripts\41_CreateProc_UpdateActivitySkuDate.sql" />
+    <None Remove="Scripts\42_CreateProc_DeleteCustomerBooking.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -72,6 +73,7 @@
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\02b_CreateTable_Content.sql" />
     <EmbeddedResource Include="Scripts\27_CreateProc_SelectActivities.sql" />
+    <EmbeddedResource Include="Scripts\42_CreateProc_DeleteCustomerBooking.sql" />
     <EmbeddedResource Include="Scripts\41_CreateProc_UpdateActivitySkuDate.sql" />
     <EmbeddedResource Include="Scripts\40_CreateProc_DeleteActivitySkuDate.sql" />
     <EmbeddedResource Include="Scripts\39_CreateProc_SelectActivity.sql" />

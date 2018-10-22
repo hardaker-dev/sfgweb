@@ -97,6 +97,25 @@ namespace SaasFeeGuides.IntegrationTests
                 DateTime = activityDates[0].StartDateTime
             });
         }
+
+        [Fact]
+        public async Task DeleteActivityDateCustomerBooking()
+        {
+            var authClient = await AuthClient();
+
+            await AddActivitiesAndSkusIfNeeded(authClient);
+            await AddDates(authClient);
+            var activitiesGerman = await _client.GetActivitiesLoc("de");
+            var activity = await _client.GetActivityLoc(activitiesGerman.FirstOrDefault(a => a.Name == "Allalin").Id, "de");
+            await AddCustomerBookingsIfNeeded(authClient);
+
+            var activityDates = await authClient.GetActivityDates(activity.Id, null, null);
+            var firstWithCustomers = activityDates.FirstOrDefault(x => x.CustomerBookings?.Any() ?? false);
+            await authClient.DeleteCustomerBooking(firstWithCustomers.ActivitySkuDateId, firstWithCustomers.CustomerBookings[0].CustomerEmail);
+            await authClient.AddCustomerBooking(firstWithCustomers.CustomerBookings[0]);
+            
+        }
+
         [Fact]
         public async Task DeleteActivityDate()
         {

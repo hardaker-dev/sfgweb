@@ -271,6 +271,23 @@ namespace SaasFeeGuides.RestClient
             }
         }
 
+        public async Task DeleteCustomerBooking(int activitySkuDateId,string customerEmail)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", "sku", "date", activitySkuDateId,"customer",customerEmail)
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.DeleteAsync(DefaultClient);
+            var response = await post;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new RestResponseException(response.StatusCode, response.RequestMessage, string.Empty, await response.Content.ReadAsStringAsync());
+            }
+        }
+
+
         public async Task UpdateActivitySkuDate(ActivitySkuDate activitySkuDate)
         {
             var request = _serviceUri.AsRestRequest()

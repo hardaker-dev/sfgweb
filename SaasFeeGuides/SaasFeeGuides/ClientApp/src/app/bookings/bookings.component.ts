@@ -39,7 +39,6 @@ export class BookingsComponent implements OnInit {
   addingDate: boolean;
   addBookingForm: FormGroup;
   addDateForm: FormGroup;
-  showClose= false;
   showCancel= true;
   selectedActivity: string;
   customerBookingExists = false;
@@ -81,7 +80,6 @@ export class BookingsComponent implements OnInit {
 
       dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
       dateTimeField.disable();
-      thisObj.showClose = true;
       thisObj.showCancel = false;
     };
 
@@ -132,7 +130,6 @@ export class BookingsComponent implements OnInit {
       this.viewEditActivityDate = null;
 
       thisObj.showCancel = true;
-      thisObj.showClose = false;
     };
   }
 
@@ -255,6 +252,7 @@ export class BookingsComponent implements OnInit {
               this.addingDate = false;
               this.resetForms();
               this.submitted = false;
+              this.viewEditActivityDate = null;
             });
       }
       else {

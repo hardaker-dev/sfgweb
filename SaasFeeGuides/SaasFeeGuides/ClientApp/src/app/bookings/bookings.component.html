@@ -63,7 +63,6 @@
       </div>
       <div [formGroup]="addDateForm">
         <button class="btn btn-primary" *ngIf="showCancel" type="button" (click)="cancelClick()">Cancel</button>
-        <button class="btn btn-primary" *ngIf="showClose" type="button" (click)="cancelClick()">Close</button>
         <button [disabled]="loading" type="submit" class="btn btn-primary right">Ok</button>
         <button [disabled]="loading || addDateForm.controls.activity.errors" type="button" class="btn btn-primary right"  (click)="appendBooking(viewEditActivityDate)">Add customer</button>
 

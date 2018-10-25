@@ -419,8 +419,8 @@ namespace SaasFeeGuides.Data
                     using (var command = cn.CreateCommand())
                     {
                         command.Parameters.AddWithValue("@ActivityName", activitySkuDate.ActivityName);
-                        command.Parameters.AddWithValue("@ActivitySkuName", activitySkuDate.ActivitySkuName);
-                        command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime.ToUniversalTime());
+                        command.Parameters.AddWithValue("@ActivitySkuName", activitySkuDate.ActivitySkuName);                        
+                        command.Parameters.AddWithValue("@DateTime",activitySkuDate.DateTime-Timezones.TimeZoneInfo.BaseUtcOffset);
 
                         command.CommandType = CommandType.StoredProcedure;
 

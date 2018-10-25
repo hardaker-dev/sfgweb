@@ -244,8 +244,10 @@ export class BookingsComponent implements OnInit {
         var customers = this.viewEditActivityDate ? this.viewEditActivityDate.model.customerBookings : [];
         this.activityService.addDate(new NewActivitySkuDate(activitySku.activityName, activitySku.name, date, customers)).pipe(first())
           .subscribe(
-            id => {
-              var activityDate = this.createActivity(customers.map((c) => c.numPersons).reduce((sum, current) => sum + current), date, activitySku, id, customers);
+          id => {
+            
+            var numPersons = customers.length > 0 ? customers.map((c) => c.numPersons).reduce((sum, current) => sum + current) : 0.2;
+            var activityDate = this.createActivity(numPersons, date, activitySku, id, customers);
               this.hookEvents(activityDate);
               this.activityDates.push(activityDate);
               this.refresh.next();

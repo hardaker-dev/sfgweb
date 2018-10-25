@@ -1,4 +1,5 @@
 ﻿using SaasFeeGuides.Data;
+using SaasFeeGuides.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,8 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuDateId = date.ActivitySkuDateId,
                 ActivitySkuId = date.ActivitySkuId,
                 ActivitySkuName = date.ActivitySkuName,
-                StartDateTime = date.StartDateTime.ToLocalTime(),
-                EndDateTime = date.EndDateTime.ToLocalTime(),
+                StartDateTime =date.StartDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
+                EndDateTime = date.EndDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
                 NumPersons = date.NumPersons
             };
         }
@@ -31,8 +32,8 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuDateId = date.ActivitySkuDateId,
                 ActivitySkuId = date.ActivitySkuId,
                 ActivitySkuName = date.ActivitySkuName,
-                StartDateTime = date.StartDateTime.ToLocalTime(),
-                EndDateTime = date.EndDateTime.ToLocalTime(),
+                StartDateTime = date.StartDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
+                EndDateTime = date.EndDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
                 AmountPaid = date.AmountPaid,
                 NumPersons = date.NumPersons,
                 TotalPrice = date.TotalPrice,
@@ -46,7 +47,7 @@ namespace SaasFeeGuides.Helpers
                 Name = booking.Name,
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
-                DateTime = booking.DateTime.ToLocalTime(),
+                DateTime = booking.DateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
                 NumPersons = booking.NumPersons,
                 HasConfirmed = booking.HasConfirmed,
                 HasPaid = booking.HasPaid

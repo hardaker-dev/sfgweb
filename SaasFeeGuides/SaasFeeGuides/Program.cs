@@ -18,7 +18,7 @@ namespace SaasFeeGuides
         {
             Startup.CommandLineArguments = args;
             ProgramHelper.BuildHost<Startup>().Run();
-           // CreateWebHostBuilder(args).Build().Run();
+            // CreateWebHostBuilder(args).Build().Run();
 
             
         }

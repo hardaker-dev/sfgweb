@@ -27,6 +27,9 @@ using SaasFeeGuides.Auth;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
 using System.Linq;
+using System.Globalization;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Localization;
 
 namespace SaasFeeGuides
 {
@@ -53,8 +56,6 @@ namespace SaasFeeGuides
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-         
-
             var connectionString = Configuration["ConnectionStrings:DefaultConnection"];
             SaasFeeGuides.Database.Deploy.Program.DeployDatabase(connectionString);
             // Add framework services.
@@ -63,7 +64,7 @@ namespace SaasFeeGuides
 
                 options.UseSqlServer(connectionString,
             b => b.MigrationsAssembly("SaasFeeGuides")).UseLazyLoadingProxies(false);
-                });
+            });
            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -73,7 +74,7 @@ namespace SaasFeeGuides
                 configuration.RootPath = "ClientApp/dist";
             });
 
-               services.AddSingleton<IJwtFactory, JwtFactory>();
+            services.AddSingleton<IJwtFactory, JwtFactory>();
 
             // jwt wire up
             // Get options from app settings
@@ -195,17 +196,28 @@ namespace SaasFeeGuides
                   });
             });
 
+            var supportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("en-US"),
+                    new CultureInfo("en-UK"),
+                    new CultureInfo("de-CH")
+                };
+
+            var options = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en-US"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures,
+
+            };
+
+            app.UseRequestLocalization(options);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseMvc();
-            //    routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "DashboardController/{action=Index}/{id?}");
-            //});
+            
 
             app.UseSpa(spa =>
             {

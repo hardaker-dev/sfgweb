@@ -54,10 +54,12 @@
   </div>
   <ul>
     <li *ngFor="let customer of customers">
+
+      <button (click)="filterClicked(customer)"  type="button" class="btn btn-primary right"><i class="fa fa-filter"></i></button>
       <table>
         <tr>
           <td class="leftColumn">
-            <span >First name</span>
+            <span>First name</span>
           </td>
           <td>
             {{customer.model.firstName}}
@@ -65,7 +67,7 @@
         </tr>
         <tr>
           <td class="leftColumn">
-            <span >Last name</span>
+            <span>Last name</span>
           </td>
           <td>
             {{customer.model.lastName}}
@@ -73,7 +75,7 @@
         </tr>
         <tr>
           <td class="leftColumn">
-            <span >Email</span>
+            <span>Email</span>
           </td>
           <td>
             {{customer.model.email}}
@@ -81,7 +83,7 @@
         </tr>
         <tr>
           <td class="leftColumn">
-            <span >Address</span>
+            <span>Address</span>
           </td>
           <td>
             {{customer.model.address}}
@@ -89,7 +91,7 @@
         </tr>
         <tr>
           <td class="leftColumn">
-            <span >Phone number</span>
+            <span>Phone number</span>
           </td>
           <td>
             {{customer.model.phoneNumber}}
@@ -97,7 +99,7 @@
         </tr>
         <tr>
           <td class="leftColumn">
-            <span >Date of birth</span>
+            <span>Date of birth</span>
           </td>
           <td>
             {{customer.model.dateOfBirth | date:'yyyy-MM-dd'}}

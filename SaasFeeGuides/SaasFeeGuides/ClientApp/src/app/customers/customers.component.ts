@@ -7,6 +7,7 @@ import { User } from '../viewModels/User';
 import { Customer } from '../viewModels/Customer';
 import { CustomerService } from '../services/customer.service';
 import { AlertService } from '../services/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: 'customers.component.html',
@@ -21,10 +22,15 @@ export class CustomersComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private formBuilder: FormBuilder,
+    private router: Router,
     private alertService: AlertService)
   {
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
  
+  }
+  filterClicked(customer:Customer) {
+
+    this.router.navigate(['/bookings'], { queryParams: { customerEmail: customer.model.email } });
   }
   onSubmit() {
     this.submitted = true;

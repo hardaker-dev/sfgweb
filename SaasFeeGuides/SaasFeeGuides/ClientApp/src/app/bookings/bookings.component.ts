@@ -14,6 +14,7 @@ import { ActivitySku } from '../viewModels/activitySku';
 import { ActivitySkuDate } from '../models/activitySkuDate';
 import { CustomerBooking } from '../viewModels/customerBooking';
 import { NewActivitySkuDate } from '../models/newActivitySkuDate';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -45,7 +46,7 @@ export class BookingsComponent implements OnInit {
   @ViewChild('instance') instance: NgbTypeahead;
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
-
+  filterCustomerEmail: string;
   private _searchModel: any;
   get searchModel(): any {
     return this._searchModel;
@@ -65,8 +66,9 @@ export class BookingsComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private activityService: ActivityService,
-    private formBuilder: FormBuilder) {
-
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute) {
+    
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
     var thisObj = this;
     this.viewEditBooking = (activityDate: ActivityDate) => {
@@ -269,7 +271,18 @@ export class BookingsComponent implements OnInit {
       }
     }
   }
-
+  searchCustomerByEmail(email: string) {
+    this.customerService.getMany(email).pipe(first()).subscribe(customers => {
+      this.customers = customers.map((m) => new Customer(m));
+      if (this.customers.length === 1) {
+       this._searchModel = this.customers[0];
+      }
+      else {
+        var element = document.getElementById('customer') as HTMLElement;
+        element.click();
+      }
+    });
+  }
   searchCustomer(event) {
     if (event) {
       if (event.key != 'Enter')
@@ -278,18 +291,10 @@ export class BookingsComponent implements OnInit {
     }
     var search = this.addBookingForm.get('customer').value;
     if (search && search.model && search.model.firstName) {
-      this.customerService.getMany(search.email).pipe(first()).subscribe(customers => {
-        this.customers = customers.map((m) => new Customer(m));
-        var element = document.getElementById('customer') as HTMLElement;
-        element.click();
-      });
+      this.searchCustomerByEmail(search.model.email);      
     }
     else {
-      this.customerService.getMany(search).pipe(first()).subscribe(customers => {
-        this.customers = customers.map((m) => new Customer(m));
-        var element = document.getElementById('customer') as HTMLElement;
-        element.click();
-      });
+      this.searchCustomerByEmail(search);
     }
   }
  
@@ -333,6 +338,11 @@ export class BookingsComponent implements OnInit {
     });
     this.loadSchedule();
     this.loadActivities();
+
+    this.filterCustomerEmail = this.route.snapshot.queryParamMap.get('customerEmail');
+    if (this.filterCustomerEmail) {
+      this.searchCustomerByEmail(this.filterCustomerEmail);
+    }
   }
 
   inputFormatter = (x: any) => {
@@ -370,7 +380,13 @@ export class BookingsComponent implements OnInit {
   }
 
   refreshActivities() {
-    this.activityDates = this.activityDates.filter(function (d) { return !d.model.deleted; });
+    this.activityDates = this.activityDates.filter((d) => {
+      return !d.model.deleted &&
+
+        d.model.customerBookings.findIndex((cb) => {
+          return !this.filterCustomerEmail || cb.customerEmail === this.filterCustomerEmail
+        }) >= 0;
+    });
   }
 
   hookEvents(activityDate: ActivityDate):void {
@@ -411,7 +427,9 @@ export class BookingsComponent implements OnInit {
             var activityDate = new ActivityDate(m);
             this.hookEvents(activityDate);
             return activityDate;
-          }));       
+        }));
+
+        this.refreshActivities();
     });
   }
 }

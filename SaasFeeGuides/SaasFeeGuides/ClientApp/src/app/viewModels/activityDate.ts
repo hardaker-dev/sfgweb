@@ -44,8 +44,13 @@ export class ActivityDate implements CalendarEventExt {
 
     this.color = colors.blue;
     this.draggable = model.amountPaid == 0;
-    this.start = new Date(model.startDateTime);
-    this.end = new Date(model.endDateTime);
+
+    var utcStart = new Date(model.startDateTime);
+    var utcEnd = new Date(model.endDateTime);
+    var offset = utcStart.getTimezoneOffset() * 60 * 1000;
+   
+    this.start = new Date(utcStart.getTime() - offset);
+    this.end = new Date(utcEnd.getTime() - offset);
     this.title = `${model.activityName}, Persons: ${model.numPersons}`;
     if (!this.model.customerBookings) {
       this.model.customerBookings = [];

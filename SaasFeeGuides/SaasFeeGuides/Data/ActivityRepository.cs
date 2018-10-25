@@ -92,8 +92,8 @@ namespace SaasFeeGuides.Data
                     command.CommandType = CommandType.StoredProcedure;
                     command.CommandText = "[Activities].[SelectActivityDates]";
                     command.Parameters.AddWithValue("@activityIds", string.Join(',', activityIds));
-                    command.Parameters.AddWithValue("@DateFrom",(object) dateFrom?.ToUniversalTime() ?? DBNull.Value);
-                    command.Parameters.AddWithValue("@DateTo", (object)dateTo?.ToUniversalTime() ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DateFrom",(object) dateFrom ?? DBNull.Value);
+                    command.Parameters.AddWithValue("@DateTo", (object)dateTo ?? DBNull.Value);
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
@@ -123,8 +123,8 @@ namespace SaasFeeGuides.Data
                 ActivityId = GetInt(reader, 2).Value,
                 ActivityName = GetString(reader, 3),
                 ActivitySkuName = GetString(reader, 4),
-                StartDateTime = GetDateTime(reader, 5).Value,
-                EndDateTime = GetDateTime(reader, 6).Value,
+                StartDateTime = DateTime.SpecifyKind(GetDateTime(reader, 5).Value, DateTimeKind.Utc),
+                EndDateTime = DateTime.SpecifyKind(GetDateTime(reader, 6).Value, DateTimeKind.Utc),
                 NumPersons = GetInt(reader,7) ?? 0,
                 TotalPrice = GetDouble(reader, 8) ?? 0,
                 AmountPaid = GetDouble(reader, 9) ?? 0,
@@ -399,7 +399,7 @@ namespace SaasFeeGuides.Data
                 using (var command = cn.CreateCommand())
                 {
                     command.Parameters.AddWithValue("@ActivitySkuDateId", activitySkuDate.Id);
-                    command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime.ToUniversalTime());
+                    command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime);
 
                     command.CommandType = CommandType.StoredProcedure;
 
@@ -420,7 +420,7 @@ namespace SaasFeeGuides.Data
                     {
                         command.Parameters.AddWithValue("@ActivityName", activitySkuDate.ActivityName);
                         command.Parameters.AddWithValue("@ActivitySkuName", activitySkuDate.ActivitySkuName);                        
-                        command.Parameters.AddWithValue("@DateTime",activitySkuDate.DateTime-Timezones.TimeZoneInfo.BaseUtcOffset);
+                        command.Parameters.AddWithValue("@DateTime",activitySkuDate.DateTime);
 
                         command.CommandType = CommandType.StoredProcedure;
 

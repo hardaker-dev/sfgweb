@@ -1,10 +1,10 @@
 ﻿[
   {
     "ActivityName": "Allalin",
-    "Name": "AllalinSku",
+    "Name": "Allalin",
     "TitleContent": [
       {
-        "Id": "AllalinSku_Title",
+        "Id": "Allalin_Title",
         "Value": "ALLALINHORN 4027M",
         "Locale": "na",
         "ContentType": "Text"
@@ -62,16 +62,16 @@
 
   {
     "ActivityName": "AllalinEast",
-    "Name": "AllalinEastSku",
+    "Name": "AllalinEast",
     "TitleContent": [
       {
-        "Id": "AllalinEastSku_Title",
+        "Id": "AllalinEast_Title",
         "Value": "ALLALINHORN EAST RIDGE 4027M",
         "Locale": "en",
         "ContentType": "Text"
       },
       {
-        "Id": "AllalinEastSku_Title",
+        "Id": "AllalinEast_Title",
         "Value": "ALLALINHORN OSTGRAT 4027M",
         "Locale": "de",
         "ContentType": "Text"
@@ -108,7 +108,7 @@
         "ContentType": "HTML"
       }
     ],
-    "DurationDays": 1.0,
+    "DurationDays": 0.0,
     "DurationHours": 4.0,
     "WebContent": [
       {

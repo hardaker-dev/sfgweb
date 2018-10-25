@@ -37,10 +37,10 @@
     "CategoryName": "Day Tours",
     "Skus": [
       {
-        "Name": "AllalinSku",
+        "Name": "Allalin",
         "TitleContent": [
           {
-            "Id": "AllalinSku_Title",
+            "Id": "Allalin_Title",
             "Value": "ALLALINHORN 4027M",
             "Locale": "na",
             "ContentType": "Text"
@@ -140,16 +140,16 @@
     "IsActive": true,
     "Skus": [
       {
-        "Name": "AllalinEastSku",
+        "Name": "AllalinEast",
         "TitleContent": [
           {
-            "Id": "AllalinEastSku_Title",
+            "Id": "AllalinEast_Title",
             "Value": "ALLALINHORN EAST RIDGE 4027M",
             "Locale": "en",
             "ContentType": "Text"
           },
           {
-            "Id": "AllalinEastSku_Title",
+            "Id": "AllalinEast_Title",
             "Value": "ALLALINHORN OSTGRAT 4027M",
             "Locale": "de",
             "ContentType": "Text"
@@ -186,7 +186,117 @@
             "ContentType": "HTML"
           }
         ],
-        "DurationDays": 1.0,
+        "DurationDays": 0.0,
+        "DurationHours": 4.0,
+        "WebContent": [
+          {
+            "Id": "AllalinEastSku_WebContent",
+            "Value": "test",
+            "Locale": "en",
+            "ContentType": "HTML"
+          },
+          {
+            "Id": "AllalinEastSku_WebContent",
+            "Value": "test",
+            "Locale": "de",
+            "ContentType": "HTML"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "Name": "AllalinNorth",
+    "CategoryName": "Day Tours",
+    "TitleContent": [
+      {
+        "Id": "AllalinNorth_Title",
+        "Value": "ALLALINHORN NORTH FACE 4027M",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "AllalinNorth_Title",
+        "Value": "ALLALINHORN NORDWAND 4027M",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "DescriptionContent": [
+      {
+        "Id": "AllalinNorth_Desc",
+        "Value": "There is hardly a more demanding and at the same time more fascinating way to reach the summit of the Allalin. If you...",
+        "Locale": "en",
+        "ContentType": "Text"
+      },
+      {
+        "Id": "AllalinNorth_Desc",
+        "Value": "Es gibt keine anspruchsvollere und gleichzeitig faszinierendere Variante auf den Gipfel. Wenn Sie den Umgang mit...",
+        "Locale": "de",
+        "ContentType": "Text"
+      }
+    ],
+    "MenuImageContent": [
+      {
+        "Id": "AllalinNorth_MenuImage",
+        "Value": "AllalinNorth.jpg",
+        "Locale": "na",
+        "ContentType": "Image"
+      }
+    ],
+    "VideoContent": null,
+    "ImageContent": null,
+    "IsActive": true,
+    "Skus": [
+      {
+        "Name": "AllalinNorth",
+        "TitleContent": [
+          {
+            "Id": "AllalinNorth_Title",
+            "Value": "ALLALINHORN NORTH FACE 4027M",
+            "Locale": "en",
+            "ContentType": "Text"
+          },
+          {
+            "Id": "AllalinNorth_Title",
+            "Value": "ALLALINHORN NORDWAND 4027M",
+            "Locale": "de",
+            "ContentType": "Text"
+          }
+        ],
+        "DescriptionContent": [
+          {
+            "Id": "AllalinNorthSku_Desc",
+            "Value": "There is hardly a more demanding and at the same time more fascinating way to reach the summit of the Allalin. If you would like to learn how to handle two ice axes and won't shy away from a 50 degree face, then this climb is for you. If you master this climb, then you've got what it takes to tackle more challenging North faces.",
+            "Locale": "en",
+            "ContentType": "HTML"
+          },
+          {
+            "Id": "AllalinNorthSku_Desc",
+            "Value": "Es gibt keine anspruchsvollere und gleichzeitig faszinierendere Variante auf den Gipfel. Wenn Sie den Umgang mit zwei Eispickeln erlernen möchten und Sie eine 50-gradige Wand nicht scheuen, sind Sie hier auf der richtigen Tour. Wer diese Nordwand meistert, verfügt über die nötige Voraussetzung, um noch anspruchsvollere Wände in Angriff zu nehmen.",
+            "Locale": "de",
+            "ContentType": "HTML"
+          }
+        ],
+        "PricePerPerson": 210.0,
+        "MinPersons": 1,
+        "MaxPersons": 8,
+        "AdditionalRequirementsContent": [
+          {
+            "Id": "AllalinNorthSku_AddRequirements",
+            "Value": "+++  Difficult tour on ice. \r\n\r\n++    Good average athletic fitness",
+            "Locale": "en",
+            "ContentType": "HTML"
+          },
+          {
+            "Id": "AllalinNorthSku_AddRequirements",
+            "Value": "+++  Schwere Eis Tour. \r\n\r\n++    Gute sportliche Grundkondition",
+            "Locale": "de",
+            "ContentType": "HTML"
+          }
+        ],
+        "DurationDays": 0.0,
         "DurationHours": 4.0,
         "WebContent": [
           {

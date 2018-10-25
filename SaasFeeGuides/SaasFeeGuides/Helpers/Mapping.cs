@@ -18,8 +18,8 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuDateId = date.ActivitySkuDateId,
                 ActivitySkuId = date.ActivitySkuId,
                 ActivitySkuName = date.ActivitySkuName,
-                StartDateTime =date.StartDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
-                EndDateTime = date.EndDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
+                StartDateTime =date.StartDateTime,
+                EndDateTime = date.EndDateTime,
                 NumPersons = date.NumPersons
             };
         }
@@ -32,8 +32,8 @@ namespace SaasFeeGuides.Helpers
                 ActivitySkuDateId = date.ActivitySkuDateId,
                 ActivitySkuId = date.ActivitySkuId,
                 ActivitySkuName = date.ActivitySkuName,
-                StartDateTime = date.StartDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
-                EndDateTime = date.EndDateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
+                StartDateTime = date.StartDateTime,
+                EndDateTime = date.EndDateTime,
                 AmountPaid = date.AmountPaid,
                 NumPersons = date.NumPersons,
                 TotalPrice = date.TotalPrice,
@@ -47,7 +47,7 @@ namespace SaasFeeGuides.Helpers
                 Name = booking.Name,
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
-                DateTime = booking.DateTime + Timezones.TimeZoneInfo.BaseUtcOffset,
+                DateTime = booking.DateTime,
                 NumPersons = booking.NumPersons,
                 HasConfirmed = booking.HasConfirmed,
                 HasPaid = booking.HasPaid

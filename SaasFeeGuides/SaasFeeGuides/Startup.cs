@@ -30,6 +30,7 @@ using System.Linq;
 using System.Globalization;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Localization;
+using Newtonsoft.Json.Serialization;
 
 namespace SaasFeeGuides
 {
@@ -66,7 +67,13 @@ namespace SaasFeeGuides
             b => b.MigrationsAssembly("SaasFeeGuides")).UseLazyLoadingProxies(false);
             });
            
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)  
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
+                .AddJsonOptions(opt =>
+                {
+                    opt.SerializerSettings.DateTimeZoneHandling = Newtonsoft.Json.DateTimeZoneHandling.Utc;
+                });
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -157,7 +164,7 @@ namespace SaasFeeGuides
             services.AddSingleton<IContentRepository>(new ContentRepository(connectionString));
             services.AddSingleton<IEquiptmentRepository>(new EquiptmentRepository(connectionString));
             services.AddTransient<IClaimsTransformation, ClaimsTransformer>();
-            services.AddMvc().AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>());
+          
 
         }
 
@@ -176,7 +183,7 @@ namespace SaasFeeGuides
                 app.UseHsts();
             }
 
-         
+
 
             app.UseExceptionHandler(
             builder =>

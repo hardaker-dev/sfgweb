@@ -82,7 +82,7 @@ namespace SaasFeeGuides.IntegrationTests
             var customerBookingId = await authClient.AddHistoricCustomerBooking(new HistoricCustomerBooking()
             {
                CustomerEmail = "dude@gmail.com",
-               ActivitySkuName = "AllalinSku",
+               ActivitySkuName = "Allalin",
                AmountPaid = 210,
                DateTime = new DateTime(2017,12,31,9,0,0),
                NumPersons = 1

@@ -172,7 +172,10 @@ export class BookingsComponent implements OnInit {
       customerBookings: customerBookings
     });
   }
-
+  offsetLocalDateTime(dateTime) {
+    var offset = dateTime.getTimezoneOffset() * 60 * 1000;
+    return new Date(dateTime.getTime() + offset);
+  }
   onSubmit() {
     this.submitted = true;
     if (this.addingBooking) {
@@ -182,7 +185,7 @@ export class BookingsComponent implements OnInit {
       }
       var activitySku = this.addBookingForm.get('activity').value as ActivitySku;
       var customer = this.addBookingForm.get('customer').value as Customer;
-      var date = new Date(this.addBookingForm.get('datetime').value as string);
+      var date = this.offsetLocalDateTime(new Date(this.addBookingForm.get('datetime').value as string));
       var numPersons = +this.addBookingForm.get('numPersons').value as number;
       var confirmed = this.addBookingForm.get('confirmed').value as boolean;
       var paid = this.addBookingForm.get('paid').value as boolean;
@@ -240,13 +243,14 @@ export class BookingsComponent implements OnInit {
       if (!this.viewEditActivityDate || this.viewEditActivityDate.model.activitySkuDateId < 0) {
 
         var activitySku = this.addDateForm.get('activity').value as ActivitySku;
-        var date = new Date(this.addDateForm.get('datetime').value as string);
+        var date = this.offsetLocalDateTime(new Date(this.addDateForm.get('datetime').value as string));
+      
         var customers = this.viewEditActivityDate ? this.viewEditActivityDate.model.customerBookings : [];
         this.activityService.addDate(new NewActivitySkuDate(activitySku.activityName, activitySku.name, date, customers)).pipe(first())
           .subscribe(
           id => {
             
-            var numPersons = customers.length > 0 ? customers.map((c) => c.numPersons).reduce((sum, current) => sum + current) : 0.2;
+            var numPersons = customers.length > 0 ? customers.map((c) => c.numPersons).reduce((sum, current) => sum + current) : 0;
             var activityDate = this.createActivity(numPersons, date, activitySku, id, customers);
               this.hookEvents(activityDate);
               this.activityDates.push(activityDate);

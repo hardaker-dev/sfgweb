@@ -1,6 +1,8 @@
 <h1>Activities</h1>
 <ul>
   <li *ngFor="let activity of activities">
+
+    <button (click)="filterClicked(activity)" type="button" class="btn btn-primary right"><i class="fa fa-filter"></i></button>
     <table>
 
       <tr>

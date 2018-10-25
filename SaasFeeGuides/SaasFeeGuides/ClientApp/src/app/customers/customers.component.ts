@@ -22,8 +22,7 @@ export class CustomersComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private formBuilder: FormBuilder,
-    private router: Router,
-    private alertService: AlertService)
+    private router: Router)
   {
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
  

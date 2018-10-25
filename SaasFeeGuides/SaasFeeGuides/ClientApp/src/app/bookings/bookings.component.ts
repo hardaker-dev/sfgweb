@@ -47,6 +47,7 @@ export class BookingsComponent implements OnInit {
   focus$ = new Subject<string>();
   click$ = new Subject<string>();
   filterCustomerEmail: string;
+  filterActivityName: string;
   private _searchModel: any;
   get searchModel(): any {
     return this._searchModel;
@@ -336,13 +337,16 @@ export class BookingsComponent implements OnInit {
       activity: ['', Validators.required],     
       datetime: ['', Validators.required],
     });
-    this.loadSchedule();
-    this.loadActivities();
-
     this.filterCustomerEmail = this.route.snapshot.queryParamMap.get('customerEmail');
+    this.filterActivityName = this.route.snapshot.queryParamMap.get('activityName');
     if (this.filterCustomerEmail) {
       this.searchCustomerByEmail(this.filterCustomerEmail);
     }
+
+    this.loadActivities();
+    this.loadSchedule();
+
+    
   }
 
   inputFormatter = (x: any) => {
@@ -383,10 +387,13 @@ export class BookingsComponent implements OnInit {
     this.activityDates = this.activityDates.filter((d) => {
       return !d.model.deleted &&
 
-        d.model.customerBookings.findIndex((cb) => {
-          return !this.filterCustomerEmail || cb.customerEmail === this.filterCustomerEmail
-        }) >= 0;
+        (!this.filterCustomerEmail || d.model.customerBookings.findIndex((cb) => {
+          return cb.customerEmail === this.filterCustomerEmail
+        }) >= 0) &&
+
+        (!this.filterActivityName || d.model.activityName == this.filterActivityName);
     });
+    
   }
 
   hookEvents(activityDate: ActivityDate):void {

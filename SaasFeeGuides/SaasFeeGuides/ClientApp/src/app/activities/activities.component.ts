@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import { User } from '../viewModels/User';
 import { Activity } from '../viewModels/Activity';
 import { ActivityService } from '../services/activity.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: 'activities.component.html',
@@ -12,8 +13,15 @@ export class ActivitiesComponent implements OnInit {
   currentAccount: User;
   activities: Activity[] = [];
 
-  constructor(private activityService: ActivityService) {
+  constructor(private activityService: ActivityService,
+    private router: Router) {
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
+  }
+
+
+  filterClicked(activity: Activity) {
+
+    this.router.navigate(['/bookings'], { queryParams: { activityName: activity.name } });
   }
 
   ngOnInit() {

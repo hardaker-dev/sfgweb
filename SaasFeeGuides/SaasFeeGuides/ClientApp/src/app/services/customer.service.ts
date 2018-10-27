@@ -4,10 +4,12 @@ import { CustomerModel,Customer } from '../viewModels/customer';
 import { HistoricCustomerBooking } from '../viewModels/historicCustomerBooking';
 import { CustomerBooking } from '../viewModels/customerBooking';
 import { AddCustomerBookingResponse } from '../viewModels/addCustomerBookingResponse';
+import { CacheService } from './cache.service';
 
 @Injectable()
 export class CustomerService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private cacheService: CacheService) { }
 
   getMany(searchText: string) {
     let params = new HttpParams();
@@ -22,6 +24,7 @@ export class CustomerService {
   }
 
   add(customer: Customer) {
+    this.clearCustomerCache();
     return this.http.post<number>('api/customer', customer.model);
   }
 
@@ -29,11 +32,17 @@ export class CustomerService {
     return this.http.post('api/customer/booking/historic', booking);
   }
   addCustomerBooking(booking: CustomerBooking) {
+    this.clearActivityCache();
     return this.http.post<AddCustomerBookingResponse>('api/customer/booking', booking);
   }
   getCustomerBookings(customerId: number) {
     return this.http.get('api/customer/' + customerId +'booking/');
   }
 
-  
+  clearActivityCache() {
+    this.cacheService.clear('api/activity/dates');
+  }
+  clearCustomerCache() {
+    this.cacheService.clear('api/customer');
+  }
 }

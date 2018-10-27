@@ -26,6 +26,8 @@ import { RegisterComponent } from './register/register.component';
 import { ActivityService } from './services/activity.service';
 import { SfgCalendarModule } from './calendar/calendar.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CacheService } from './services/cache.service';
+import { CachingInterceptor } from './interceptors/cache.interceptor';
 
 @NgModule({
   imports: [
@@ -52,12 +54,14 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     RegisterComponent
   ],
   providers: [
+    CacheService,
     AuthGuard,
     AlertService,
     AuthenticationService,
     AccountService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true },
     CustomerService,
     ActivityService
   ],

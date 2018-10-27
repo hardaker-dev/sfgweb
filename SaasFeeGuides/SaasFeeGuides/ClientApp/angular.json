@@ -30,7 +30,7 @@
           "configurations": {
             "production": {
               "optimization": true,
-              "outputHashing": "all",             
+              "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,

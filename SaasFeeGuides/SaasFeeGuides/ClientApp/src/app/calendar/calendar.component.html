@@ -101,7 +101,7 @@
       <ng-template contextMenuItem (execute)="addBooking($event.item.start)">
         Add new booking
       </ng-template>
-      <ng-template contextMenuItem (execute)="addDate($event.item)">
+      <ng-template contextMenuItem (execute)="addDate($event.item.start)">
         Add activity
       </ng-template>
       <ng-template [enabled]="dayEvent.event.model.numPersons==0" contextMenuItem (execute)="deleteDate($event.item)">
@@ -150,7 +150,7 @@
       <ng-template contextMenuItem (execute)="addBooking($event.item.start)">
         Add new booking
       </ng-template>
-      <ng-template contextMenuItem (execute)="addDate($event.item)">
+      <ng-template contextMenuItem (execute)="addDate($event.item.start)">
         Add activity
       </ng-template>
       <ng-template [enabled]="weekEvent.event.model.numPersons==0" contextMenuItem (execute)="deleteDate($event.item)">

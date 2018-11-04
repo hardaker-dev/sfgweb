@@ -5,7 +5,8 @@
     @Date datetime2,
 	@NumPersons int,
 	@HasPaid bit,
-	@HasConfirmed bit
+	@HasConfirmed bit,
+	@CustomerNotes nvarchar(max)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -49,8 +50,9 @@ BEGIN
 		[NumPersons] ,
 		[PriceAgreed] ,
 		[Created],
-		[Modified]	)
-	VALUES (@customerId,@activitySkuDateId,@HasConfirmed,@HasPaid,0,@NumPersons,@PriceAgreed,GETUTCDATE(),GETUTCDATE())
+		[Modified],
+		[CustomerNotes]	)
+	VALUES (@customerId,@activitySkuDateId,@HasConfirmed,@HasPaid,0,@NumPersons,@PriceAgreed,GETUTCDATE(),GETUTCDATE(),@CustomerNotes)
 
 	SELECT CAST(SCOPE_IDENTITY() as INT),@activitySkuDateId
 

@@ -136,6 +136,34 @@ export class BookingsComponent implements OnInit {
     };
   }
 
+  hasNewConfirmedChanged( event) {
+   
+    if (!event.currentTarget.checked) {
+      this.addBookingForm.get('paid').setValue(false);      
+    }
+  }
+  hasNewPaidChanged( event) {
+    if (event.currentTarget.checked) {
+      this.addBookingForm.get('confirmed').setValue(true);
+      this.disableField('confirmed', this.addBookingForm);
+    }
+    else {
+      this.enableField('confirmed',this.addBookingForm);
+    }
+  }
+
+  hasConfirmedChanged(customerBooking: CustomerBooking, event) {
+    customerBooking.hasConfirmed = event.currentTarget.checked;
+    if (!customerBooking.hasConfirmed) {
+      customerBooking.hasPaid = false;
+    }
+  }
+  hasPaidChanged(customerBooking: CustomerBooking, event) {
+    customerBooking.hasPaid = event.currentTarget.checked;
+    if (customerBooking.hasPaid) {
+      customerBooking.hasConfirmed = true;     
+      }
+  }
   deleteDate(date: ActivityDate) {
     date.delete();
   }

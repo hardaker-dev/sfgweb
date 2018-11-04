@@ -14,7 +14,7 @@ namespace SaasFeeGuides.Data
     public interface ICustomerRepository
     {
         Task<int> UpsertCustomer(Customer customer);
-        Task<(int customerBookingId, int activityDateId)> InsertCustomerBooking(CustomerBooking booking);
+        Task<(int customerBookingId, int activityDateId)> UpsertCustomerBooking(CustomerBooking booking);
         Task<Customer> SelectCustomerByUserId(string userId);
         Task DeleteAccount(string userId);
         Task<IEnumerable<Customer>> SelectCustomers(string emailSearch, string firstNameSearch, string lastNameSearch);
@@ -27,31 +27,43 @@ namespace SaasFeeGuides.Data
         public CustomerRepository(string connectionString) : base(connectionString)
         {
         }
-        public async Task<(int customerBookingId, int activityDateId)> InsertCustomerBooking(CustomerBooking booking)
+        public async Task<(int customerBookingId, int activityDateId)> UpsertCustomerBooking(CustomerBooking booking)
         {
             using (var cn = await GetNewConnectionAsync())
             {
                 using (var command = cn.CreateCommand())
                 {
-                    command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
+                    
+                    command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.AddWithValue("@PriceAgreed", booking.PriceAgreed);
                     command.Parameters.AddWithValue("@Email", booking.CustomerEmail);
-                    command.Parameters.AddWithValue("@Date", booking.DateTime);
                     command.Parameters.AddWithValue("@NumPersons", booking.NumPersons);
                     command.Parameters.AddWithValue("@HasPaid", booking.HasPaid);
                     command.Parameters.AddWithValue("@HasConfirmed", booking.HasConfirmed);
-                    command.CommandType = CommandType.StoredProcedure;
-                   
-                    command.CommandText = "[Activities].[InsertCustomerBooking]";
-                    return await ReadSingleValueAsync(command, (reader) =>
+                    command.Parameters.AddWithValue("@CustomerNotes", booking.CustomerNotes ?? string.Empty);
+                    if (booking.Id.HasValue)
+                    {
+                        command.Parameters.AddWithValue("@Id", booking.Id.Value);
+                     
+                        command.Parameters.AddWithValue("@HasCancelled", booking.HasCancelled);
+                        command.CommandText = "[Activities].[UpdateCustomerBooking]";
+                        await command.ExecuteNonQueryAsync();
+                        return (booking.Id.Value, booking.ActivityDateSkuId);
+                    }
+                    else
+                    {
+                        command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
+                        command.Parameters.AddWithValue("@Date", booking.DateTime);
+                        command.CommandText = "[Activities].[InsertCustomerBooking]";
+                        return await ReadSingleValueAsync(command, (reader) =>
 
-                     {
-                         var customerBookingId = GetInt(reader, 0).Value;
-                         var activityDateId = GetInt(reader, 1).Value;
+                         {
+                             var customerBookingId = GetInt(reader, 0).Value;
+                             var activityDateId = GetInt(reader, 1).Value;
 
-                         return (customerBookingId, activityDateId);
-                     });
-                    
+                             return (customerBookingId, activityDateId);
+                         });
+                    }                    
                 }
             }
         }

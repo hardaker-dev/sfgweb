@@ -50,7 +50,8 @@ BEGIN
 		cb.NumPersons,
 		cb.PriceAgreed,
 		asd.DateTime,
-		c.FirstName + ' ' + c.LastName as [Name]
+		c.FirstName + ' ' + c.LastName as [CustomerDisplayName],
+		cb.CustomerNotes
 		FROM Activities.ActivitySkuDate asd
 	inner join Activities.ActivitySku aSku on aSku.Id = asd.ActivitySkuId
 	left JOIN STRING_SPLIT(@ActivityIds, ',') actId on actId.value = aSku.ActivityId	

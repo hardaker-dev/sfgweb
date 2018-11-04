@@ -70,7 +70,7 @@ namespace SaasFeeGuides.Controllers
         }
         [Authorize("Admin")]
         [HttpDelete("sku/date/{activitySkuDateId:int}/customer/{customerEmail}")]
-        public async Task<IActionResult> DleteActivitySkuDateCustomer(int activitySkuDateId,string customerEmail)
+        public async Task<IActionResult> DeleteActivitySkuDateCustomer(int activitySkuDateId,string customerEmail)
         {
             await _customerRepository.DeleteCustomerBooking(activitySkuDateId, customerEmail);
            
@@ -83,7 +83,7 @@ namespace SaasFeeGuides.Controllers
             var id = await _activityRepository.InsertActivitySkuDate(activitySkuDate);
             foreach(var customerBooking in activitySkuDate.CustomerBookings ?? new ViewModels.CustomerBooking[0])
             {
-                await _customerRepository.InsertCustomerBooking(customerBooking.Map());
+                await _customerRepository.UpsertCustomerBooking(customerBooking.Map());
             }
             return new OkObjectResult(id);
         }

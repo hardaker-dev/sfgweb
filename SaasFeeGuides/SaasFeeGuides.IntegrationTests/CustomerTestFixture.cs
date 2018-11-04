@@ -64,6 +64,33 @@ namespace SaasFeeGuides.IntegrationTests
         }
 
         [Fact]
+        public async Task UpdateCustomerBooking()
+        {
+            var authClient = await AuthClient();
+
+            await AddActivitiesAndSkusIfNeeded(authClient);
+            var customers = await authClient.GetCustomers();
+            await AddCustomerBookingsIfNeeded(authClient);
+
+            var dates = await authClient.GetAllActivityDates(null, null);
+            var date = dates.FirstOrDefault(x=>x.CustomerBookings?.Any() ?? false);
+            var booking = date.CustomerBookings[0];
+            booking.HasPaid = !booking.HasPaid;
+            booking.HasConfirmed = !booking.HasConfirmed;
+            booking.CustomerNotes = "1 leg";
+
+            await authClient.UpdateCustomerBooking(booking);
+
+            dates = await authClient.GetAllActivityDates(null, null);
+            date = dates.FirstOrDefault(x => x.CustomerBookings?.Any() ?? false);
+            booking = date.CustomerBookings[0];
+
+            Assert.True(booking.HasPaid);
+            Assert.True(booking.HasConfirmed);
+            Assert.Equal("1 leg", booking.CustomerNotes);
+        }
+
+        [Fact]
         public async Task AddHistoricCustomerBooking()
         {
             var authClient = await AuthClient();

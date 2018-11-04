@@ -1,7 +1,7 @@
 export class CustomerBooking {
 
   constructor(
-    public name : string,
+    public customerDisplayName : string,
     public activitySkuName : string,
     public dateTime: Date,
     public customerEmail: string,     

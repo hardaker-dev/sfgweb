@@ -60,7 +60,23 @@ namespace SaasFeeGuides.RestClient
 
             return await get.ReceiveJsonAsync<IList<Activity>>();
         }
+        public override async Task<IList<ActivityDate>> GetAllActivityDates(DateTime? dateFrom, DateTime? dateTo)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "activity", "dates")
+                  .WithBearerToken(_bearerToken)
+                  .WithQueryParameters(new Dictionary<string, object>()
+                {
+                    {"dateFrom",dateFrom?.ToString(ApiConstants.DateStringFormat) },
+                    {"dateTo",dateTo?.ToString(ApiConstants.DateStringFormat) }
+                })
+                .AcceptGzipCompression();
 
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+            return await get.ReceiveJsonAsync<IList<ActivityDate>>();
+        }
         public async Task<int> AddOrUpdateEquiptment(Equiptment equiptment)
         {
             var request = _serviceUri.AsRestRequest()
@@ -75,6 +91,23 @@ namespace SaasFeeGuides.RestClient
             return await post.ReceiveJsonAsync<int>();
 
         }
+
+        public async Task UpdateCustomerBooking(CustomerBooking customerBooking)
+        {
+            var request = _serviceUri.AsRestRequest()
+             .WithPathSegments("api", "customer", "booking")
+             .WithBearerToken(_bearerToken)
+             .AcceptGzipCompression();
+
+            var post = request.PatchJsonAsync(customerBooking, DefaultClient);
+            var response = await post;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new RestResponseException(response.StatusCode, response.RequestMessage, string.Empty, await response.Content.ReadAsStringAsync());
+            }
+        }
+
         public async Task<int> AddOrUpdateActivitySku(ActivitySku activitySku)
         {
             var request = _serviceUri.AsRestRequest()

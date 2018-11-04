@@ -49,10 +49,10 @@
                 {{customerBooking.numPersons}}
               </td>
               <td>
-                <input type="checkbox"  [checked]="customerBooking.hasConfirmed" />              
+                <input type="checkbox" [disabled]="customerBooking.hasPaid"  (change)="hasConfirmedChanged(customerBooking,$event)" [checked]="customerBooking.hasConfirmed " />              
               </td>
               <td>
-                <input type="checkbox" [checked]="customerBooking.hasPaid"  />                
+                <input type="checkbox" (change)="hasPaidChanged(customerBooking, $event)" [checked]="customerBooking.hasPaid"  />                
               </td>
               <td>
                 <i class="fa fa-remove pointer" (click)="deleteBooking(customerBooking)"></i>
@@ -135,11 +135,11 @@
 
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="confirmed">Confirmed</label>
-        <input class="form-control form-input-checkbox " formControlName="confirmed" type="checkbox" />
+        <input class="form-control form-input-checkbox"   (change)="hasNewConfirmedChanged($event)" formControlName="confirmed" type="checkbox" />
       </div>
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="paid">Paid</label>
-        <input class="form-control form-input-checkbox" formControlName="paid" type="checkbox" />
+        <input class="form-control form-input-checkbox" formControlName="paid" (change)="hasNewPaidChanged($event)" type="checkbox" />
       </div>
       <div [formGroup]="addBookingForm">
         <button class="btn btn-primary" type="button" (click)="cancelClick()">Cancel</button>

@@ -72,12 +72,13 @@ namespace SaasFeeGuides.Extensions
             return reader.GetFieldValue<DateTime>(fieldNum);
         }
 
-        public static Models.CustomerBooking ReadCustomer(this SqlDataReader reader)
+        public static Models.CustomerBooking ReadCustomerBooking(this SqlDataReader reader)
         {
             try
             {
                 return new Models.CustomerBooking
                 {
+                    Id = reader.GetInteger(0).Value,
                     ActivitySkuName =  reader.GetStr( 1),
                     ActivityDateSkuId = reader.GetInteger(3).Value,
                     HasConfirmed = reader.GetBool(4) ?? false,
@@ -86,7 +87,8 @@ namespace SaasFeeGuides.Extensions
                     NumPersons = reader.GetInteger(7).Value,
                     PriceAgreed = reader.GetDub(8) ?? 0,
                     DateTime = reader.GetDt(9).Value,
-                    Name = reader.GetStr(10)
+                    CustomerDisplayName = reader.GetStr(10),
+                    CustomerNotes = reader.GetStr(11)
                 };
             }
             catch (Exception ex)

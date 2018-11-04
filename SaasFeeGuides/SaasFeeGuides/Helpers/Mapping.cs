@@ -44,24 +44,31 @@ namespace SaasFeeGuides.Helpers
         {
             return new ViewModels.CustomerBooking()
             {
-                Name = booking.Name,
+                CustomerDisplayName = booking.CustomerDisplayName,
+                Id = booking.Id,
+                PriceAgreed = booking.PriceAgreed,
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
                 DateTime = booking.DateTime,
                 NumPersons = booking.NumPersons,
                 HasConfirmed = booking.HasConfirmed,
-                HasPaid = booking.HasPaid
+                HasPaid = booking.HasPaid,
+                CustomerNotes = booking.CustomerNotes
             };
         }
         public static Models.CustomerBooking Map(this ViewModels.CustomerBooking booking)
         {
             return new Models.CustomerBooking()
             {
+                CustomerNotes = booking.CustomerNotes,
+                Id= booking.Id,
+                PriceAgreed = booking.PriceAgreed ?? -1,                
                 ActivitySkuName = booking.ActivitySkuName,
                 CustomerEmail = booking.CustomerEmail,
                 DateTime = booking.DateTime,
                 NumPersons = booking.NumPersons,
                 HasConfirmed = booking.HasConfirmed,
+                HasCancelled = booking.HasCancelled,
                 HasPaid = booking.HasPaid
             };
         }

@@ -29,7 +29,7 @@ namespace SaasFeeGuides.RestClient
             AutomaticDecompression = DecompressionMethods.GZip
         });
 
-        public async Task<IList<ActivityDate>> GetAllActivityDates( DateTime? dateFrom, DateTime? dateTo)
+        public virtual async Task<IList<ActivityDate>> GetAllActivityDates( DateTime? dateFrom, DateTime? dateTo)
         {
             var request = _serviceUri.AsRestRequest()
                 .WithPathSegments("api", "activity",  "dates")

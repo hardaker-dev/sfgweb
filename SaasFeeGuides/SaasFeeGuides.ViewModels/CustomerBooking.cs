@@ -5,6 +5,7 @@ namespace SaasFeeGuides.ViewModels
 {
     public class CustomerBooking
     {
+        public int? Id { get; set; }
         public string ActivitySkuName { get; set; }
 
         public DateTime DateTime { get; set; }
@@ -14,6 +15,9 @@ namespace SaasFeeGuides.ViewModels
         
         public bool HasPaid { get; set; }
         public bool HasConfirmed { get; set; }
-        public string Name { get; set; }
+        public string CustomerDisplayName { get; set; }
+        public double? PriceAgreed { get; set; }
+        public bool HasCancelled { get; set; }
+        public string CustomerNotes { get; set; }
     }
 }

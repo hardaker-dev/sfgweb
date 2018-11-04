@@ -100,7 +100,7 @@ namespace SaasFeeGuides.Data
                         var activityDates = new HashSet<Models.ActivityDate>(await ReadListAsync(reader, ReadActivityDate));                    
                         await reader.NextResultAsync();
 
-                        var customers = await ReadListAsync(reader, ModelReaderExtensions.ReadCustomer);
+                        var customers = await ReadListAsync(reader, ModelReaderExtensions.ReadCustomerBooking);
 
                         foreach (var customerGroup in customers.GroupBy(x => x.ActivityDateSkuId))
                         {

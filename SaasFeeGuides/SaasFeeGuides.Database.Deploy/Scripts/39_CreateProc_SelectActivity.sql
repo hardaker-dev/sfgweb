@@ -41,4 +41,20 @@ BEGIN
 	from Activities.ActivityEquiptment ae	
 	where ae.activityId = @ActivityId
 
+
+	select 
+		asp.[ActivitySkuId],
+		asp.[Name],		
+		asp.[DescriptionContentId],
+		asp.[DiscountCode],
+		asp.[Price],
+		asp.[MaxPersons],
+		asp.[MinPersons],
+		asp.[DiscountPercentage],
+		asp.[ValidFrom],
+		asp.[ValidTo]	
+	from Activities.ActivitySku actS
+	inner join Activities.ActivitySkuPrice asp on asp.[ActivitySkuId] = actS.Id
+	where actS.activityId = @ActivityId
+
 END

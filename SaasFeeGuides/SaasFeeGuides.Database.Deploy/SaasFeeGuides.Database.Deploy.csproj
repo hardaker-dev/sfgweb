@@ -31,7 +31,7 @@
     <None Remove="Scripts\19_CreateProc_UpsertActivity.sql" />
     <None Remove="Scripts\20_CreateProc_UpsertActivitySku.sql" />
     <None Remove="Scripts\21_CreateTable_GuideAvailability.sql" />
-    <None Remove="Scripts\22_CreateProc_InsertActivityPrice.sql" />
+    <None Remove="Scripts\22_CreateProc_UpsertActivitySkuPrice.sql" />
     <None Remove="Scripts\24_CreateProc_UpsertContent.sql" />
     <None Remove="Scripts\25_CreateProc_FindActivityByName.sql" />
     <None Remove="Scripts\26_CreateProc_FindActivitySkuByName.sql" />
@@ -95,7 +95,7 @@
     <EmbeddedResource Include="Scripts\37_CreateProc_SelectActivitiesLoc.sql" />
     <EmbeddedResource Include="Scripts\26_CreateProc_FindActivitySkuByName.sql" />
     <EmbeddedResource Include="Scripts\25_CreateProc_FindActivityByName.sql" />
-    <EmbeddedResource Include="Scripts\22_CreateProc_InsertActivityPrice.sql" />
+    <EmbeddedResource Include="Scripts\22_CreateProc_UpsertActivitySkuPrice.sql" />
     <EmbeddedResource Include="Scripts\20_CreateProc_UpsertActivitySku.sql" />
     <EmbeddedResource Include="Scripts\21_CreateTable_GuideAvailability.sql" />
     <EmbeddedResource Include="Scripts\19_CreateProc_UpsertActivity.sql" />

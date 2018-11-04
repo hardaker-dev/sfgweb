@@ -4,7 +4,7 @@ BEGIN TRAN
 
 	CREATE TABLE [Activities].[ActivitySkuPrice](	
 		[ActivitySkuId] [int] NULL,
-		[Name] nvarchar(max) not null,		
+		[Name] nvarchar(450) not null,		
 		[DescriptionContentId] varchar(50) not null,
 		[DiscountCode] nvarchar(255) null,
 		[Price] float  NULL,
@@ -15,7 +15,7 @@ BEGIN TRAN
 		[ValidTo] date null	
 	)
 
-	CREATE CLUSTERED INDEX CIX_ActivitySkuDate ON [Activities].[ActivitySkuPrice]   ([ActivitySkuId]);
+	CREATE CLUSTERED INDEX CIX_ActivitySkuPrice ON [Activities].[ActivitySkuPrice]   ([ActivitySkuId],[Name]);
 
 	ALTER TABLE [Activities].[ActivitySkuPrice]
 	ADD CONSTRAINT FK_ActivitySkuPrice_ActivitySkuId FOREIGN KEY (ActivitySkuId)     

@@ -38,4 +38,18 @@ BEGIN
 			ae.[Count],
 			ae.GuideOnly
 	from Activities.ActivityEquiptment ae
+
+	select 
+		asp.[ActivitySkuId],
+		asp.[Name],		
+		asp.[DescriptionContentId],
+		asp.[DiscountCode],
+		asp.[Price],
+		asp.[MaxPersons],
+		asp.[MinPersons],
+		asp.[DiscountPercentage],
+		asp.[ValidFrom],
+		asp.[ValidTo]	
+	from Activities.ActivitySku actS
+	inner join Activities.ActivitySkuPrice asp on asp.[ActivitySkuId] = actS.Id
 END

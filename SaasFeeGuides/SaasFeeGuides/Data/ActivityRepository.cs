@@ -33,6 +33,7 @@ namespace SaasFeeGuides.Data
         Task<int> InsertActivitySkuDate(NewActivitySkuDate activitySkuDate);
         Task DeleteActivitySkuDate(int activitySkuDateId);
         Task UpdateActivitySkuDate(ActivitySkuDate activitySkuDate);
+        Task UpsertActivitySkuPrice(Models.ActivitySkuPrice activitySkuPrice);
     }
     public class ActivityRepository : DataAccessBase, IActivityRepository
     {
@@ -58,8 +59,18 @@ namespace SaasFeeGuides.Data
                         var activity = ReadActivity(reader);
                         await reader.NextResultAsync();
                         activity.Skus = await ReadListAsync(reader, ReadActivitySku);
+                        var activitySkus = new HashSet<Models.ActivitySku>(activity.Skus);
                         await reader.NextResultAsync();
-                        activity.Equiptment = await ReadListAsync(reader, ReadActivityEquiptment);
+                        activity.Equiptment = await ReadListAsync(reader, ReadActivityEquiptment);                        
+
+                        await reader.NextResultAsync();
+                        var activityPrices = await ReadListAsync(reader, ReadActivitySkuPrice);
+                        foreach (var activityPriceGroup in activityPrices.GroupBy(x => x.ActivitySkuId))
+                        {
+                            activitySkus.TryGetValue(new Models.ActivitySku() { Id = activityPriceGroup.Key }, out Models.ActivitySku activitySku);
+                            activitySku.PriceOptions = activityPriceGroup.ToList();
+                        }
+
                         return activity;
                     }
                 }
@@ -176,6 +187,7 @@ namespace SaasFeeGuides.Data
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         var activities = new HashSet<Models.Activity>( await ReadListAsync(reader, ReadActivity));
+                        var activitySkus = new HashSet<Models.ActivitySku>();
 
                         await reader.NextResultAsync();                       
                         var skus = await ReadListAsync(reader, ReadActivitySku);
@@ -183,6 +195,10 @@ namespace SaasFeeGuides.Data
                         {
                             activities.TryGetValue(new Models.Activity() { Id = skuGroup.Key }, out Models.Activity activity);
                             activity.Skus = skuGroup.ToList();
+                            foreach(var sku in activity.Skus)
+                            {
+                                activitySkus.Add(sku);
+                            }
                         }
                         await reader.NextResultAsync();
                         var equitpment = await ReadListAsync(reader, ReadActivityEquiptment);
@@ -192,6 +208,14 @@ namespace SaasFeeGuides.Data
                             activity.Equiptment = equiptmentGroup.ToList();
                         }
 
+                        await reader.NextResultAsync();
+                        var activityPrices = await ReadListAsync(reader, ReadActivitySkuPrice);
+                        foreach (var activityPriceGroup in activityPrices.GroupBy(x => x.ActivitySkuId))
+                        {
+                            activitySkus.TryGetValue(new Models.ActivitySku() { Id = activityPriceGroup.Key }, out Models.ActivitySku activitySku);
+                            activitySku.PriceOptions = activityPriceGroup.ToList();
+                        }
+
                         return activities;
                     }
 
@@ -199,6 +223,9 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
+
+    
+
         public async Task<IEnumerable<Models.ActivityLoc>> SelectActivities(string locale)
         {
             using (var cn = await GetNewConnectionAsync())
@@ -240,6 +267,30 @@ namespace SaasFeeGuides.Data
                     }
                  
                 }
+            }
+        }
+
+        private Models.ActivitySkuPrice ReadActivitySkuPrice(SqlDataReader reader)
+        {
+            try
+            {
+                return new Models.ActivitySkuPrice
+                {
+                    ActivitySkuId = GetInt(reader, 0).GetValueOrDefault(),
+                    Name = GetString(reader, 1),
+                    DescriptionContentId = GetString(reader, 2),
+                    DiscountCode = GetString(reader, 3),
+                    Price = GetDouble(reader, 4),
+                    MaxPersons = GetInt(reader, 5).Value,
+                    MinPersons = GetInt(reader, 6).Value,
+                    DiscountPercentage = GetDouble(reader, 7),
+                    ValidFrom = GetDateTime(reader, 8),
+                    ValidTo = GetDateTime(reader, 9)                    
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error reading ActivitySkuPrice", ex);
             }
         }
 
@@ -441,6 +492,46 @@ namespace SaasFeeGuides.Data
                 }
             }
         }
+
+        public async Task UpsertActivitySkuPrice(Models.ActivitySkuPrice activitySkuPrice)
+        {
+            try
+            {
+                using (var cn = await GetNewConnectionAsync())
+                {
+                    using (var command = cn.CreateCommand())
+                    {
+                        command.Parameters.AddWithValue("@Name", activitySkuPrice.Name);
+                        command.Parameters.AddWithValue("@ActivitySkuId", activitySkuPrice.ActivitySkuId);
+                        command.Parameters.AddWithValue("@DiscountCode", (object)activitySkuPrice.DiscountCode ?? DBNull.Value);
+                        command.Parameters.AddWithValue("@DiscountPercentage", (object)activitySkuPrice.DiscountPercentage ?? DBNull.Value);
+                        command.Parameters.AddWithValue("@MaxPersons", activitySkuPrice.MaxPersons);
+                        command.Parameters.AddWithValue("@MinPersons", activitySkuPrice.MinPersons);
+                        command.Parameters.AddWithValue("@Price", (object)activitySkuPrice.Price ?? DBNull.Value);
+                        command.Parameters.AddWithValue("@ValidFrom", activitySkuPrice.ValidFrom);
+                        command.Parameters.AddWithValue("@ValidTo", activitySkuPrice.ValidTo);
+                        command.Parameters.AddWithValue("@DescriptionContentId", activitySkuPrice.DescriptionContentId);
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        command.CommandText = "[Activities].[UpsertActivitySkuPrice]";
+
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                switch ((DataError)e.Number)
+                {
+                    case DataError.CannotFindRecord:
+                        var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
+                        throw new BadRequestException(error.Message, HttpStatusCode.NotFound, e);
+                    default: throw e;
+                }
+            }
+        }
+
+        #region private methods
         private Models.ActivitySku ReadActivitySku(SqlDataReader reader)
         {
             try
@@ -535,6 +626,6 @@ namespace SaasFeeGuides.Data
             }
         }
 
-       
+        #endregion
     }
 }

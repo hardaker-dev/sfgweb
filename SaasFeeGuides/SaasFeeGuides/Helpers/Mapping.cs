@@ -1,5 +1,6 @@
 ﻿using SaasFeeGuides.Data;
 using SaasFeeGuides.Extensions;
+using SaasFeeGuides.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -148,7 +149,7 @@ namespace SaasFeeGuides.Helpers
             return new ViewModels.ActivitySku()
             {
                 DescriptionContent = await descContent,
-               TitleContent = await titleContent,
+                TitleContent = await titleContent,
                 Name = sku.Name,
                 ActivityName = sku.ActivityName,
                 AdditionalRequirementsContent =await additionalRequirementsContent,
@@ -159,7 +160,8 @@ namespace SaasFeeGuides.Helpers
                 PricePerPerson = sku.PricePerPerson,
                 WebContent = await webContent,
                 ActivityId = sku.ActivityId,
-                Id = sku.Id.Value
+                Id = sku.Id.Value,
+                PriceOptions = await Task.WhenAll(sku.PriceOptions?.Select(price => price.Map(contentRepository)))
             };
         }
         private static ViewModels.ActivitySkuLoc Map(this Models.ActivitySkuLoc s)
@@ -248,7 +250,38 @@ namespace SaasFeeGuides.Helpers
                 CategoryName = activity.CategoryName
             };
         }
-
+        public static async Task<ViewModels.ActivitySkuPrice> Map(this ActivitySkuPrice activitySkuPrice, IContentRepository contentRepository)
+        {
+            return new ViewModels.ActivitySkuPrice()
+            {
+                ActivitySkuId = activitySkuPrice.ActivitySkuId,
+                DiscountCode = activitySkuPrice.DiscountCode,
+                DiscountPercentage = activitySkuPrice.DiscountPercentage,
+                MaxPersons = activitySkuPrice.MaxPersons,
+                MinPersons = activitySkuPrice.MinPersons,
+                Name = activitySkuPrice.Name,
+                Price = activitySkuPrice.Price ?? 0,
+                ValidFrom = activitySkuPrice.ValidFrom,
+                ValidTo = activitySkuPrice.ValidTo,
+                DescriptionContent = await contentRepository.SelectContent(activitySkuPrice.DescriptionContentId),
+            };
+        }
+        public static async Task<ActivitySkuPrice> Map(this ViewModels.ActivitySkuPrice activitySkuPrice, IContentRepository contentRepository)
+        {
+            return new ActivitySkuPrice()
+            {
+                ActivitySkuId = activitySkuPrice.ActivitySkuId,
+                DiscountCode = activitySkuPrice.DiscountCode,
+                DiscountPercentage = activitySkuPrice.DiscountPercentage,
+                MaxPersons = activitySkuPrice.MaxPersons,
+                MinPersons = activitySkuPrice.MinPersons,
+                Name = activitySkuPrice.Name,
+                Price = activitySkuPrice.Price,
+                ValidFrom = activitySkuPrice.ValidFrom,
+                ValidTo = activitySkuPrice.ValidTo,
+                DescriptionContentId = await contentRepository.InsertContent(activitySkuPrice.DescriptionContent),
+            };
+        }
         public static async Task<Models.ActivitySku> Map(this ViewModels.ActivitySku activitySku, IContentRepository contentRepository)
         {
             var title = contentRepository.InsertContent(activitySku.TitleContent);

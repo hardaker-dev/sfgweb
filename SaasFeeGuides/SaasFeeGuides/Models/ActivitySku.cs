@@ -1,8 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SaasFeeGuides.Models
 {
-    public class ActivitySku
+    public class ActivitySku : IEquatable<ActivitySku>
     {
         public int? Id { get; internal set; }
         public string ActivityName { get; internal set; }
@@ -17,5 +19,22 @@ namespace SaasFeeGuides.Models
         public double DurationHours { get; internal set; }
         public string WebContentId { get; internal set; }
         public int ActivityId { get; internal set; }
+        public IList<ActivitySkuPrice> PriceOptions { get; internal set; }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Activity);
+        }
+
+        public bool Equals(ActivitySku other)
+        {
+            return other != null &&
+                   EqualityComparer<int?>.Default.Equals(Id, other.Id);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
+        }
     }
 }

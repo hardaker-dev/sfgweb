@@ -214,12 +214,24 @@ namespace SaasFeeGuides.Controllers
             if (activitySkus == null)
                 return Enumerable.Empty<(string name, int id)>();
 
-            return await Task.WhenAll(activitySkus.Select(sku =>
+
+            var results = await Task.WhenAll(activitySkus.Select(sku =>
             {
-                return  sku.Map(_contentRepository)
-                .ContinueWith(activitySkuModel => _activityRepository.UpsertActivitySku(activitySkuModel.Result))
-                .ContinueWith(skuTask => (sku.Name, skuTask.Result.Result));
+                return sku.Map(_contentRepository)
+                .ContinueWith(async activitySkuModel =>
+                {
+                    var activitySkuId = await _activityRepository.UpsertActivitySku(await activitySkuModel);
+                    foreach (var priceOption in sku.PriceOptions ?? Enumerable.Empty<ViewModels.ActivitySkuPrice>())
+                    {
+                        priceOption.ActivitySkuId = activitySkuId;
+                        await _activityRepository.UpsertActivitySkuPrice(await priceOption.Map(_contentRepository));
+                    }
+
+                    return (sku.Name,activitySkuId);
+                });
             }));
+            //unwrap
+            return await Task.WhenAll(results.Select(y => y));
         }
     }
 }

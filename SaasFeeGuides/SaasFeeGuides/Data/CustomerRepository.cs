@@ -29,41 +29,53 @@ namespace SaasFeeGuides.Data
         }
         public async Task<(int customerBookingId, int activityDateId)> UpsertCustomerBooking(CustomerBooking booking)
         {
-            using (var cn = await GetNewConnectionAsync())
+            try
             {
-                using (var command = cn.CreateCommand())
+                using (var cn = await GetNewConnectionAsync())
                 {
-                    
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@PriceAgreed", booking.PriceAgreed);
-                    command.Parameters.AddWithValue("@Email", booking.CustomerEmail);
-                    command.Parameters.AddWithValue("@NumPersons", booking.NumPersons);
-                    command.Parameters.AddWithValue("@HasPaid", booking.HasPaid);
-                    command.Parameters.AddWithValue("@HasConfirmed", booking.HasConfirmed);
-                    command.Parameters.AddWithValue("@CustomerNotes", booking.CustomerNotes ?? string.Empty);
-                    if (booking.Id.HasValue)
+                    using (var command = cn.CreateCommand())
                     {
-                        command.Parameters.AddWithValue("@Id", booking.Id.Value);
-                     
-                        command.Parameters.AddWithValue("@HasCancelled", booking.HasCancelled);
-                        command.CommandText = "[Activities].[UpdateCustomerBooking]";
-                        await command.ExecuteNonQueryAsync();
-                        return (booking.Id.Value, booking.ActivityDateSkuId);
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@PriceAgreed", booking.PriceAgreed);
+                        command.Parameters.AddWithValue("@Email", booking.CustomerEmail);
+                        command.Parameters.AddWithValue("@NumPersons", booking.NumPersons);
+                        command.Parameters.AddWithValue("@HasPaid", booking.HasPaid);
+                        command.Parameters.AddWithValue("@HasConfirmed", booking.HasConfirmed);
+                        command.Parameters.AddWithValue("@CustomerNotes", booking.CustomerNotes ?? string.Empty);
+                        if (booking.Id.HasValue)
+                        {
+                            command.Parameters.AddWithValue("@Id", booking.Id.Value);
+
+                            command.Parameters.AddWithValue("@HasCancelled", booking.HasCancelled);
+                            command.CommandText = "[Activities].[UpdateCustomerBooking]";
+                            await command.ExecuteNonQueryAsync();
+                            return (booking.Id.Value, booking.ActivityDateSkuId);
+                        }
+                        else
+                        {
+                            command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
+                            command.Parameters.AddWithValue("@Date", booking.DateTime);
+                            command.CommandText = "[Activities].[InsertCustomerBooking]";
+                            return await ReadSingleValueAsync(command, (reader) =>
+
+                             {
+                                 var customerBookingId = GetInt(reader, 0).Value;
+                                 var activityDateId = GetInt(reader, 1).Value;
+
+                                 return (customerBookingId, activityDateId);
+                             });
+                        }
                     }
-                    else
-                    {
-                        command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
-                        command.Parameters.AddWithValue("@Date", booking.DateTime);
-                        command.CommandText = "[Activities].[InsertCustomerBooking]";
-                        return await ReadSingleValueAsync(command, (reader) =>
-
-                         {
-                             var customerBookingId = GetInt(reader, 0).Value;
-                             var activityDateId = GetInt(reader, 1).Value;
-
-                             return (customerBookingId, activityDateId);
-                         });
-                    }                    
+                }
+            }
+            catch (SqlException e)
+            {
+                switch ((DataError)e.Number)
+                {
+                    case DataError.CannotFindRecord:
+                        var error = e.Errors.Cast<SqlError>().FirstOrDefault(ee => ee.Number == (int)DataError.CannotFindRecord);
+                        throw new BadRequestException(error.Message, HttpStatusCode.NotFound, e);
+                    default: throw e;
                 }
             }
         }

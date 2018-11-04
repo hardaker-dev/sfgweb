@@ -147,9 +147,88 @@ namespace SaasFeeGuides.IntegrationTests
 
             foreach (var activity in activities)
             {
+                foreach(var sku in activity.Skus)
+                {
+                   sku.PriceOptions =  BuildPriceOptions();
+                }
                 activity.Equiptment = equiptment;
             }
             return activities;
+        }
+
+        private static IList<ActivitySkuPrice> BuildPriceOptions()
+        {
+            return new[]
+            {
+                new ActivitySkuPrice()
+                {
+                    DescriptionContent = new[]
+                    {
+                        new Content()
+                        {
+                            ContentType = "Text",
+                            Value = "Join a group",
+                            Locale = "na",
+                            Id = "GroupDesc"
+                        }
+                    },
+                    MaxPersons = 8,
+                    MinPersons = 1,
+                    Name = "Group",
+                    Price = 210 * 4
+                },
+                    new ActivitySkuPrice()
+                {
+                    DescriptionContent = new[]
+                    {
+                        new Content()
+                        {
+                            ContentType = "Text",
+                            Value = "Private tour",
+                            Locale = "na",
+                            Id = "PrivateTourDesc"
+                        }
+                    },
+                    MaxPersons = 2,
+                    MinPersons = 1,
+                    Name = "Private2",
+                    Price = 660
+                },
+                    new ActivitySkuPrice()
+                {
+                    DescriptionContent = new[]
+                    {
+                        new Content()
+                        {
+                            ContentType = "Text",
+                            Value ="Private tour",
+                            Locale = "na",
+                            Id = "PrivateTourDesc"
+                        }
+                    },
+                    MaxPersons = 3,
+                    MinPersons = 3,
+                    Name = "Private3",
+                    Price = 810
+                },
+                    new ActivitySkuPrice()
+                {
+                    DescriptionContent = new[]
+                    {
+                        new Content()
+                        {
+                            ContentType = "Text",
+                            Value ="Private tour",
+                            Locale = "na",
+                            Id = "PrivateTourDesc"
+                        }
+                    },
+                    MaxPersons = 4,
+                    MinPersons = 4,
+                    Name = "Private4",
+                    Price = 840
+                }
+            };
         }
 
         protected static ActivityEquiptment[] BuildEquiptment()

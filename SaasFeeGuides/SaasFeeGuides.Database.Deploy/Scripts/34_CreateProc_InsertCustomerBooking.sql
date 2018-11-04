@@ -54,6 +54,18 @@ BEGIN
 		[CustomerNotes]	)
 	VALUES (@customerId,@activitySkuDateId,@HasConfirmed,@HasPaid,0,@NumPersons,@PriceAgreed,GETUTCDATE(),GETUTCDATE(),@CustomerNotes)
 
+	
 	SELECT CAST(SCOPE_IDENTITY() as INT),@activitySkuDateId
+
+	INSERT INTO Activities.CustomerBookingAudit ([CustomerId],
+		[ActivitySkuDateId],
+		[HasConfirmed],
+		[HasPaid] ,
+		[HasCancelled] ,
+		[NumPersons] ,
+		[PriceAgreed] ,
+		[Modified]	)
+	VALUES (@customerId,@activitySkuDateId,@HasConfirmed,@HasPaid,0,@NumPersons,@PriceAgreed,GETUTCDATE())
+
 
 END

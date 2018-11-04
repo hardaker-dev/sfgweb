@@ -157,12 +157,23 @@ export class BookingsComponent implements OnInit {
     if (!customerBooking.hasConfirmed) {
       customerBooking.hasPaid = false;
     }
+    this.customerService.updateCustomerBooking(customerBooking)
+      .pipe(first())
+      .subscribe(response =>
+      { }
+      );
   }
   hasPaidChanged(customerBooking: CustomerBooking, event) {
     customerBooking.hasPaid = event.currentTarget.checked;
     if (customerBooking.hasPaid) {
       customerBooking.hasConfirmed = true;     
-      }
+    }
+
+    this.customerService.updateCustomerBooking(customerBooking)
+      .pipe(first())
+      .subscribe(response =>
+      { }
+      );
   }
   deleteDate(date: ActivityDate) {
     date.delete();

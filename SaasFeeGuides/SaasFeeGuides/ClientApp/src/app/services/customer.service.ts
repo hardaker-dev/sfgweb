@@ -35,6 +35,11 @@ export class CustomerService {
     this.clearActivityCache();
     return this.http.post<AddCustomerBookingResponse>('api/customer/booking', booking);
   }
+  updateCustomerBooking(booking: CustomerBooking) {
+    this.clearActivityCache();
+    return this.http.patch('api/customer/booking', booking);
+  }
+
   getCustomerBookings(customerId: number) {
     return this.http.get('api/customer/' + customerId +'booking/');
   }

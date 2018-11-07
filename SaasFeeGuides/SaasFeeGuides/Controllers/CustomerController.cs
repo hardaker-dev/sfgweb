@@ -25,11 +25,11 @@ namespace SaasFeeGuides.Controllers
 
         public CustomerController(
             UserManager<AppUser> userManager,
-            ICustomerRepository accountRepository,
+            ICustomerRepository customerRepository,
             IActivityRepository activityRepository)
         {
             _userManager = userManager;      
-            _customerRepository = accountRepository;
+            _customerRepository = customerRepository;
             _activityRepository = activityRepository;
         }
         [Authorize("Admin")]

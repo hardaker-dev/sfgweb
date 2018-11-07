@@ -87,7 +87,34 @@ namespace SaasFeeGuides.Helpers
                 HasPaid = true
             };
         }
+        public static ViewModels.Guide Map(this Models.Guide guide)
+        {
+            return new ViewModels.Guide()
+            {
+                Id = guide.Id,
+                Address = guide.Address,
+                FirstName = guide.FirstName,
+                Email = guide.Email,
+                DateOfBirth = guide.DateOfBirth,
+                LastName = guide.LastName,
+                PhoneNumber = guide.PhoneNumber,
+                IsActive = guide.IsActive
+            };
+        }
 
+        public static Models.Guide Map(this ViewModels.Guide guide)
+        {
+            return new Models.Guide()
+            {
+                Address = guide.Address,
+                FirstName = guide.FirstName,
+                Email = guide.Email,
+                DateOfBirth = guide.DateOfBirth,
+                LastName = guide.LastName,
+                PhoneNumber = guide.PhoneNumber,
+                IsActive = guide.IsActive
+            };
+        }
         public static ViewModels.Customer Map(this Models.Customer customer)
         {
             return new ViewModels.Customer()

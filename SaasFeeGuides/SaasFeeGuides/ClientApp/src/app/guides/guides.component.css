@@ -1,0 +1,44 @@
+
+
+ul{
+  max-width:400px;
+  padding-left:0px;
+}
+
+li {
+  border-top: solid;
+  padding-bottom: 10px;
+  padding-top:10px;
+  list-style: none;
+  border-color: lightsteelblue;
+  
+}
+
+
+
+.margin-small {
+  margin:5px;
+}
+
+
+.leftColumn {
+  border-right: dotted;
+  border-color: lightsteelblue;
+  font-weight: bold;
+  color: black;
+  font-size: 14px;
+  min-width: 120px;
+  display: inline-block;
+  text-align: left;
+}
+
+td {
+  padding-left:10px;
+}
+
+
+.form-input {
+  display: inline-block;
+  width: 200px;
+  margin-left: 10px;
+}

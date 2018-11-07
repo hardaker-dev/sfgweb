@@ -3,39 +3,39 @@ import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { User } from '../viewModels/User';
-import { Customer } from '../viewModels/Customer';
-import { CustomerService } from '../services/customer.service';
+import { GuideService } from '../services/guide.service';
 import { Router } from '@angular/router';
+import { Guide } from '../viewModels/guide';
 
 @Component({
-  templateUrl: 'customers.component.html',
-  styleUrls: ['./customers.component.css'] })
-export class CustomersComponent implements OnInit {
+  templateUrl: 'guides.component.html',
+  styleUrls: ['./guides.component.css'] })
+export class GuidesComponent implements OnInit {
   currentAccount: User;
-  customers: Customer[] = [];
-  addingCustomer:boolean;
-  addCustomerForm: FormGroup;
+  guides: Guide[] = [];
+  addingGuide:boolean;
+  addGuideForm: FormGroup;
   submitted = false;
   loading = false;
   constructor(
-    private customerService: CustomerService,
+    private guideService: GuideService,
     private formBuilder: FormBuilder,
     private router: Router)
   {
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
  
   }
-  filterClicked(customer:Customer) {
+  filterClicked(guide:Guide) {
 
-    this.router.navigate(['/bookings'], { queryParams: { customerEmail: customer.model.email } });
+    this.router.navigate(['/bookings'], { queryParams: { guideEmail: guide.model.email } });
   }
   onSubmit() {
     this.submitted = true;
-    if (this.addCustomerForm.invalid) {
+    if (this.addGuideForm.invalid) {
       return;
     }
     this.loading = true;
-    var customer = new Customer({
+    var guide = new Guide({
       id: null,
       email: this.f.email.value,
       firstName: this.f.firstName.value,
@@ -44,17 +44,17 @@ export class CustomersComponent implements OnInit {
       dateOfBirth: this.f.dob.value,
       phoneNumber: this.f.phoneNumber.value
     });
-    this.customerService
-      .add(customer)
+    this.guideService
+      .add(guide)
       .pipe(first())
       .subscribe(
       id => {
-        customer.model.id = id;
-          this.customers.push(customer);
+        guide.model.id = id;
+        this.guides.push(guide);
           this.loading = false;
-          this.addingCustomer = false;
-          this.addCustomerForm.clearValidators();
-          this.addCustomerForm.reset();
+          this.addingGuide = false;
+          this.addGuideForm.clearValidators();
+        this.addGuideForm.reset();
           this.submitted = false;
       },
       error => {
@@ -65,7 +65,7 @@ export class CustomersComponent implements OnInit {
   }
   ngOnInit() {
    
-    this.addCustomerForm = this.formBuilder.group({
+    this.addGuideForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', Validators.required],
@@ -73,26 +73,26 @@ export class CustomersComponent implements OnInit {
       dob: ['', Validators.required],
       address: ['', Validators.required]
     });
-    this.addingCustomer = false;
+    this.addingGuide = false;
     this.loading = false;
     this.submitted = false;
-    this.loadAllCustomers();
+    this.loadAllGuides();
   }
   cancelClick() {
-    this.addingCustomer = false;
-    this.addCustomerForm.reset();
+    this.addingGuide = false;
+    this.addGuideForm.reset();
   }
-  addCustomerClick() {
-    this.addingCustomer = true;
+  addGuideClick() {
+    this.addingGuide = true;
   }
 
-  private loadAllCustomers() {
-    this.customerService.getMany(null)
+  private loadAllGuides() {
+    this.guideService.getMany(null)
       .pipe(first())
-      .subscribe(customers => {
-        this.customers = customers.map((m) => new Customer(m));;
+      .subscribe(guides => {
+        this.guides = guides.map((m) => new Guide(m));;
     });
   }
 
-  get f() { return this.addCustomerForm.controls; }
+  get f() { return this.addGuideForm.controls; }
 }

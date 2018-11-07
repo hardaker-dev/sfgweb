@@ -28,6 +28,8 @@ import { SfgCalendarModule } from './calendar/calendar.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CacheService } from './services/cache.service';
 import { CachingInterceptor } from './interceptors/cache.interceptor';
+import { GuidesComponent } from './guides/guides.component';
+import { GuideService } from './services/guide.service';
 
 @NgModule({
   imports: [
@@ -51,7 +53,8 @@ import { CachingInterceptor } from './interceptors/cache.interceptor';
     BookingsComponent,
     ActivitiesComponent,
     AuthenticateComponent,
-    RegisterComponent
+    RegisterComponent,
+    GuidesComponent
   ],
   providers: [
     CacheService,
@@ -59,6 +62,7 @@ import { CachingInterceptor } from './interceptors/cache.interceptor';
     AlertService,
     AuthenticationService,
     AccountService,
+    GuideService,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true },

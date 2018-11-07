@@ -90,7 +90,7 @@ namespace SaasFeeGuides.Data
                     
                     command.CommandType = CommandType.StoredProcedure;
                    
-                    command.CommandText = "[Activities].[DeleteAccount]";
+                    command.CommandText = "[Activities].[DeleteCustomerAccount]";
 
                     await command.ExecuteNonQueryAsync();
                     

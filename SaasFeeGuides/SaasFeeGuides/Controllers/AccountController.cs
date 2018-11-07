@@ -18,14 +18,14 @@ namespace SaasFeeGuides.Controllers
     {
 
         private readonly UserManager<AppUser> _userManager;
-        private readonly ICustomerRepository _accountRepository;
+        private readonly ICustomerRepository _customerRepository;
 
         public AccountController(
             UserManager<AppUser> userManager,
             ICustomerRepository accountRepository)
         {
             _userManager = userManager;     
-            _accountRepository = accountRepository;
+            _customerRepository = accountRepository;
         }
         [HttpPost]
         public async Task<IActionResult> AddCustomerAccount([FromBody]CustomerAccount model)
@@ -49,7 +49,7 @@ namespace SaasFeeGuides.Controllers
                 await _userManager.AddClaimAsync(userIdentity, new System.Security.Claims.Claim(Constants.Strings.JwtClaimIdentifiers.Role, Constants.Strings.JwtClaims.ApiAdminAccess));
             }
 
-            await _accountRepository.UpsertCustomer(new Models.Customer()
+            await _customerRepository.UpsertCustomer(new Models.Customer()
             {
                 Address = model.Address,
                 DateOfBirth = model.DateOfBirth,
@@ -75,7 +75,7 @@ namespace SaasFeeGuides.Controllers
 
             var idClaim = this.User.Claims.FirstOrDefault(c => c.Type == "id");
 
-            await _accountRepository.DeleteAccount(idClaim.Value);
+            await _customerRepository.DeleteAccount(idClaim.Value);
 
             return new OkResult();
         }

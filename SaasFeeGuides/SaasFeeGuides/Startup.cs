@@ -159,6 +159,7 @@ namespace SaasFeeGuides
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddSingleton<IGuideRepository>(new GuideRepository(connectionString));
             services.AddSingleton<IActivityRepository>(new ActivityRepository(connectionString));
             services.AddSingleton<ICustomerRepository>(new CustomerRepository(connectionString));
             services.AddSingleton<IContentRepository>(new ContentRepository(connectionString));

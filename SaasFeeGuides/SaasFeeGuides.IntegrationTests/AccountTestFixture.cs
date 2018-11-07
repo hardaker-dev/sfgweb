@@ -18,24 +18,7 @@ namespace SaasFeeGuides.IntegrationTests
             : base(output)
         {
         }
-        [Fact]
-        public async Task GetDashboardIndex()
-        {
-            var authClient = await AuthClient();
-            try
-            {
-                await authClient.AddClaim(new AppClaim()
-                {
-                    ClaimType = "role",
-                    ClaimValue = "api_access"
-                });
-                await authClient.GetDashboardIndex();
-            }
-            finally
-            {
-                await authClient.DeleteAccount();
-            }
-        }
+      
 
         [Fact]
         public async Task AddAdminAccount()

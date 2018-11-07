@@ -24,10 +24,13 @@
     <None Remove="Scripts\12_CreateTable_Guide.sql" />
     <None Remove="Scripts\13_CreateTable_CustomerBookingEquiptment.sql" />
     <None Remove="Scripts\14_CreateTable_GuideBooking.sql" />
+    <None Remove="Scripts\15b_CreateProc_InsertGuide.sql" />
     <None Remove="Scripts\15_CreateProc_InsertCustomer.sql" />
+    <None Remove="Scripts\16b_CreateProc_UpdateGuide.sql" />
     <None Remove="Scripts\16_CreateProc_UpdateCustomer.sql" />
     <None Remove="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
-    <None Remove="Scripts\18_CreateProc_DeleteAccount.sql" />
+    <None Remove="Scripts\18b_CreateProc_DeleteGuideAccount.sql" />
+    <None Remove="Scripts\18_CreateProc_DeleteCustomerAccount.sql" />
     <None Remove="Scripts\19_CreateProc_UpsertActivity.sql" />
     <None Remove="Scripts\20_CreateProc_UpsertActivitySku.sql" />
     <None Remove="Scripts\21_CreateTable_GuideAvailability.sql" />
@@ -44,7 +47,9 @@
     <None Remove="Scripts\33a_CreateTable_CustomerBookingAudit.sql" />
     <None Remove="Scripts\33_CreateProc_UpsertActivityEquiptment.sql" />
     <None Remove="Scripts\34_CreateProc_InsertCustomerBooking.sql" />
+    <None Remove="Scripts\35b_CreateProc_SelectGuides.sql" />
     <None Remove="Scripts\35_CreateProc_SelectCustomers.sql" />
+    <None Remove="Scripts\36b_CreateProc_SelectGuide.sql" />
     <None Remove="Scripts\36_CreateProc_SelectCustomer.sql" />
     <None Remove="Scripts\37_CreateProc_SelectActivitiesLoc.sql" />
     <None Remove="Scripts\38_CreateProc_SelectContent.sql" />
@@ -74,8 +79,13 @@
     <EmbeddedResource Include="Scripts\03_CreateTable_Category.sql" />
     <EmbeddedResource Include="Scripts\02_CreateSchemas.sql" />
     <EmbeddedResource Include="Scripts\02b_CreateTable_Content.sql" />
+    <EmbeddedResource Include="Scripts\15b_CreateProc_InsertGuide.sql" />
+    <EmbeddedResource Include="Scripts\16b_CreateProc_UpdateGuide.sql" />
+    <EmbeddedResource Include="Scripts\18_CreateProc_DeleteCustomerAccount.sql" />
     <EmbeddedResource Include="Scripts\33a_CreateTable_CustomerBookingAudit.sql" />
     <EmbeddedResource Include="Scripts\27_CreateProc_SelectActivities.sql" />
+    <EmbeddedResource Include="Scripts\35b_CreateProc_SelectGuides.sql" />
+    <EmbeddedResource Include="Scripts\36b_CreateProc_SelectGuide.sql" />
     <EmbeddedResource Include="Scripts\43_CreateProc_UpdateCustomerBooking.sql" />
     <EmbeddedResource Include="Scripts\42_CreateProc_DeleteCustomerBooking.sql" />
     <EmbeddedResource Include="Scripts\41_CreateProc_UpdateActivitySkuDate.sql" />
@@ -99,7 +109,7 @@
     <EmbeddedResource Include="Scripts\20_CreateProc_UpsertActivitySku.sql" />
     <EmbeddedResource Include="Scripts\21_CreateTable_GuideAvailability.sql" />
     <EmbeddedResource Include="Scripts\19_CreateProc_UpsertActivity.sql" />
-    <EmbeddedResource Include="Scripts\18_CreateProc_DeleteAccount.sql" />
+    <EmbeddedResource Include="Scripts\18b_CreateProc_DeleteGuideAccount.sql" />
     <EmbeddedResource Include="Scripts\17_CreateProc_SelectCustomerByUserId.sql" />
     <EmbeddedResource Include="Scripts\16_CreateProc_UpdateCustomer.sql" />
     <EmbeddedResource Include="Scripts\24_CreateProc_UpsertContent.sql" />

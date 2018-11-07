@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE Activities.DeleteAccount
+﻿CREATE PROCEDURE Activities.DeleteCustomerAccount
 	@UserId nvarchar(450)
 AS
 BEGIN

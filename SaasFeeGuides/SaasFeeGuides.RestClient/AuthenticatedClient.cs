@@ -162,6 +162,20 @@ namespace SaasFeeGuides.RestClient
             return await post.ReceiveJsonAsync<(int customerBookingId, int activitySkuDateId)>();
 
         }
+        public async Task<int> AddGuide(Guide guide)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "guide")
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var post = request.PostJsonAsync(guide, DefaultClient);
+            var response = await post;
+
+
+            return await post.ReceiveJsonAsync<int>();
+
+        }
         public async Task<int> AddCustomer(Customer customer)
         {
             var request = _serviceUri.AsRestRequest()
@@ -190,6 +204,20 @@ namespace SaasFeeGuides.RestClient
             return await post.ReceiveJsonAsync<int>();
 
         }
+        public async Task<Guide> GetGuide(int guideId)
+        {
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "guide", guideId)
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+
+            return await get.ReceiveJsonAsync<Guide>();
+
+        }
         public async Task<Customer> GetCustomer(int customerId)
         {
             var request = _serviceUri.AsRestRequest()
@@ -202,6 +230,27 @@ namespace SaasFeeGuides.RestClient
 
 
             return await get.ReceiveJsonAsync<Customer>();
+
+        }
+
+        public async Task<IList<Guide>> GetGuides(string searchText = null)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            if (searchText != null)
+            {
+                parameters.Add("searchText", searchText);
+            }
+            var request = _serviceUri.AsRestRequest()
+                .WithPathSegments("api", "guide")
+                .WithQueryParameters(parameters)
+                .WithBearerToken(_bearerToken)
+                .AcceptGzipCompression();
+
+            var get = request.GetAsync(DefaultClient);
+            var response = await get;
+
+
+            return await get.ReceiveJsonAsync<IList<Guide>>();
 
         }
         public async Task<IList<Customer>> GetCustomers(string searchText=null)

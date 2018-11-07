@@ -55,6 +55,7 @@
   <ItemGroup>
     <None Remove="ClientApp\src\app\authenticate\LoginInputs.ts" />
     <None Remove="ClientApp\src\app\models\activitySkuDate.ts" />
+    <None Remove="ClientApp\src\app\services\guide.service.ts" />
     <None Remove="ClientApp\src\app\viewModels\account.ts" />
     <None Remove="ClientApp\src\app\viewModels\activity.ts" />
     <None Remove="ClientApp\src\app\viewModels\activityDate.ts" />
@@ -63,6 +64,7 @@
     <None Remove="ClientApp\src\app\viewModels\content.ts" />
     <None Remove="ClientApp\src\app\viewModels\customer.ts" />
     <None Remove="ClientApp\src\app\viewModels\customerBooking.ts" />
+    <None Remove="ClientApp\src\app\viewModels\guide.ts" />
     <None Remove="ClientApp\src\app\viewModels\historicCustomerBooking.ts" />
     <None Remove="ClientApp\src\app\viewModels\newActivitySkuDate.ts" />
     <None Remove="ClientApp\src\app\viewModels\user.ts" />
@@ -104,12 +106,14 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\models\activitySkuDate.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\guide.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activitySku.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activityDate.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\newActivitySkuDate.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\content.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\activity.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\addCustomerBookingResponse.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\viewModels\guide.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\customerBooking.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\user.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\viewModels\customer.ts" />

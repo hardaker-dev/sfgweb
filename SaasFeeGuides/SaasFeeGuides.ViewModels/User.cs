@@ -8,6 +8,5 @@ namespace SaasFeeGuides.ViewModels
     {
         public string AuthToken { get; set; }
         public int ExpiresIn { get; set; }
-        public Customer Customer { get; set; }
     }
 }

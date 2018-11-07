@@ -53,11 +53,11 @@ namespace SaasFeeGuides.Controllers
             {
                 return BadRequest(Errors.AddErrorToModelState("login_failure", "Invalid username or password.", ModelState));
             }
-            var customer = await _customerRepository.SelectCustomerByUserId(identity.Claims.Single(c => c.Type == "id").Value);
+          //  var customer = await _customerRepository.SelectCustomerByUserId(identity.Claims.Single(c => c.Type == "id").Value);
             // Serialize and return the response
             var response = new User
             {
-                Customer = customer.Map(),
+            //    Customer = customer.Map(),
                 AuthToken = await _jwtFactory.GenerateEncodedToken(credentials.UserName, identity),
                 ExpiresIn = (int)_jwtOptions.ValidFor.TotalSeconds
             };

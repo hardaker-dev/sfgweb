@@ -59,6 +59,35 @@ namespace SaasFeeGuides.IntegrationTests
             return loginResponse;
         }
 
+        protected static async Task<IList<int>> AddGuidesIfNeeded(AuthenticatedClient authClient)
+        {
+            var guides = await authClient.GetGuides();
+            var ids = new List<int>();
+            if (guides.Count <= 1)
+            {
+                ids.Add(await authClient.AddGuide(new Guide()
+                {
+                    Address = "France",
+                    DateOfBirth = new DateTime(1984, 10, 1),
+                    Email = "paul.rayit@gmail.com",
+                    FirstName = "Paul",
+                    LastName = "Rayit",
+                    PhoneNumber = "+447567123456"
+                }));
+
+                ids.Add(await authClient.AddGuide(new Guide()
+                {
+                    Address = "Sweden",
+                    DateOfBirth = new DateTime(1984, 10, 2),
+                    Email = "scott.parkes@gmail.com",
+                    FirstName = "Scott",
+                    LastName = "Parkes",
+                    PhoneNumber = "+447567123456"
+                }));
+            }
+            return ids;
+        }
+
         protected static async Task<IList<int>> AddCustomersIfNeeded(AuthenticatedClient authClient)
         {
             var customers = await authClient.GetCustomers();

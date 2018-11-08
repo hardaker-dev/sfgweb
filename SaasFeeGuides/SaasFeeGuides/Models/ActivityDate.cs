@@ -19,6 +19,7 @@ namespace SaasFeeGuides.Models
         public double TotalPrice { get; set; }
 
         public IList<CustomerBooking> CustomerBookings { get; set; }
+        public string PriceOptionName { get;  set; }
 
         public override bool Equals(object obj)
         {

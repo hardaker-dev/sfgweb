@@ -6,7 +6,8 @@
 	@NumPersons int,
 	@HasPaid bit,
 	@HasConfirmed bit,
-	@CustomerNotes nvarchar(max)
+	@CustomerNotes nvarchar(max),
+	@ActivitySkuPriceName varchar(450)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -36,8 +37,8 @@ BEGIN
 			THROW 50001,@message,0 
 		END
 
-		insert into Activities.ActivitySkuDate([ActivitySkuId],[DateTime])
-		values (@activitySkuId,@Date)
+		insert into Activities.ActivitySkuDate([ActivitySkuId],[DateTime],[ActivitySkuPriceName])
+		values (@activitySkuId,@Date,@ActivitySkuPriceName)
 		SET @activitySkuDateId = (SELECT CAST(SCOPE_IDENTITY() as INT))
 	END
 

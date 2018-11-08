@@ -19,5 +19,6 @@ namespace SaasFeeGuides.ViewModels
         public double? PriceAgreed { get; set; }
         public bool HasCancelled { get; set; }
         public string CustomerNotes { get; set; }
+        public string PriceOptionName { get; set; }
     }
 }

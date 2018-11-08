@@ -111,12 +111,16 @@ namespace SaasFeeGuides.Data
                         var activityDates = new HashSet<Models.ActivityDate>(await ReadListAsync(reader, ReadActivityDate));                    
                         await reader.NextResultAsync();
 
-                        var customers = await ReadListAsync(reader, ModelReaderExtensions.ReadCustomerBooking);
-
-                        foreach (var customerGroup in customers.GroupBy(x => x.ActivityDateSkuId))
+                        var customerBookings = await ReadListAsync(reader, ModelReaderExtensions.ReadCustomerBooking);
+                        
+                        foreach (var customerGroup in customerBookings.GroupBy(x => x.ActivityDateSkuId))
                         {
                             activityDates.TryGetValue(new Models.ActivityDate() { ActivitySkuDateId = customerGroup.Key }, out Models.ActivityDate activityDate);
                             activityDate.CustomerBookings = customerGroup.ToList();
+                            foreach(var customerBooking in activityDate.CustomerBookings)
+                            {
+                                customerBooking.PriceOptionName = activityDate.PriceOptionName;
+                            }
                         }
 
                         return activityDates;
@@ -139,6 +143,7 @@ namespace SaasFeeGuides.Data
                 NumPersons = GetInt(reader,7) ?? 0,
                 TotalPrice = GetDouble(reader, 8) ?? 0,
                 AmountPaid = GetDouble(reader, 9) ?? 0,
+                PriceOptionName = GetString(reader, 10),
             };
         }
 
@@ -451,6 +456,7 @@ namespace SaasFeeGuides.Data
                 {
                     command.Parameters.AddWithValue("@ActivitySkuDateId", activitySkuDate.Id);
                     command.Parameters.AddWithValue("@DateTime", activitySkuDate.DateTime);
+                    command.Parameters.AddWithValue("@ActivitySkuPriceName", (object)activitySkuDate.ActivitySkuPriceName ?? DBNull.Value);
 
                     command.CommandType = CommandType.StoredProcedure;
 
@@ -472,6 +478,7 @@ namespace SaasFeeGuides.Data
                         command.Parameters.AddWithValue("@ActivityName", activitySkuDate.ActivityName);
                         command.Parameters.AddWithValue("@ActivitySkuName", activitySkuDate.ActivitySkuName);                        
                         command.Parameters.AddWithValue("@DateTime",activitySkuDate.DateTime);
+                        command.Parameters.AddWithValue("@ActivitySkuPriceName", activitySkuDate.ActivitySkuPriceName);
 
                         command.CommandType = CommandType.StoredProcedure;
 

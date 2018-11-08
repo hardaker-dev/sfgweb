@@ -41,7 +41,8 @@ namespace SaasFeeGuides.IntegrationTests
                 var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "NotAllalin",
-                    DateTime = new DateTime(2018, 9, 20)
+                    DateTime = new DateTime(2018, 9, 20),
+                    ActivitySkuPriceName = "Group"
                 });
             }
             catch (RestResponseException e)
@@ -64,7 +65,8 @@ namespace SaasFeeGuides.IntegrationTests
                 var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "Allalin",
-                    DateTime = new DateTime(2018, 9, 20,9,0,0)
+                    DateTime = new DateTime(2018, 9, 20,9,0,0),
+                    ActivitySkuPriceName = "Group"
                 });
             }
         }
@@ -114,6 +116,7 @@ namespace SaasFeeGuides.IntegrationTests
             var activityDates = await authClient.GetActivityDates(activity.Id, null, null);
             var firstWithCustomers = activityDates.FirstOrDefault(x => x.CustomerBookings?.Any() ?? false);
             await authClient.DeleteCustomerBooking(firstWithCustomers.ActivitySkuDateId, firstWithCustomers.CustomerBookings[0].CustomerEmail);
+
             await authClient.AddCustomerBooking(firstWithCustomers.CustomerBookings[0]);
             
         }
@@ -136,7 +139,8 @@ namespace SaasFeeGuides.IntegrationTests
             var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
             {
                 ActivityName = activityDates[0].ActivityName,
-                DateTime = activityDates[0].StartDateTime
+                DateTime = activityDates[0].StartDateTime,
+                ActivitySkuPriceName = "Group"
             });
             try
             {
@@ -320,13 +324,15 @@ namespace SaasFeeGuides.IntegrationTests
                 var activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "Allalin",
-                    DateTime = date
+                    DateTime = date,
+                    ActivitySkuPriceName = "Group"
                 });
 
                 activitySkuDateId = await authClient.AddActivitySkuDate(new NewActivitySkuDate()
                 {
                     ActivityName = "AllalinEast",
-                    DateTime = date
+                    DateTime = date,
+                    ActivitySkuPriceName = "Private2"
                 });
             }
         }

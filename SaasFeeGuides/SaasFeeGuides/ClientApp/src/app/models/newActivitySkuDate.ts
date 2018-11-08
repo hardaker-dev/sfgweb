@@ -6,7 +6,8 @@ export class NewActivitySkuDate {
     public activityName: string,
     public activitySkuName: string,
     public dateTime: Date,
-    public customerBookings: CustomerBooking[]
+    public customerBookings: CustomerBooking[],
+    public activitySkuPriceName:string
   ) {
   }
 

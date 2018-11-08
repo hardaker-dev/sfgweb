@@ -18,5 +18,6 @@ namespace SaasFeeGuides.Models
         public bool HasCancelled { get; set; }
         public string CustomerDisplayName { get; set; }
         public string CustomerNotes { get; set; }
+        public string PriceOptionName { get; internal set; }
     }
 }

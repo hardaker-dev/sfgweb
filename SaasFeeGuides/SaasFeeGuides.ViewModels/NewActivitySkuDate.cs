@@ -9,5 +9,6 @@ namespace SaasFeeGuides.ViewModels
         public string ActivitySkuName { get; set; }
         public DateTime DateTime { get; set; }
         public IList<CustomerBooking> CustomerBookings { get; set; }
+        public string ActivitySkuPriceName { get; set; }
     }
 }

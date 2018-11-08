@@ -18,6 +18,7 @@ export interface ActivityDateModel  {
   totalPrice: number;
   deleted?: boolean;
   customerBookings: CustomerBooking[];
+  priceOptionName: string;
 }
 export class ActivityDate implements CalendarEventExt {
     id?: string | number;

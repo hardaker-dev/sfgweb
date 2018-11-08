@@ -1,5 +1,6 @@
 
 import { Content } from './content';
+import { ActivitySkuPrice } from './activitySkuPrice';
 
 
 export class ActivitySku {
@@ -17,7 +18,8 @@ export class ActivitySku {
     public durationDays: number,
     public durationHours: number,
     public webContentId: string,
-    public activityId: number
+    public activityId: number,
+    public priceOptions: ActivitySkuPrice[]
 
   ) {
   }

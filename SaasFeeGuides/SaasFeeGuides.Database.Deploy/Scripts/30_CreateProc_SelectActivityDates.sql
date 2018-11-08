@@ -20,7 +20,8 @@ BEGIN
            WHEN cb.[HasPaid] = 1
              THEN [PriceAgreed]
              ELSE 0 
-        END) AS amountPaid	
+        END) AS amountPaid,
+		asd.[ActivitySkuPriceName]	
 		FROM Activities.ActivitySkuDate asd
 	inner join Activities.ActivitySku aSku on aSku.Id = asd.ActivitySkuId
 	inner join Activities.Activity a on a.Id = aSku.ActivityId
@@ -37,7 +38,8 @@ BEGIN
 			aSku.[Name],
 			asd.[DateTime],
 			aSku.DurationDays,
-			aSku.DurationHours
+			aSku.DurationHours,
+			asd.[ActivitySkuPriceName]	
 
 	SELECT 
 		cb.Id,

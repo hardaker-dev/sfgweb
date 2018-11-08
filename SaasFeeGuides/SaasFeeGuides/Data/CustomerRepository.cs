@@ -55,6 +55,7 @@ namespace SaasFeeGuides.Data
                         {
                             command.Parameters.AddWithValue("@ActivitySkuName", booking.ActivitySkuName);
                             command.Parameters.AddWithValue("@Date", booking.DateTime);
+                            command.Parameters.AddWithValue("@ActivitySkuPriceName", booking.PriceOptionName);
                             command.CommandText = "[Activities].[InsertCustomerBooking]";
                             return await ReadSingleValueAsync(command, (reader) =>
 

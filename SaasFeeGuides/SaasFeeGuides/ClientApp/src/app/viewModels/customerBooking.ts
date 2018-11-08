@@ -7,6 +7,7 @@ export class CustomerBooking {
     public customerEmail: string,     
     public numPersons: number,
     public hasPaid: boolean,
-    public hasConfirmed: boolean) { }
+    public hasConfirmed: boolean,
+    public priceOptionName:string) { }
 
 }

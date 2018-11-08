@@ -38,7 +38,8 @@ namespace SaasFeeGuides.Helpers
                 AmountPaid = date.AmountPaid,
                 NumPersons = date.NumPersons,
                 TotalPrice = date.TotalPrice,
-                CustomerBookings = date.CustomerBookings?.Select(Map).ToList()
+                CustomerBookings = date.CustomerBookings?.Select(Map).ToList(),
+                PriceOptionName = date.PriceOptionName
             };
         }
         public static ViewModels.CustomerBooking Map(this Models.CustomerBooking booking)
@@ -54,7 +55,8 @@ namespace SaasFeeGuides.Helpers
                 NumPersons = booking.NumPersons,
                 HasConfirmed = booking.HasConfirmed,
                 HasPaid = booking.HasPaid,
-                CustomerNotes = booking.CustomerNotes
+                CustomerNotes = booking.CustomerNotes,
+                PriceOptionName = booking.PriceOptionName
             };
         }
         public static Models.CustomerBooking Map(this ViewModels.CustomerBooking booking)
@@ -70,7 +72,8 @@ namespace SaasFeeGuides.Helpers
                 NumPersons = booking.NumPersons,
                 HasConfirmed = booking.HasConfirmed,
                 HasCancelled = booking.HasCancelled,
-                HasPaid = booking.HasPaid
+                HasPaid = booking.HasPaid,
+                PriceOptionName = booking.PriceOptionName
             };
         }
 
@@ -84,7 +87,8 @@ namespace SaasFeeGuides.Helpers
                 DateTime = booking.DateTime,
                 NumPersons = booking.NumPersons,
                 HasConfirmed = true,
-                HasPaid = true
+                HasPaid = true,
+                PriceOptionName = booking.PriceOptionName
             };
         }
         public static ViewModels.Guide Map(this Models.Guide guide)

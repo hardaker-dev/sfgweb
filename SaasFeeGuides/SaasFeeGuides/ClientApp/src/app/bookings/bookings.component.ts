@@ -15,6 +15,7 @@ import { ActivitySkuDate } from '../models/activitySkuDate';
 import { CustomerBooking } from '../viewModels/customerBooking';
 import { NewActivitySkuDate } from '../models/newActivitySkuDate';
 import { ActivatedRoute } from '@angular/router';
+import { ActivitySkuPrice } from '../viewModels/activitySkuPrice';
 
 
 @Component({
@@ -58,6 +59,9 @@ export class BookingsComponent implements OnInit {
 
     if (this._searchModel && this._searchModel.model) {
       this.formattedSelection = this._searchModel.formattedNameEmail();
+      if (this.viewEditActivityDate) {
+        this.customerBookingExists = this.viewEditActivityDate.model.customerBookings.find((x) => x.customerEmail === this._searchModel.model.email)!=null;
+      }
     }
     else {
       this.formattedSelection = this._searchModel;
@@ -72,37 +76,54 @@ export class BookingsComponent implements OnInit {
     
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
     var thisObj = this;
+
     this.viewEditBooking = (activityDate: ActivityDate) => {
       thisObj.viewEditActivityDate = activityDate;
       thisObj.addingDate = true;
-      var dateTimeField = thisObj.addDateForm.get('datetime');
-      var activitySkuField = thisObj.addDateForm.get('activity');
+      var dateTimeField = thisObj.addDateForm.controls.datetime;
+      var activitySkuField = thisObj.addDateForm.controls.activity;
+      var priceOptionField = thisObj.addDateForm.controls.priceOption;
 
-      activitySkuField.setValue(thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId));
+      var activitySku = thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId);
+      activitySkuField.setValue(activitySku);
       activitySkuField.disable();
 
       dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
       dateTimeField.disable();
+
+      priceOptionField.setValue(activitySku.priceOptions.find((sku) => sku.name == activityDate.model.priceOptionName));
+      priceOptionField.disable();
+
       thisObj.showCancel = false;
     };
 
     this.appendBooking = (activityDate: ActivityDate) => {
 
-      var dateTimeField = thisObj.addBookingForm.get('datetime');
-      var activitySkuField = thisObj.addBookingForm.get('activity');
+      var dateTimeField = thisObj.addBookingForm.controls.datetime;
+      var activitySkuField = thisObj.addBookingForm.controls.activity;
+      var priceOptionField = thisObj.addBookingForm.controls.priceOption;
       if (!activityDate)
       {
-        var activitySku = this.addDateForm.get('activity').value as ActivitySku;
-        var date = new Date(this.addDateForm.get('datetime').value as string);
-        activityDate = this.createActivity(0, date, activitySku, -1, []);
+        var activitySku = this.addDateForm.controls.activity.value as ActivitySku;
+
+        var date = this.offsetLocalDateTime(new Date(this.addDateForm.controls.datetime.value as string));       
+        var priceOption = this.addDateForm.controls.priceOption.value as ActivitySkuPrice;
+
+        activityDate = this.createActivity(0, date, activitySku, -1, [], priceOption.name);
       }
       thisObj.viewEditActivityDate = activityDate;
       thisObj.addingBooking = true;
 
-      activitySkuField.setValue(thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId));
+      var activitySku = thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId);
+      activitySkuField.setValue(activitySku);
       activitySkuField.disable();
+
       dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
       dateTimeField.disable();
+
+      priceOptionField.setValue(activitySku.priceOptions.find((sku) => sku.name == activityDate.model.priceOptionName));
+      priceOptionField.disable();
+
     };
     this.deleteBooking = (customerBooking) => {
       this.activityService.deleteCustomerBooking(this.viewEditActivityDate.model.activitySkuDateId, customerBooking.customerEmail)
@@ -118,37 +139,46 @@ export class BookingsComponent implements OnInit {
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
 
-      this.enableField('activity', thisObj.addBookingForm);
-      this.enableField('datetime', thisObj.addBookingForm);      
-      thisObj.addBookingForm.get('datetime').setValue(this.getLocalISOTime(date));      
+      thisObj.addBookingForm.controls.activity.enable();
+      thisObj.addBookingForm.controls.datetime.enable();
+      thisObj.addBookingForm.controls.priceOption.enable();    
+      thisObj.addBookingForm.controls.datetime.setValue(this.getLocalISOTime(date));
+      thisObj.addBookingForm.controls.activity.setValue(thisObj.activitySkus[0]);
+      thisObj.addBookingForm.controls.priceOption.setValue(thisObj.activitySkus[0].priceOptions[0]);
+    
      };
     this.addDate = (date) => {
       thisObj.addingDate = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
 
-      this.enableField('activity', thisObj.addDateForm);
-      this.enableField('datetime', thisObj.addDateForm);
-      thisObj.addDateForm.get('datetime').setValue(this.getLocalISOTime(date));
+      thisObj.addDateForm.controls.activity.enable();
+      thisObj.addDateForm.controls.datetime.enable();
+      thisObj.addDateForm.controls.priceOption.enable(); 
+      thisObj.addDateForm.controls.datetime.setValue(this.getLocalISOTime(date));
+      thisObj.addDateForm.controls.activity.setValue(thisObj.activitySkus[0]);
+      thisObj.addDateForm.controls.priceOption.setValue(thisObj.activitySkus[0].priceOptions[0]);
       this.viewEditActivityDate = null;
 
       thisObj.showCancel = true;
     };
   }
+  activitySelected() {
 
+  }
   hasNewConfirmedChanged( event) {
    
     if (!event.currentTarget.checked) {
-      this.addBookingForm.get('paid').setValue(false);      
+      this.addBookingForm.controls.paid.setValue(false);      
     }
   }
   hasNewPaidChanged( event) {
     if (event.currentTarget.checked) {
-      this.addBookingForm.get('confirmed').setValue(true);
-      this.disableField('confirmed', this.addBookingForm);
+      this.addBookingForm.controls.confirmed.setValue(true);
+      this.addBookingForm.controls.confirmed.disable();
     }
     else {
-      this.enableField('confirmed',this.addBookingForm);
+      this.addBookingForm.controls.confirmed.enable();
     }
   }
 
@@ -184,13 +214,7 @@ export class BookingsComponent implements OnInit {
     }
     return [];
   }
-  enableField(name, form: FormGroup) {
-    form.get(name).enable();
-  }
 
-  disableField(name, form: FormGroup) {
-    form.get(name).disable();
-  }
   getLocalISOTime(date) {
     var tzoffset = date.getTimezoneOffset() * 60000; //offset in milliseconds
     var localISOTime = (new Date(date.getTime() - tzoffset)).toISOString().slice(0, -1);
@@ -198,7 +222,7 @@ export class BookingsComponent implements OnInit {
   }
 
 
-  createActivity(numPersons: number, date: Date, activitySku: ActivitySku, id: number, customerBookings: CustomerBooking[]) {
+  createActivity(numPersons: number, date: Date, activitySku: ActivitySku, id: number, customerBookings: CustomerBooking[],priceOptionName:string) {
     return new ActivityDate({
       numPersons: numPersons,
       startDateTime: date,
@@ -211,7 +235,8 @@ export class BookingsComponent implements OnInit {
       amountPaid: 0,
       deleted: false,
       activitySkuDateId: id,
-      customerBookings: customerBookings
+      customerBookings: customerBookings,
+      priceOptionName: priceOptionName
     });
   }
   offsetLocalDateTime(dateTime) {
@@ -225,14 +250,15 @@ export class BookingsComponent implements OnInit {
       if (this.addBookingForm.invalid) {
         return;
       }
-      var activitySku = this.addBookingForm.get('activity').value as ActivitySku;
-      var customer = this.addBookingForm.get('customer').value as Customer;
-      var date = this.offsetLocalDateTime(new Date(this.addBookingForm.get('datetime').value as string));
-      var numPersons = +this.addBookingForm.get('numPersons').value as number;
-      var confirmed = this.addBookingForm.get('confirmed').value as boolean;
-      var paid = this.addBookingForm.get('paid').value as boolean;
-      
-      var customerBooking = new CustomerBooking(customer.model.firstName + ' ' + customer.model.lastName, activitySku.name, date, customer.model.email, numPersons, paid, confirmed);
+      var activitySku = this.addBookingForm.controls.activity.value as ActivitySku;
+      var customer = this.addBookingForm.controls.customer.value as Customer;
+      var date = this.offsetLocalDateTime(new Date(this.addBookingForm.controls.datetime.value as string));
+      var priceOption = this.addBookingForm.controls.priceOption.value as ActivitySkuPrice;
+      var numPersons = +this.addBookingForm.controls.numPersons.value as number;
+      var confirmed = this.addBookingForm.controls.confirmed.value as boolean;
+      var paid = this.addBookingForm.controls.paid.value as boolean;
+
+      var customerBooking = new CustomerBooking(customer.model.firstName + ' ' + customer.model.lastName, activitySku.name, date, customer.model.email, numPersons, paid, confirmed, priceOption.name);
       if (this.viewEditActivityDate && this.viewEditActivityDate.model.activitySkuDateId < 0) {
         this.viewEditActivityDate.model.customerBookings.push(customerBooking);
         this.addingBooking = false;
@@ -242,9 +268,9 @@ export class BookingsComponent implements OnInit {
       }
       else {
         if (this.viewEditActivityDate) {
-          var existingCustomerBooking = this.viewEditActivityDate.model.customerBookings.find((x) => x.customerEmail === customer.model.email);
-          if (existingCustomerBooking) {
-            this.customerBookingExists = true;
+          this.customerBookingExists = this.viewEditActivityDate.model.customerBookings.find((x) => x.customerEmail === customer.model.email)!=null;
+          if (this.customerBookingExists) {
+           
             return;
           }
         }
@@ -254,7 +280,7 @@ export class BookingsComponent implements OnInit {
           .subscribe(
             response => {
               if (!this.viewEditActivityDate) {
-                var activityDate = this.createActivity(numPersons, date, activitySku, response.activitySkuDateId, [customerBooking]);
+                var activityDate = this.createActivity(numPersons, date, activitySku, response.activitySkuDateId, [customerBooking], priceOption.name);
                 this.hookEvents(activityDate);
                 this.activityDates.push(activityDate);
               }
@@ -284,16 +310,16 @@ export class BookingsComponent implements OnInit {
       }
       if (!this.viewEditActivityDate || this.viewEditActivityDate.model.activitySkuDateId < 0) {
 
-        var activitySku = this.addDateForm.get('activity').value as ActivitySku;
-        var date = this.offsetLocalDateTime(new Date(this.addDateForm.get('datetime').value as string));
-      
+        var activitySku = this.addDateForm.controls.activity.value as ActivitySku;
+        var date = this.offsetLocalDateTime(new Date(this.addDateForm.controls.datetime.value as string));
+        var priceOption = this.addDateForm.controls.priceOption.value as ActivitySkuPrice;
         var customers = this.viewEditActivityDate ? this.viewEditActivityDate.model.customerBookings : [];
-        this.activityService.addDate(new NewActivitySkuDate(activitySku.activityName, activitySku.name, date, customers)).pipe(first())
+        this.activityService.addDate(new NewActivitySkuDate(activitySku.activityName, activitySku.name, date, customers, priceOption.name)).pipe(first())
           .subscribe(
           id => {
             
             var numPersons = customers.length > 0 ? customers.map((c) => c.numPersons).reduce((sum, current) => sum + current) : 0;
-            var activityDate = this.createActivity(numPersons, date, activitySku, id, customers);
+            var activityDate = this.createActivity(numPersons, date, activitySku, id, customers, priceOption.name);
               this.hookEvents(activityDate);
               this.activityDates.push(activityDate);
               this.refresh.next();
@@ -329,7 +355,7 @@ export class BookingsComponent implements OnInit {
         return;
       event.preventDefault();
     }
-    var search = this.addBookingForm.get('customer').value;
+    var search = this.addBookingForm.controls.customer.value;
     if (search && search.model && search.model.firstName) {
       this.searchCustomerByEmail(search.model.email);      
     }
@@ -360,13 +386,14 @@ export class BookingsComponent implements OnInit {
   resetAddBookingForm() {
     this.addBookingForm.clearValidators();
     this.addBookingForm.reset();
-    this.addBookingForm.get('confirmed').setValue(false);
-    this.addBookingForm.get('paid').setValue(false);
+    this.addBookingForm.controls.confirmed.setValue(false);
+    this.addBookingForm.controls.paid.setValue(false);
   }
   ngOnInit() {
     this.addBookingForm = this.formBuilder.group({
       activity: ['', Validators.required],
       customer: ['', Validators.required],
+      priceOption: ['', Validators.required],
       numPersons: ['', Validators.required],
       datetime: ['', Validators.required],
       confirmed: [false],
@@ -375,6 +402,7 @@ export class BookingsComponent implements OnInit {
     this.addDateForm = this.formBuilder.group({
       activity: ['', Validators.required],     
       datetime: ['', Validators.required],
+      priceOption: ['', Validators.required]
     });
     this.filterCustomerEmail = this.route.snapshot.queryParamMap.get('customerEmail');
     this.filterActivityName = this.route.snapshot.queryParamMap.get('activityName');

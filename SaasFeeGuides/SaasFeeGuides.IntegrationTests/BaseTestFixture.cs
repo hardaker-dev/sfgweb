@@ -143,7 +143,8 @@ namespace SaasFeeGuides.IntegrationTests
                     ActivitySkuName = "Allalin",
                     CustomerEmail = "dude@gmail.com",
                     DateTime = new DateTime(2018,12,31,9,0,0),
-                    NumPersons = 3
+                    NumPersons = 3,
+                    PriceOptionName = "Group"
                 }
             };
                 foreach (var booking in bookings)

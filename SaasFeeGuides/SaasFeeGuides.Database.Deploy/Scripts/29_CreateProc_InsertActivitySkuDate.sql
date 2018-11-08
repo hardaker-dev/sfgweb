@@ -1,7 +1,8 @@
 ﻿CREATE PROCEDURE Activities.InsertActivitySkuDate
 	@ActivityName nvarchar(450),
 	@ActivitySkuName nvarchar(450) = null,
-	@DateTime datetime2
+	@DateTime datetime2,
+	@ActivitySkuPriceName varchar(450)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -35,8 +36,8 @@ BEGIN
 	SET @activitySkuDateId = (SELECT 1 FROM Activities.[ActivitySkuDate] WHERE [ActivitySkuId] = @activitySkuId and [DateTime] = @DateTime)
 	IF @activitySkuDateId is NULL
 	BEGIN
-		INSERT INTO Activities.[ActivitySkuDate] ([ActivitySkuId],[DateTime])
-		VALUES (@activitySkuId,@DateTime)
+		INSERT INTO Activities.[ActivitySkuDate] ([ActivitySkuId],[DateTime],[ActivitySkuPriceName])
+		VALUES (@activitySkuId,@DateTime,@ActivitySkuPriceName)
 		SELECT CAST(SCOPE_IDENTITY() as INT)
 	END
 	ELSE

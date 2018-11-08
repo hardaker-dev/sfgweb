@@ -17,5 +17,6 @@ namespace SaasFeeGuides.ViewModels
         public int NumPersons { get; set; }
 
         public IList<CustomerBooking> CustomerBookings { get; set; }
+        public string PriceOptionName { get; set; }
     }
 }

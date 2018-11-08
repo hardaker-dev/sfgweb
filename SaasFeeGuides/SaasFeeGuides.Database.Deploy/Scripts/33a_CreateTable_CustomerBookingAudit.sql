@@ -21,8 +21,5 @@ BEGIN TRAN
 		REFERENCES Activities.Customer(Id)    
 
 
-	ALTER TABLE [Activities].[CustomerBookingAudit]
-	ADD CONSTRAINT FK_CustomerBookingAudit_ActivitySkuDateId FOREIGN KEY ([ActivitySkuDateId])     
-		REFERENCES Activities.ActivitySkuDate(Id)  
 
 COMMIT TRAN

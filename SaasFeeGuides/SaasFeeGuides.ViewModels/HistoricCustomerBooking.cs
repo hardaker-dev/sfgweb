@@ -10,6 +10,6 @@ namespace SaasFeeGuides.ViewModels
      
         public int NumPersons { get; set; }
         public double AmountPaid { get; set; }
-        
+        public string PriceOptionName { get; set; }
     }
 }

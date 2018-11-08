@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE Activities.UpdateActivitySkuDate
 	@ActivitySkuDateId int,
-	@DateTime datetime
+	@DateTime datetime,
+	@ActivitySkuPriceName varchar(450) = null
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -12,7 +13,8 @@ BEGIN
 	END
 
 	update Activities.ActivitySkuDate 
-	set [DateTime] = @DateTime
+	set [DateTime] = @DateTime,
+		ActivitySkuPriceName = COALESCE( @ActivitySkuPriceName,ActivitySkuPriceName)
 	where id = @ActivitySkuDateId
 
 END

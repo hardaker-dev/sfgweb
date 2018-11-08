@@ -112,7 +112,8 @@ namespace SaasFeeGuides.IntegrationTests
                ActivitySkuName = "Allalin",
                AmountPaid = 210,
                DateTime = new DateTime(2017,12,31,9,0,0),
-               NumPersons = 1
+               NumPersons = 1,
+               PriceOptionName = "Group"
             });
 
             Assert.True(customerId > 0);

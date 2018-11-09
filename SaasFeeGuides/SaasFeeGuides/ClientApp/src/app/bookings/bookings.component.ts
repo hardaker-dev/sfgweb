@@ -134,37 +134,40 @@ export class BookingsComponent implements OnInit {
           this.refresh.next();
         });
     };
+
+    var setDefaults = (formGroup: FormGroup,date:Date) => {
+
+      formGroup.controls.activity.enable();
+      formGroup.controls.datetime.enable();
+      formGroup.controls.priceOption.enable();
+      formGroup.controls.datetime.setValue(this.getLocalISOTime(date));
+      formGroup.controls.activity.setValue(thisObj.activitySkus[0]);
+      formGroup.controls.priceOption.setValue(thisObj.activitySkus[0].priceOptions[0]);
+    }
     this.addBooking = (date) => {
       thisObj.addingBooking = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
-
-      thisObj.addBookingForm.controls.activity.enable();
-      thisObj.addBookingForm.controls.datetime.enable();
-      thisObj.addBookingForm.controls.priceOption.enable();    
-      thisObj.addBookingForm.controls.datetime.setValue(this.getLocalISOTime(date));
-      thisObj.addBookingForm.controls.activity.setValue(thisObj.activitySkus[0]);
-      thisObj.addBookingForm.controls.priceOption.setValue(thisObj.activitySkus[0].priceOptions[0]);
+      setDefaults(thisObj.addBookingForm, date);
     
      };
     this.addDate = (date) => {
       thisObj.addingDate = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
+      
+      setDefaults(thisObj.addDateForm, date);
 
-      thisObj.addDateForm.controls.activity.enable();
-      thisObj.addDateForm.controls.datetime.enable();
-      thisObj.addDateForm.controls.priceOption.enable(); 
-      thisObj.addDateForm.controls.datetime.setValue(this.getLocalISOTime(date));
-      thisObj.addDateForm.controls.activity.setValue(thisObj.activitySkus[0]);
-      thisObj.addDateForm.controls.priceOption.setValue(thisObj.activitySkus[0].priceOptions[0]);
       this.viewEditActivityDate = null;
 
       thisObj.showCancel = true;
     };
   }
-  activitySelected() {
+  priceChanged() {
+    var priceOption = this.addBookingForm.controls.priceOption.value as ActivitySkuPrice;
+    var numPersons = this.addBookingForm.controls.numPersons.value as number;
 
+    this.addBookingForm.controls.price.setValue(priceOption.price / priceOption.maxPersons * numPersons);
   }
   hasNewConfirmedChanged( event) {
    
@@ -396,6 +399,7 @@ export class BookingsComponent implements OnInit {
       priceOption: ['', Validators.required],
       numPersons: ['', Validators.required],
       datetime: ['', Validators.required],
+      price: ['', Validators.required],
       confirmed: [false],
       paid: [false]
     });

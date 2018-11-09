@@ -16,7 +16,7 @@
 
         <select class="form-control form-input"
                 formControlName="activity"
-                [ngClass]="{ 'is-invalid': submitted && addDateForm.controls.activity.errors }"  (change)="activitySelected()" size="1">
+                [ngClass]="{ 'is-invalid': submitted && addDateForm.controls.activity.errors }"   size="1">
           <option *ngFor="let activity of activitySkus"   [ngValue]="activity">
             {{activity.name}}
           </option>
@@ -46,7 +46,7 @@
           <thead>
             <tr>
               <th>Name</th>
-              <th>Email Name</th>
+              <th>Email</th>
               <th>Persons</th>
               <th>Confirmed</th>
               <th>Paid</th>
@@ -55,7 +55,7 @@
           <tbody>
             <tr *ngFor="let customerBooking of customerBookings()">
               <td>
-                {{customerBooking.name}}
+                {{customerBooking.customerDisplayName}}
               </td>
               <td>
                 {{customerBooking.customerEmail}}
@@ -102,8 +102,8 @@
 
         <select class="form-control form-input"
                 formControlName="activity"
-                [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.activity.errors }" (change)="activitySelected()"   size="1">
-          <option *ngFor="let activity of activitySkus"   [ngValue]="activity" >
+                [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.activity.errors }"  size="1">
+          <option *ngFor="let activity of activitySkus" [ngValue]="activity">
             {{activity.name}}
           </option>
         </select>
@@ -117,7 +117,7 @@
 
         <select class="form-control form-input"
                 formControlName="priceOption"
-                [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.priceOption.errors }" size="1">
+                [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.priceOption.errors }" size="1" (change)="priceChanged()">
           <option *ngFor="let priceOption of addBookingForm.controls.activity.value.priceOptions" [ngValue]="priceOption">
             {{priceOption.name}}
           </option>
@@ -160,9 +160,17 @@
 
       <div class="form-group" [formGroup]="addBookingForm">
         <label class="input-label" for="numPersons">Persons</label>
-        <input class="form-control form-input" formControlName="numPersons" type="text" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.numPersons.errors }" />
+        <input class="form-control form-input"  formControlName="numPersons"  (change)="priceChanged()"  type="text" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.numPersons.errors }" />
         <div *ngIf="submitted && addBookingForm.controls.numPersons.errors" class="invalid-feedback">
           <div *ngIf="addBookingForm.controls.numPersons.errors.required">Persons is required</div>
+        </div>
+      </div>
+
+      <div class="form-group" [formGroup]="addBookingForm">
+        <label class="input-label" for="price">Price</label>
+        <input class="form-control form-input" formControlName="price"  type="text" [ngClass]="{ 'is-invalid': submitted && addBookingForm.controls.price.errors }" />
+        <div *ngIf="submitted && addBookingForm.controls.price.errors" class="invalid-feedback">
+          <div *ngIf="addBookingForm.controls.price.errors.required">Price is required</div>
         </div>
       </div>
 

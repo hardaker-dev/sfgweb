@@ -49,6 +49,7 @@ export class BookingsComponent implements OnInit {
   click$ = new Subject<string>();
   filterCustomerEmail: string;
   filterActivityName: string;
+  personsOption: number[];
   private _searchModel: any;
   get searchModel(): any {
     return this._searchModel;
@@ -77,54 +78,50 @@ export class BookingsComponent implements OnInit {
     this.currentAccount = JSON.parse(localStorage.getItem('currentUser'));
     var thisObj = this;
 
+    var setDefaults = (formGroup: FormGroup, date: Date) => {
+      formGroup.controls.activity.enable();
+      formGroup.controls.datetime.enable();
+      formGroup.controls.priceOption.enable();
+      formGroup.controls.datetime.setValue(this.getLocalISOTime(date));
+      formGroup.controls.activity.setValue(thisObj.activitySkus[0]);
+
+    }
+    var setActivity = (formGroup: FormGroup, activityDate: ActivityDate) => {
+
+      var activitySku = thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId);
+      formGroup.controls.activity.setValue(activitySku);
+      formGroup.controls.activity.disable();
+
+      formGroup.controls.datetime.setValue(this.getLocalISOTime(activityDate.start));
+      formGroup.controls.datetime.disable();
+
+      formGroup.controls.priceOption.setValue(activitySku.priceOptions.find((sku) => sku.name == activityDate.model.priceOptionName));
+      formGroup.controls.priceOption.disable();
+    }
     this.viewEditBooking = (activityDate: ActivityDate) => {
       thisObj.viewEditActivityDate = activityDate;
       thisObj.addingDate = true;
-      var dateTimeField = thisObj.addDateForm.controls.datetime;
-      var activitySkuField = thisObj.addDateForm.controls.activity;
-      var priceOptionField = thisObj.addDateForm.controls.priceOption;
 
-      var activitySku = thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId);
-      activitySkuField.setValue(activitySku);
-      activitySkuField.disable();
-
-      dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
-      dateTimeField.disable();
-
-      priceOptionField.setValue(activitySku.priceOptions.find((sku) => sku.name == activityDate.model.priceOptionName));
-      priceOptionField.disable();
+      setActivity(thisObj.addDateForm, activityDate);      
 
       thisObj.showCancel = false;
     };
 
     this.appendBooking = (activityDate: ActivityDate) => {
-
-      var dateTimeField = thisObj.addBookingForm.controls.datetime;
-      var activitySkuField = thisObj.addBookingForm.controls.activity;
-      var priceOptionField = thisObj.addBookingForm.controls.priceOption;
       if (!activityDate)
       {
         var activitySku = this.addDateForm.controls.activity.value as ActivitySku;
 
         var date = this.offsetLocalDateTime(new Date(this.addDateForm.controls.datetime.value as string));       
         var priceOption = this.addDateForm.controls.priceOption.value as ActivitySkuPrice;
-
         activityDate = this.createActivity(0, date, activitySku, -1, [], priceOption.name);
       }
       thisObj.viewEditActivityDate = activityDate;
       thisObj.addingBooking = true;
-
-      var activitySku = thisObj.activitySkus.find((sku) => sku.id == activityDate.model.activitySkuId);
-      activitySkuField.setValue(activitySku);
-      activitySkuField.disable();
-
-      dateTimeField.setValue(this.getLocalISOTime(activityDate.start));
-      dateTimeField.disable();
-
-      priceOptionField.setValue(activitySku.priceOptions.find((sku) => sku.name == activityDate.model.priceOptionName));
-      priceOptionField.disable();
-
+      
+      setActivity(thisObj.addBookingForm, activityDate);   
     };
+
     this.deleteBooking = (customerBooking) => {
       this.activityService.deleteCustomerBooking(this.viewEditActivityDate.model.activitySkuDateId, customerBooking.customerEmail)
         .pipe(first()).subscribe(response => {
@@ -135,21 +132,17 @@ export class BookingsComponent implements OnInit {
         });
     };
 
-    var setDefaults = (formGroup: FormGroup,date:Date) => {
-
-      formGroup.controls.activity.enable();
-      formGroup.controls.datetime.enable();
-      formGroup.controls.priceOption.enable();
-      formGroup.controls.datetime.setValue(this.getLocalISOTime(date));
-      formGroup.controls.activity.setValue(thisObj.activitySkus[0]);
-      formGroup.controls.priceOption.setValue(thisObj.activitySkus[0].priceOptions[0]);
-    }
+   
     this.addBooking = (date) => {
       thisObj.addingBooking = true;
       var hour = date.getHours();
       if (hour == 0) { date.setHours(7); }
       setDefaults(thisObj.addBookingForm, date);
-    
+
+      var priceOption = thisObj.activitySkus[0].priceOptions[0];
+      thisObj.addBookingForm.controls.priceOption.setValue(priceOption);
+      thisObj.personsOption = Array.apply(null, { length: priceOption.maxPersons }).map(Number.call, Number).map(value => value+1);
+      thisObj.addBookingForm.controls.numPersons.setValue(thisObj.personsOption[0]);
      };
     this.addDate = (date) => {
       thisObj.addingDate = true;
@@ -163,11 +156,33 @@ export class BookingsComponent implements OnInit {
       thisObj.showCancel = true;
     };
   }
+
+  priceOptionChanged() {
+    this.priceChanged();
+    this.setPersonsOption();
+  }
   priceChanged() {
     var priceOption = this.addBookingForm.controls.priceOption.value as ActivitySkuPrice;
     var numPersons = this.addBookingForm.controls.numPersons.value as number;
 
     this.addBookingForm.controls.price.setValue(priceOption.price / priceOption.maxPersons * numPersons);
+
+  }
+
+  activityChanged() {
+    if (this.addingBooking) {
+      this.priceChanged();
+      this.setPersonsOption();
+    }
+  }
+
+  setPersonsOption() {
+    var priceOption = this.addBookingForm.controls.priceOption.value as ActivitySkuPrice;
+    this.personsOption = Array.apply(null, { length: priceOption.maxPersons }).map(Number.call, Number).map(value => value + 1);
+    if (this.addBookingForm.controls.numPersons.value > priceOption.maxPersons) {
+      this.addBookingForm.controls.numPersons.setValue(priceOption.maxPersons);
+    }
+    this.priceChanged();
   }
   hasNewConfirmedChanged( event) {
    
@@ -416,8 +431,6 @@ export class BookingsComponent implements OnInit {
 
     this.loadActivities();
     this.loadSchedule();
-
-    
   }
 
   inputFormatter = (x: any) => {

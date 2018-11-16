@@ -24,11 +24,10 @@ namespace SaasFeeGuides.IntegrationTests.TestFramework
         protected ServiceIntegrationTestBase(ITestOutputHelper output, int minPort, int maxPort)
         {
 #if AZURETEST
-            var env = "AzureTest";
-#else
-            var env = "Development";
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "AzureTest");
 #endif
 
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             var config = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                .AddJsonFile($"appsettings.{env}.json", optional: true)

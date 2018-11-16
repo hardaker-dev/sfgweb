@@ -93,7 +93,7 @@ namespace SaasFeeGuides.Extensions
             }
             catch (Exception ex)
             {
-                throw new Exception("Error reading Customer", ex);
+                throw new Exception("Error reading Customer Booking", ex);
             }
         }
     }

@@ -2,12 +2,14 @@
   "profiles": {
     "Development": {
       "commandName": "Project",
+      "commandLineArgs": "SaasFeeGuides.IntegrationTests.dll",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "AzureTest": {
       "commandName": "Project",
+      "commandLineArgs": "SaasFeeGuides.IntegrationTests.dll",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "AzureTest"
       }

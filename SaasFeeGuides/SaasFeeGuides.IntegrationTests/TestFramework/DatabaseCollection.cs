@@ -19,18 +19,21 @@ namespace SaasFeeGuides.IntegrationTests.TestFramework
         public DatabaseFixture()
         {
 #if AZURETEST
-            var env = "AzureTest";
-#else
-            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
-            var env = "Development";
-            var config = new ConfigurationBuilder()
-              .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-              .AddJsonFile($"appsettings.{env}.json", optional: true)
-             .Build();
-            var connectionString = config["ConnectionStrings:DefaultConnection"];
-
-            SaasFeeGuides.Database.Deploy.Program.DeleteDatabase(connectionString);
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "AzureTest");
 #endif
+
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
+            if (env == "Development")
+            {
+                var config = new ConfigurationBuilder()
+                  .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                  .AddJsonFile($"appsettings.{env}.json", optional: true)
+                 .Build();
+
+                var connectionString = config["ConnectionStrings:DefaultConnection"];
+
+                SaasFeeGuides.Database.Deploy.Program.DeleteDatabase(connectionString);
+            }
             // ... initialize data in the test database ...
         }
 

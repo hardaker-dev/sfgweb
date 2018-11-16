@@ -78,7 +78,7 @@ namespace SaasFeeGuides.Controllers
         }
         [Authorize("Admin")]
         [HttpPost("sku/date")]
-        public async Task<IActionResult> AddActivitySkuDate(ViewModels.NewActivitySkuDate activitySkuDate)
+        public async Task<ActionResult<int>> AddActivitySkuDate(ViewModels.NewActivitySkuDate activitySkuDate)
         {
             var id = await _activityRepository.InsertActivitySkuDate(activitySkuDate);
             foreach(var customerBooking in activitySkuDate.CustomerBookings ?? new ViewModels.CustomerBooking[0])
@@ -101,7 +101,7 @@ namespace SaasFeeGuides.Controllers
 
         [Authorize("Admin")]
         [HttpPost]
-        public async Task<IActionResult> AddActivity(ViewModels.Activity activity)
+        public async Task<ActionResult<int>> AddActivity(ViewModels.Activity activity)
         {
             var activityModel = await activity.Map(null, _contentRepository);
 
@@ -110,7 +110,7 @@ namespace SaasFeeGuides.Controllers
             await UpsertSkus(activity.Skus);
             await InsertEquiptment(activity.Equiptment, activityId);
 
-            return new OkObjectResult(activityId);
+            return activityId;
         }
 
         private async Task InsertEquiptment(IList<ViewModels.ActivityEquiptment> equiptments, int activityId)
@@ -156,20 +156,20 @@ namespace SaasFeeGuides.Controllers
         }
         [Authorize("Admin")]
         [HttpGet("{activityId:int}/edit")]
-        public async Task<IActionResult> GetActivity(int activityId)
+        public async Task<ActionResult<ViewModels.Activity>> GetActivity(int activityId)
         {
             var activity = await _activityRepository.SelectActivity(activityId);
 
-            return new OkObjectResult(await activity.Map(_contentRepository));
+            return await activity.Map(_contentRepository);
         }
         [Authorize("Admin")]
         [HttpGet("edit")]
-        public async Task<IActionResult> GetActivities()
+        public async Task<ActionResult<ViewModels.Activity[]>> GetActivities()
         {
             var activities = await _activityRepository.SelectActivities();
 
             var mapped =  await Task.WhenAll( activities.Select(a => a.Map(_contentRepository)));
-            return new OkObjectResult(mapped);
+            return mapped;
         }
 
         [Authorize("Admin")]
@@ -183,20 +183,20 @@ namespace SaasFeeGuides.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetActivities(string locale)
+        public async Task<ActionResult<ViewModels.ActivityLoc[]>> GetActivities(string locale)
         {
             var activities = await _activityRepository.SelectActivities(locale ?? "en");
            
 
-            return new OkObjectResult(activities);
+            return activities.Select(x=>x.Map()).ToArray();
         }
 
         [HttpGet("{activityId:int}")]
-        public async Task<IActionResult> GetActivity(int activityId, string locale)
+        public async Task<ActionResult<ViewModels.ActivityLoc>> GetActivity(int activityId, string locale)
         {
             var activity = await _activityRepository.SelectActivity(activityId, locale ?? "en");
 
-            return new OkObjectResult(activity.Map());
+            return activity.Map();
         }             
 
         private void EnsureMatchingActivityName(ViewModels.Activity activity)

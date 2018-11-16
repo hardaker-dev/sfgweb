@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using RiskFirst.RestClient;
 using SaasFeeGuides.IntegrationTests.TestFramework;
 using SaasFeeGuides.RestClient;
+using SaasFeeGuides.RestClient.Extensions;
 using SaasFeeGuides.ViewModels;
 using Xunit;
 using Xunit.Abstractions;
@@ -47,7 +48,7 @@ namespace SaasFeeGuides.IntegrationTests
             }
             catch (RestResponseException e)
             {
-                Assert.Equal("Cannot find activity with name 'NotAllalin'", e.Body);
+                Assert.Equal("Cannot find activity with name 'NotAllalin'", (string)e.GetJsonBody().message);
             }
 
         }

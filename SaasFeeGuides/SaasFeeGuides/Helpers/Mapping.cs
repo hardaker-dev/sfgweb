@@ -154,8 +154,8 @@ namespace SaasFeeGuides.Helpers
                 Images = activity.Images,
                 MenuImage = activity.MenuImage,
                 Name = activity.Name,
-                Skus = activity.Skus.Select(Map).ToList(),
-                Equiptment = activity.Equiptment.Select(Map).ToList(),
+                Skus = activity.Skus?.Select(Map)?.ToList(),
+                Equiptment = activity.Equiptment?.Select(Map)?.ToList(),
                 Title = activity.Title,
                 Videos = activity.Videos
             };

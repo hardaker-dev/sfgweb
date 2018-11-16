@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;AZURETEST</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;AZURETEST</DefineConstants>
     <Optimize>false</Optimize>
   </PropertyGroup>
 

@@ -58,7 +58,14 @@ namespace SaasFeeGuides
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = Configuration["ConnectionStrings:DefaultConnection"];
-            SaasFeeGuides.Database.Deploy.Program.DeployDatabase(connectionString);
+            try
+            {
+                SaasFeeGuides.Database.Deploy.Program.DeployDatabase(connectionString);
+            }
+            catch(Exception e)
+            {
+                e.Trace();
+            }
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
             {
@@ -67,7 +74,10 @@ namespace SaasFeeGuides
             b => b.MigrationsAssembly("SaasFeeGuides")).UseLazyLoadingProxies(false);
             });
            
-            services.AddMvc()
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(Filters.CustomExceptionFilterAttribute)); // by type
+            })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)  
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .AddJsonOptions(opt =>

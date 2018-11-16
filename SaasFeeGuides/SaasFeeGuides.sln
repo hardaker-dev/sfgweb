@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaasFeeGuides.RestClient", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaasFeeGuides.ViewModels", "SaasFeeGuides.ViewModels\SaasFeeGuides.ViewModels.csproj", "{0833C78E-E9FF-4FC6-ACFA-89F5DCE4BE6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaasFeeGuides.Database.Deploy", "SaasFeeGuides.Database.Deploy\SaasFeeGuides.Database.Deploy.csproj", "{17665C90-AA02-4960-8074-77F5402B5014}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaasFeeGuides.Database.Deploy", "SaasFeeGuides.Database.Deploy\SaasFeeGuides.Database.Deploy.csproj", "{17665C90-AA02-4960-8074-77F5402B5014}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

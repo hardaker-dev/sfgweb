@@ -10,7 +10,8 @@ namespace SaasFeeGuides.Exceptions
     {
         public int ErrorCode { get; set; }
 
-        public BadRequestException(string message, HttpStatusCode errorCode, Exception innerException) : this(message, (int)errorCode, innerException)
+        public BadRequestException(string message, HttpStatusCode errorCode, Exception innerException) 
+            : this(message, (int)errorCode, innerException)
         {
         }
         public BadRequestException(string message,int errorCode, Exception innerException) : base(message, innerException)

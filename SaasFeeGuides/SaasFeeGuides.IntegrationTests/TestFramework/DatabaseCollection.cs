@@ -21,6 +21,7 @@ namespace SaasFeeGuides.IntegrationTests.TestFramework
 #if AZURETEST
             var env = "AzureTest";
 #else
+            Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
             var env = "Development";
             var config = new ConfigurationBuilder()
               .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
